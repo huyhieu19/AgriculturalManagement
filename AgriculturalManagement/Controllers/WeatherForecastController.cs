@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers
 {
@@ -11,16 +12,17 @@ namespace AgriculturalManagement.Controllers
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogerManager logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogerManager logger)
         {
-            _logger = logger;
+            this.logger = logger;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            logger.LogInfomation("Nguyen Huy Hieu");
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
