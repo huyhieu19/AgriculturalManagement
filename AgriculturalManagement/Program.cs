@@ -1,4 +1,5 @@
 using NLog;
+using NLog.Extensions.Logging;
 using Service;
 using Service.Contracts;
 

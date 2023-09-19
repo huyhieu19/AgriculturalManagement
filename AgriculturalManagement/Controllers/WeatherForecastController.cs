@@ -14,6 +14,7 @@ namespace AgriculturalManagement.Controllers
 
         private readonly ILogerManager logger;
 
+
         public WeatherForecastController(ILogerManager logger)
         {
             this.logger = logger;
