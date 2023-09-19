@@ -5,6 +5,7 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgriculturalManagement", "AgriculturalManagement\AgriculturalManagement.csproj", "{CD75F585-01E2-46D4-992B-AD55F66FD92D}"
 	ProjectSection(ProjectDependencies) = postProject
+		{011B00C4-A245-4D55-9573-B5BB304FCAB6} = {011B00C4-A245-4D55-9573-B5BB304FCAB6}
 		{104D829B-4CF3-4727-8722-A837BAE5D7A7} = {104D829B-4CF3-4727-8722-A837BAE5D7A7}
 	EndProjectSection
 EndProject
@@ -20,15 +21,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share", "Share\Share.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Startup", "Startup\Startup.csproj", "{011B00C4-A245-4D55-9573-B5BB304FCAB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{FCC4D135-8A84-42A6-8FF1-9BF455770209}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{FCC4D135-8A84-42A6-8FF1-9BF455770209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Contracts", "Service.Contracts\Service.Contracts.csproj", "{3474A0EA-0A61-4F46-AD58-4146A32E9827}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Contracts", "Service.Contracts\Service.Contracts.csproj", "{3474A0EA-0A61-4F46-AD58-4146A32E9827}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{2D461FB7-3071-47AD-B711-4928BB5C99AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{2D461FB7-3071-47AD-B711-4928BB5C99AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.Contracts", "Repository.Contracts\Repository.Contracts.csproj", "{E820F096-3D2B-42F8-AE79-47BB209A38A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository.Contracts", "Repository.Contracts\Repository.Contracts.csproj", "{E820F096-3D2B-42F8-AE79-47BB209A38A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Extensions", "Service.Extention\Service.Extensions.csproj", "{104D829B-4CF3-4727-8722-A837BAE5D7A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Extensions", "Service.Extention\Service.Extensions.csproj", "{104D829B-4CF3-4727-8722-A837BAE5D7A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
