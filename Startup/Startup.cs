@@ -38,7 +38,7 @@ namespace Startup
         public static WebApplicationBuilder AddServicesContext(this WebApplicationBuilder builder)
         {
             builder.Services.AddDbContext<DbContext>(options =>
-                  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("AgriculturalManagement")));
             builder.Services.AddSwaggerGen(opt =>
             {
                 opt.SwaggerDoc("v1", new OpenApiInfo { Title = "ManagerServer", Version = "v1" });
