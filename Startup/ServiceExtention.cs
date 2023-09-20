@@ -8,7 +8,7 @@ using Service.Contracts;
 
 namespace Startup
 {
-    public static class Startup
+    public static class ServiceExtention
     {
         public static WebApplicationBuilder AddServicesBase(this WebApplicationBuilder builder)
         {
@@ -67,18 +67,6 @@ namespace Startup
                 });
             });
             return builder;
-        }
-        public static WebApplication UseService(this WebApplication app)
-        {
-
-            app.UseSwagger();
-            app.UseSwaggerUI();
-            app.UseCors("AllowAllHeaders");
-            app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.MapControllers();
-            return app;
         }
     }
 }
