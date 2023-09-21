@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using Database.ModelCreateConfiguration;
+using Entities;
 using Entities.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,15 @@ namespace Database
             // Method intentionally left empty.
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<ZoneEntity>().HasMany<ZoneDeviceDriverEntity>(p => p.ZoneDeviceDrivers).WithOne(p => p.Zone).OnDelete(DeleteBehavior.NoAction);
+            base.OnModelCreating(builder);
+
+            // Image configuration
+            builder.ApplyConfiguration(new ImageConfiguration());
+
+            //Farm configuration
+            builder.Entity<FarmEntity>().HasOne(p => p.User).WithMany(p => p.Farms).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.SetNull);
         }
 
         public DbSet<StaffEntity> StaffEntities { get; set; } = null!;
