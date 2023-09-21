@@ -10,9 +10,9 @@ namespace Entities
         public bool? IsDaily { get; set; } = false;
         public bool? IsAuto { get; set; } = false;
         [ForeignKey("DeviceDriver")]
-        public int DeviceDriverId { get; set; }
+        public int? DeviceDriverId { get; set; }
         [ForeignKey("Zone")]
-        public int ZoneId { get; set; }
+        public int? ZoneId { get; set; }
         public int? ShutDownTime { get; set; }
         public int? OpenTimer { get; set; }
         public DeviceDriverEntity? DeviceDriver { get; set; }

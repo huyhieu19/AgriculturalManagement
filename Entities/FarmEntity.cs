@@ -12,9 +12,15 @@ namespace Entities
         public string? Description { get; set; }
         public string? Address { get; set; }
         public string? Note { get; set; }
+
+
         [ForeignKey("User")]
         public string? UserId { get; set; }
+
+
         public UserEntity? User { get; set; }
+
+
         public ICollection<ImageEntity>? Images { get; set; }
         public ICollection<ZoneEntity>? Zones { get; set; }
     }
