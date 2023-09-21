@@ -8,8 +8,8 @@ namespace Entities.User
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Address { get; set; }
-        public DateTime Dob { get; set; }
-        public DateTime DateJoin { get; set; }
+        public DateTime? Dob { get; set; }
+        public DateTime? DateJoin { get; set; }
         public string? Position { get; set; }
         public int? OffWorksOfMonth { get; set; }
         public int? WorksOfMonth { get; set; }

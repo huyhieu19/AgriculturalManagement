@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriculturalManagement.Migrations
 {
     [DbContext(typeof(FactDbContext))]
-    [Migration("20230920173214_fix")]
-    partial class fix
+    [Migration("20230921054616_createtable1")]
+    partial class createtable1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,12 +43,9 @@ namespace AgriculturalManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ZoneId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.ToTable("DeviceDriverEntities");
+                    b.ToTable("DeviceDriver", (string)null);
                 });
 
             modelBuilder.Entity("Entities.FarmEntity", b =>
@@ -79,7 +76,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FarmEntities");
+                    b.ToTable("Farm", (string)null);
                 });
 
             modelBuilder.Entity("Entities.ImageEntity", b =>
@@ -90,13 +87,13 @@ namespace AgriculturalManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FarmId")
+                    b.Property<int?>("FarmId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StaffId")
+                    b.Property<int?>("StaffId")
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
@@ -104,7 +101,10 @@ namespace AgriculturalManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("ZoneId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -112,7 +112,11 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("ImageEntities");
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("ZoneId");
+
+                    b.ToTable("Image", (string)null);
                 });
 
             modelBuilder.Entity("Entities.InstrumentationEntity", b =>
@@ -129,10 +133,7 @@ namespace AgriculturalManagement.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("InstrumentationEntityId")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<int?>("MachineEntityId")
@@ -145,18 +146,16 @@ namespace AgriculturalManagement.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ZoneId")
+                    b.Property<int?>("ZoneId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("InstrumentationEntityId");
 
                     b.HasIndex("MachineEntityId");
 
                     b.HasIndex("ZoneId");
 
-                    b.ToTable("InstrumentationEntities");
+                    b.ToTable("Instrumentation", (string)null);
                 });
 
             modelBuilder.Entity("Entities.MachineEntity", b =>
@@ -173,7 +172,7 @@ namespace AgriculturalManagement.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -185,7 +184,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MachineEntities");
+                    b.ToTable("Machine", (string)null);
                 });
 
             modelBuilder.Entity("Entities.MachineWarranlyDateEntity", b =>
@@ -199,9 +198,6 @@ namespace AgriculturalManagement.Migrations
                     b.Property<int>("DeviceDriversId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FarmId")
-                        .HasColumnType("int");
-
                     b.Property<int>("InstrumentationId")
                         .HasColumnType("int");
 
@@ -211,20 +207,18 @@ namespace AgriculturalManagement.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("WarrantyDate")
+                    b.Property<DateTime?>("WarrantyDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DeviceDriversId");
 
-                    b.HasIndex("FarmId");
-
                     b.HasIndex("InstrumentationId");
 
                     b.HasIndex("MachineId");
 
-                    b.ToTable("MachineWarranlyDateEntities");
+                    b.ToTable("MachineWarranlyDate", (string)null);
                 });
 
             modelBuilder.Entity("Entities.TypeTreeEntity", b =>
@@ -247,7 +241,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TypeTreeEntities");
+                    b.ToTable("TypeTree", (string)null);
                 });
 
             modelBuilder.Entity("Entities.User.StaffEntity", b =>
@@ -264,10 +258,10 @@ namespace AgriculturalManagement.Migrations
                     b.Property<int?>("Bonus")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateJoin")
+                    b.Property<DateTime?>("DateJoin")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Dob")
+                    b.Property<DateTime?>("Dob")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -291,7 +285,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StaffEntities");
+                    b.ToTable("Staff", (string)null);
                 });
 
             modelBuilder.Entity("Entities.User.UserEntity", b =>
@@ -356,7 +350,7 @@ namespace AgriculturalManagement.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Entities.ZoneDeviceDriverEntity", b =>
@@ -367,7 +361,7 @@ namespace AgriculturalManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DeviceDriverId")
+                    b.Property<int?>("DeviceDriverId")
                         .HasColumnType("int");
 
                     b.Property<bool?>("IsAuto")
@@ -382,7 +376,7 @@ namespace AgriculturalManagement.Migrations
                     b.Property<int?>("ShutDownTime")
                         .HasColumnType("int");
 
-                    b.Property<int>("ZoneId")
+                    b.Property<int?>("ZoneId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -391,7 +385,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("ZoneId");
 
-                    b.ToTable("ZoneDeviceDrivers");
+                    b.ToTable("ZoneDeviceDriver", (string)null);
                 });
 
             modelBuilder.Entity("Entities.ZoneEntity", b =>
@@ -433,7 +427,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("TypeTreeId");
 
-                    b.ToTable("ZoneEntityEntities");
+                    b.ToTable("Zone", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -460,7 +454,7 @@ namespace AgriculturalManagement.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -485,7 +479,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("RoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -510,7 +504,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("UserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -532,7 +526,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("UserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -547,7 +541,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -566,13 +560,13 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("UserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Entities.FarmEntity", b =>
                 {
                     b.HasOne("Entities.User.UserEntity", "User")
-                        .WithMany()
+                        .WithMany("Farms")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
@@ -582,36 +576,38 @@ namespace AgriculturalManagement.Migrations
                 {
                     b.HasOne("Entities.FarmEntity", "Farm")
                         .WithMany("Images")
-                        .HasForeignKey("FarmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FarmId");
 
                     b.HasOne("Entities.User.StaffEntity", "Staff")
                         .WithMany("Images")
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StaffId");
+
+                    b.HasOne("Entities.User.UserEntity", "User")
+                        .WithMany("Images")
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("Entities.ZoneEntity", "Zone")
+                        .WithMany("Images")
+                        .HasForeignKey("ZoneId");
 
                     b.Navigation("Farm");
 
                     b.Navigation("Staff");
+
+                    b.Navigation("User");
+
+                    b.Navigation("Zone");
                 });
 
             modelBuilder.Entity("Entities.InstrumentationEntity", b =>
                 {
-                    b.HasOne("Entities.InstrumentationEntity", null)
-                        .WithMany("Instrumentations")
-                        .HasForeignKey("InstrumentationEntityId");
-
                     b.HasOne("Entities.MachineEntity", null)
                         .WithMany("Instrumentations")
                         .HasForeignKey("MachineEntityId");
 
                     b.HasOne("Entities.ZoneEntity", "Zone")
                         .WithMany("Instrumentations")
-                        .HasForeignKey("ZoneId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ZoneId");
 
                     b.Navigation("Zone");
                 });
@@ -621,30 +617,19 @@ namespace AgriculturalManagement.Migrations
                     b.HasOne("Entities.DeviceDriverEntity", "DeviceDriver")
                         .WithMany("MachineWarranlyDates")
                         .HasForeignKey("DeviceDriversId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.FarmEntity", "Farm")
-                        .WithMany()
-                        .HasForeignKey("FarmId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.InstrumentationEntity", "Instrumentation")
-                        .WithMany()
+                        .WithMany("MachineWarranlyDates")
                         .HasForeignKey("InstrumentationId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.MachineEntity", "Machine")
-                        .WithMany()
+                        .WithMany("MachineWarranlyDates")
                         .HasForeignKey("MachineId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DeviceDriver");
-
-                    b.Navigation("Farm");
 
                     b.Navigation("Instrumentation");
 
@@ -655,15 +640,11 @@ namespace AgriculturalManagement.Migrations
                 {
                     b.HasOne("Entities.DeviceDriverEntity", "DeviceDriver")
                         .WithMany("ZoneDeviceDrivers")
-                        .HasForeignKey("DeviceDriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DeviceDriverId");
 
                     b.HasOne("Entities.ZoneEntity", "Zone")
                         .WithMany("ZoneDeviceDrivers")
-                        .HasForeignKey("ZoneId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("ZoneId");
 
                     b.Navigation("DeviceDriver");
 
@@ -675,13 +656,11 @@ namespace AgriculturalManagement.Migrations
                     b.HasOne("Entities.FarmEntity", "Farm")
                         .WithMany("Zones")
                         .HasForeignKey("FarmId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.TypeTreeEntity", "Type")
                         .WithMany("Zones")
                         .HasForeignKey("TypeTreeId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Farm");
@@ -756,12 +735,14 @@ namespace AgriculturalManagement.Migrations
 
             modelBuilder.Entity("Entities.InstrumentationEntity", b =>
                 {
-                    b.Navigation("Instrumentations");
+                    b.Navigation("MachineWarranlyDates");
                 });
 
             modelBuilder.Entity("Entities.MachineEntity", b =>
                 {
                     b.Navigation("Instrumentations");
+
+                    b.Navigation("MachineWarranlyDates");
                 });
 
             modelBuilder.Entity("Entities.TypeTreeEntity", b =>
@@ -774,8 +755,17 @@ namespace AgriculturalManagement.Migrations
                     b.Navigation("Images");
                 });
 
+            modelBuilder.Entity("Entities.User.UserEntity", b =>
+                {
+                    b.Navigation("Farms");
+
+                    b.Navigation("Images");
+                });
+
             modelBuilder.Entity("Entities.ZoneEntity", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("Instrumentations");
 
                     b.Navigation("ZoneDeviceDrivers");

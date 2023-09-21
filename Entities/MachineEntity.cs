@@ -10,7 +10,9 @@ namespace Entities
         public string? Description { get; set; }
         public string? Note { get; set; }
         public DateTime? DateOfPurChanse { get; set; }
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; } = false;
+
         public ICollection<InstrumentationEntity>? Instrumentations { get; set; }
+        public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
     }
 }

@@ -21,11 +21,32 @@ namespace Database
         {
             base.OnModelCreating(builder);
 
+            // Bỏ tiền tố AspNet của các bảng: mặc định các bảng trong IdentityDbContext có
+            // tên với tiền tố AspNet như: AspNetUserRoles, AspNetUser ...
+            // Đoạn mã sau chạy khi khởi tạo DbContext, tạo database sẽ loại bỏ tiền tố đó
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                var tableName = entityType.GetTableName();
+                if (tableName.StartsWith("AspNet"))
+                {
+                    entityType.SetTableName(tableName.Substring(6));
+                }
+            }
+
             // Image configuration
             builder.ApplyConfiguration(new ImageConfiguration());
 
             //Farm configuration
-            builder.Entity<FarmEntity>().HasOne(p => p.User).WithMany(p => p.Farms).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.SetNull);
+            builder.ApplyConfiguration(new FarmConfiguration());
+
+            builder.ApplyConfiguration(new InstrumentationConfiguration());
+            builder.ApplyConfiguration(new MachineWarranlyDateConfiguration());
+            builder.ApplyConfiguration(new ZoneConfiguration());
+            builder.ApplyConfiguration(new ZoneDeviceDriverConfiguration());
+            builder.ApplyConfiguration(new DeviceDriverConfiguration());
+            builder.ApplyConfiguration(new TypeTreeConfiguration());
+            builder.ApplyConfiguration(new StaffConfiguration());
+            builder.ApplyConfiguration(new MachineConfiguration());
         }
 
         public DbSet<StaffEntity> StaffEntities { get; set; } = null!;

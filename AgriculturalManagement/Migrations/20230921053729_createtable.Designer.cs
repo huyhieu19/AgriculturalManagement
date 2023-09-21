@@ -4,6 +4,7 @@ using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriculturalManagement.Migrations
 {
     [DbContext(typeof(FactDbContext))]
-    partial class FactDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230921053729_createtable")]
+    partial class createtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +45,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeviceDriver", (string)null);
+                    b.ToTable("DeviceDriverEntities");
                 });
 
             modelBuilder.Entity("Entities.FarmEntity", b =>
@@ -181,7 +184,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Machine", (string)null);
+                    b.ToTable("MachineEntities");
                 });
 
             modelBuilder.Entity("Entities.MachineWarranlyDateEntity", b =>
@@ -238,7 +241,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TypeTree", (string)null);
+                    b.ToTable("TypeTreeEntities");
                 });
 
             modelBuilder.Entity("Entities.User.StaffEntity", b =>
@@ -282,7 +285,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Staff", (string)null);
+                    b.ToTable("StaffEntities");
                 });
 
             modelBuilder.Entity("Entities.User.UserEntity", b =>
