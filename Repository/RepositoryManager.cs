@@ -1,21 +1,21 @@
 ﻿using Repository.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
     public sealed class RepositoryManager : IRepositoryManager
     {
-        private readonly Lazy<IRepositoryBase> repositoryBase;
+        private readonly Lazy<IFarmRepository> farmRepository;
 
         public RepositoryManager()
         {
-            repositoryBase = new Lazy<IRepositoryBase>(() => new RepositoryBase());
+            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository());
         }
 
-        public IRepositoryBase RepositoryBase => repositoryBase.Value;
+        public IFarmRepository Fram => throw new NotImplementedException();
+
+        public Task SaveAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

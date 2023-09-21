@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Service.Contracts
+﻿namespace Service.Contracts
 {
     public interface IFarmService
     {
-        Task<IFarmService> GetAsync();
+        Task<IEnumerable<IFarmService>> GetAllFarmAsync(bool trackChange);
     }
 }
