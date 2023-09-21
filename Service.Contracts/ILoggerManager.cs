@@ -1,6 +1,6 @@
 ﻿namespace Service.Contracts
 {
-    public interface ILogerManager
+    public interface ILoggerManager
     {
         void LogInfomation(string message);
         void LogWarning(string message);

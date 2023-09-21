@@ -16,7 +16,8 @@ namespace Startup
 
 
             // Add services to the container.
-            builder.Services.AddSingleton<ILogerManager, LoggerManager>();
+            builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
