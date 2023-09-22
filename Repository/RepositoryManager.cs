@@ -1,21 +1,21 @@
-﻿using Repository.Contracts;
+﻿using Database;
+using Repository.Contracts;
 
 namespace Repository
 {
     public sealed class RepositoryManager : IRepositoryManager
     {
         private readonly Lazy<IFarmRepository> farmRepository;
+        private readonly FactDbContext factDbContext;
 
-        public RepositoryManager()
+        public RepositoryManager(FactDbContext factDbContext)
         {
-            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository());
+            this.factDbContext = factDbContext;
+            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext));
         }
 
-        public IFarmRepository Fram => throw new NotImplementedException();
+        public IFarmRepository FarmRepository => farmRepository.Value;
 
-        public Task SaveAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task SaveAsync() => await factDbContext.SaveChangesAsync();
     }
 }
