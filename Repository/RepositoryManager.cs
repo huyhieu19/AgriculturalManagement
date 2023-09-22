@@ -1,5 +1,6 @@
 ﻿using Database;
 using Repository.Contracts;
+using Service.Contracts;
 
 namespace Repository
 {
@@ -7,11 +8,11 @@ namespace Repository
     {
         private readonly Lazy<IFarmRepository> farmRepository;
         private readonly FactDbContext factDbContext;
-
-        public RepositoryManager(FactDbContext factDbContext)
+        
+        public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger)
         {
             this.factDbContext = factDbContext;
-            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext));
+            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext, logger));
         }
 
         public IFarmRepository FarmRepository => farmRepository.Value;
