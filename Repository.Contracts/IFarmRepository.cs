@@ -1,19 +1,15 @@
 ﻿using Entities;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Models.Farm;
 
 namespace Repository.Contracts
 {
     public interface IFarmRepository
     {
         Task<IEnumerable<FarmEntity>> GetAllFarm(bool trackChanges);
-        Task CreateFarm(FarmEntity entity);
-        Task DeleteFarm(int id);
-        Task UpdateFarm(FarmEntity entity);
+        void CreateFarm(FarmEntity entity);
+        void DeleteFarm(int id);
+        void UpdateFarm(FarmUpdateModel model);
         Task<IEnumerable<FarmEntity>> GetByCondition(QueryBaseModel model, bool trackchanges);
     }
 }

@@ -21,7 +21,7 @@ namespace Startup
             builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
-
+            builder.Services.AddSingleton<DapperContext>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -5,9 +5,11 @@ using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class FarmControler : ControllerBase
     {
-        private IServiceManager serviceManager;
+        private readonly IServiceManager serviceManager;
         public FarmControler(IServiceManager serviceManager) => this.serviceManager = serviceManager;
 
         [HttpGet, Route("farms")]
@@ -34,6 +36,11 @@ namespace AgriculturalManagement.Controllers
         public async Task<bool> UpdateFarm([FromBody] FarmUpdateModel model)
         {
             return await serviceManager.FarmService.UpdateFarm(model);
+        }
+        [HttpGet, Route("names")]
+        public async Task<IEnumerable<FarmFilterNameModel>> GetNamesFarmAsync()
+        {
+            return await serviceManager.FarmService.GetNameFarm();
         }
     }
 }

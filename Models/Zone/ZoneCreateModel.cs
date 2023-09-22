@@ -1,8 +1,7 @@
 ﻿namespace Models.Zone
 {
-    public class ZoneDisplayModel
+    public class ZoneCreateModel
     {
-        public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public string? Note { get; set; }
