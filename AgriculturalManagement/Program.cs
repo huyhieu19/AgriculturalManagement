@@ -13,6 +13,8 @@ internal class Program
           .AddServicesBase()
           ;
 
+        builder.Services.AddAutoMapper(typeof(Program));
+
         LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
         var app = builder.Build();
         app.UseService();

@@ -12,10 +12,10 @@ namespace AgriculturalManagement.Controllers
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-        private readonly ILogerManager logger;
+        private readonly ILoggerManager logger;
 
 
-        public WeatherForecastController(ILogerManager logger)
+        public WeatherForecastController(ILoggerManager logger)
         {
             this.logger = logger;
         }

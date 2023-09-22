@@ -5,6 +5,6 @@ namespace Service.Extention
 {
     public static class InjectService
     {
-        public static void ConfigureLoggerService(this IServiceCollection service) => service.AddSingleton<ILogerManager, LoggerManager>();
+        public static void ConfigureLoggerService(this IServiceCollection service) => service.AddSingleton<ILoggerManager, LoggerManager>();
     }
 }
