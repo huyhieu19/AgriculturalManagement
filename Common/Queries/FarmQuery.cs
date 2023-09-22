@@ -3,7 +3,7 @@
     public static class FarmQuery
     {
         public const string UpdateFarm = @"UPDATE Farm
-         SET [Name] = @name, Address = @address, Description = @description
+         SET [Name] = @Name, Address = @Address, Description = @Description, Note = @Note
          WHERE Id = @Id";
     }
 }

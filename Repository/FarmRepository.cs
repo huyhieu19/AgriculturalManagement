@@ -4,6 +4,7 @@ using Database;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Farm;
 using Repository.Contracts;
 using Service.Contracts;
 
@@ -19,15 +20,13 @@ namespace Repository
             this.dapperContext = dapperContext;
         }
 
-        public Task CreateFarm(FarmEntity entity)
+        public void CreateFarm(FarmEntity entity)
         {
             try
             {
-                logger.LogInfomation($"FarmRepository | Create {entity} | start ");
+                logger.LogInfomation($"FarmRepository | Create | start ");
                 Create(entity);
-                FactDbContext.SaveChanges();
                 logger.LogInfomation($"FarmRepository | Create | end ");
-                return Task.CompletedTask;
             }
             catch (Exception ex)
             {
@@ -36,16 +35,14 @@ namespace Repository
             }
         }
 
-        public Task DeleteFarm(int id)
+        public void DeleteFarm(int id)
         {
             try
             {
                 logger.LogInfomation($"FarmRepository | Delete: {id} | start ");
                 var entity = FindByCondition(p => p.Id == id, false).First();
                 Delete(entity);
-                FactDbContext.SaveChanges();
                 logger.LogInfomation($"FarmRepository | Delete | end ");
-                return Task.CompletedTask;
             }
             catch (Exception ex)
             {
@@ -79,16 +76,12 @@ namespace Repository
             return Farms.OrderBy(p => p.Name).ToList();
         }
 
-        public async Task UpdateFarm(FarmEntity entity)
+        public async void UpdateFarm(FarmUpdateModel model)
         {
             try
             {
-                logger.LogInfomation($"FarmRepository | Update: Id = {entity.Id}| start ");
-                var param = new DynamicParameters();
-                param.Add("id", entity.Id, System.Data.DbType.Int64);
-                param.Add("name", entity.Name, System.Data.DbType.String);
-                param.Add("address", entity.Address, System.Data.DbType.String);
-                param.Add("description", entity.Description, System.Data.DbType.String);
+                logger.LogInfomation($"FarmRepository | Update: Id = {model.Id}| start ");
+                var param = new DynamicParameters(model);
 
                 using (var connection = dapperContext.CreateConnection())
                 {

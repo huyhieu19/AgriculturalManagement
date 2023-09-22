@@ -20,12 +20,13 @@ namespace Service
             _mapper = mapper;
         }
 
-        public Task<bool> AddFarm(FarmCreateModel createModel)
+        public async Task<bool> AddFarm(FarmCreateModel createModel)
         {
             _logger.LogInfomation("Create farm in Farm service layer");
             var companyEntity = _mapper.Map<FarmEntity>(createModel);
             repositoryManager.FarmRepository.CreateFarm(companyEntity);
-            return Task.FromResult(true);
+            await repositoryManager.SaveAsync();
+            return true;
         }
 
         public async Task<IEnumerable<FarmDisplayModel>> GetAllFarmAsync(bool trackChanges)
@@ -53,33 +54,40 @@ namespace Service
             }
         }
 
-        public Task<bool> RemoveFarm(int id)
+        public async Task<IEnumerable<FarmFilterNameModel>> GetNameFarm()
+        {
+            var farms = await repositoryManager.FarmRepository.GetAllFarm(false);
+            var farmsDisplayModel = _mapper.Map<IEnumerable<FarmFilterNameModel>>(farms);
+            return farmsDisplayModel;
+        }
+
+        public async Task<bool> RemoveFarm(int id)
         {
             try
             {
                 _logger.LogInfomation($"Farm Service | Remove Farm: {id}");
                 repositoryManager.FarmRepository.DeleteFarm(id);
-                return Task.FromResult(true);
+                await repositoryManager.SaveAsync();
+                return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Farm Service | Exception: {ex}");
-                return Task.FromResult(false);
+                return false;
             }
         }
-        public Task<bool> UpdateFarm(FarmUpdateModel updateModel)
+        public async Task<bool> UpdateFarm(FarmUpdateModel updateModel)
         {
             try
             {
                 _logger.LogInfomation($"Farm Service | Udpate Farm: {updateModel}");
-                FarmEntity farmEntity = _mapper.Map<FarmEntity>(updateModel);
-                repositoryManager.FarmRepository.UpdateFarm(farmEntity);
-                return Task.FromResult(true);
+                repositoryManager.FarmRepository.UpdateFarm(updateModel);
+                return await Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Farm Service | Exception: {ex}");
-                return Task.FromResult(false);
+                return false;
             }
         }
     }

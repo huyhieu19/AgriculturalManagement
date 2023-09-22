@@ -7,17 +7,18 @@ namespace Entities
     {
         [Key]
         public int Id { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public string? Note { get; set; }
-        public DateTime HarvestTime { get; set; }
-        public DateTime TimeToStartPlanting { get; set; }
-        public string Function { get; set; } = null!;
+        public DateTime? HarvestTime { get; set; }
+        public DateTime? TimeToStartPlanting { get; set; } = DateTime.Now;
+        public string? Function { get; set; }
+        public DateTime? CreateDate { get; set; } = DateTime.Now;
 
         [ForeignKey("Farm")]
-        public int FarmId { get; set; }
+        public int? FarmId { get; set; }
         [ForeignKey("Type")]
-        public int TypeTreeId { get; set; }
+        public int? TypeTreeId { get; set; }
 
         public FarmEntity? Farm { get; set; }
         public TypeTreeEntity? Type { get; set; }

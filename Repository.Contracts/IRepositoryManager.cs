@@ -3,6 +3,7 @@
     public interface IRepositoryManager
     {
         IFarmRepository FarmRepository { get; }
+        IZoneRepository ZoneRepository { get; }
         Task SaveAsync();
     }
 }

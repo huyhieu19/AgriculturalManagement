@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entities;
 using Models.Farm;
+using Models.Zone;
 
 namespace AgriculturalManagement
 {
@@ -8,10 +9,18 @@ namespace AgriculturalManagement
     {
         public MappingProfile()
         {
-            // Farm profile
-            CreateMap<FarmEntity, FarmDisplayModel>().ReverseMap();
-            CreateMap<FarmEntity, FarmCreateModel>().ReverseMap();
-            CreateMap<FarmUpdateModel, FarmEntity>().ReverseMap();
+            // Farm mapper profile
+            CreateMap<FarmEntity, FarmDisplayModel>();
+            CreateMap<FarmCreateModel, FarmEntity>();
+            CreateMap<FarmUpdateModel, FarmEntity>();
+            CreateMap<FarmEntity, FarmFilterNameModel>();
+
+            // Zone mapper profile 
+            CreateMap<ZoneEntity, ZoneDisplayModel>();
+            CreateMap<ZoneUpdateModel, ZoneEntity>();
+            CreateMap<ZoneCreateModel, ZoneEntity>();
+
+            //
 
         }
     }

@@ -1,5 +1,4 @@
-﻿using Entities;
-using Models;
+﻿using Models;
 using Models.Farm;
 
 namespace Service.Contracts
@@ -11,5 +10,6 @@ namespace Service.Contracts
         Task<bool> AddFarm(FarmCreateModel createModel);
         Task<bool> RemoveFarm(int id);
         Task<bool> UpdateFarm(FarmUpdateModel updateModel);
+        Task<IEnumerable<FarmFilterNameModel>> GetNameFarm();
     }
 }

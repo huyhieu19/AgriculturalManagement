@@ -1,6 +1,6 @@
 ﻿namespace Models.Zone
 {
-    public class ZoneDisplayModel
+    public class ZoneUpdateModel
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
