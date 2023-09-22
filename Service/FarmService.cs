@@ -40,7 +40,7 @@ namespace Service
         {
             try
             {
-                _logger.LogInfomation($"Farm Service| Get By Condition : {model.SearchTerm} {model.typeOrderBy} | start ");
+                _logger.LogInfomation($"Farm Service| Get By Condition | start ");
                 var responseEntities = await repositoryManager.FarmRepository.GetByCondition(model, trackChanges);
                 var response = _mapper.Map<IEnumerable<FarmDisplayModel>>(responseEntities);
                 _logger.LogInfomation($"Farm Service | Get By Condition | end ");
@@ -60,7 +60,8 @@ namespace Service
                 _logger.LogInfomation($"Farm Service | Remove Farm: {id}");
                 repositoryManager.FarmRepository.DeleteFarm(id);
                 return Task.FromResult(true);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.LogError($"Farm Service | Exception: {ex}");
                 return Task.FromResult(false);
@@ -71,11 +72,11 @@ namespace Service
             try
             {
                 _logger.LogInfomation($"Farm Service | Udpate Farm: {updateModel}");
-                FarmEntity farmEntity = _mapper.Map<FarmEntity>(updateModel); 
+                FarmEntity farmEntity = _mapper.Map<FarmEntity>(updateModel);
                 repositoryManager.FarmRepository.UpdateFarm(farmEntity);
                 return Task.FromResult(true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"Farm Service | Exception: {ex}");
                 return Task.FromResult(false);

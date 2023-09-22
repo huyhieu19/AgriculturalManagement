@@ -8,11 +8,11 @@ namespace Repository
     {
         private readonly Lazy<IFarmRepository> farmRepository;
         private readonly FactDbContext factDbContext;
-        
-        public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger)
+
+        public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext)
         {
             this.factDbContext = factDbContext;
-            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext, logger));
+            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext, logger, dapperContext));
         }
 
         public IFarmRepository FarmRepository => farmRepository.Value;

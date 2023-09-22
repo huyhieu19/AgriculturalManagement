@@ -1,26 +1,22 @@
-﻿using Database;
+﻿using Common.Queries;
+using Dapper;
+using Database;
 using Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Microsoft.Extensions.Logging;
 using Models;
 using Repository.Contracts;
 using Service.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
     public class FarmRepository : RepositoryBase<FarmEntity>, IFarmRepository
     {
         private readonly ILoggerManager logger;
-        public FarmRepository(FactDbContext factDbContext, ILoggerManager logger) : base(factDbContext)
+        private readonly DapperContext dapperContext;
+        public FarmRepository(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext) : base(factDbContext)
         {
-            this.logger = logger;   
+            this.logger = logger;
+            this.dapperContext = dapperContext;
         }
 
         public Task CreateFarm(FarmEntity entity)
@@ -50,7 +46,8 @@ namespace Repository
                 FactDbContext.SaveChanges();
                 logger.LogInfomation($"FarmRepository | Delete | end ");
                 return Task.CompletedTask;
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 logger.LogError($"FarmRepository | Delete | Exeption: {ex}");
                 throw;
@@ -86,14 +83,25 @@ namespace Repository
         {
             try
             {
-                logger.LogInfomation($"FarmRepository | Update: {entity}| start ");
-                var entityUpdate = await FindByCondition(p => p.Id == entity.Id, false).FirstOrDefaultAsync();
-                if (entityUpdate != null) {
-                    Update(entity); 
-                    FactDbContext.SaveChanges();
+                logger.LogInfomation($"FarmRepository | Update: Id = {entity.Id}| start ");
+                var param = new DynamicParameters();
+                param.Add("id", entity.Id, System.Data.DbType.Int64);
+                param.Add("name", entity.Name, System.Data.DbType.String);
+                param.Add("address", entity.Address, System.Data.DbType.String);
+                param.Add("description", entity.Description, System.Data.DbType.String);
+
+                using (var connection = dapperContext.CreateConnection())
+                {
+                    connection.Open();
+                    using (var trans = connection.BeginTransaction())
+                    {
+                        await connection.ExecuteAsync(FarmQuery.UpdateFarm, param, transaction: trans);
+                        trans.Commit();
+                    }
                 }
+
                 logger.LogInfomation($"FarmRepository | Update | end ");
-                
+
             }
             catch (Exception ex)
             {

@@ -27,7 +27,7 @@ namespace Database
             foreach (var entityType in builder.Model.GetEntityTypes())
             {
                 var tableName = entityType.GetTableName();
-                if (tableName.StartsWith("AspNet"))
+                if (tableName!.StartsWith("AspNet"))
                 {
                     entityType.SetTableName(tableName.Substring(6));
                 }
