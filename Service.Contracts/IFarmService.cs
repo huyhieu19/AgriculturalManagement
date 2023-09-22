@@ -1,7 +1,15 @@
-﻿namespace Service.Contracts
+﻿using Entities;
+using Models;
+using Models.Farm;
+
+namespace Service.Contracts
 {
     public interface IFarmService
     {
-        Task<IEnumerable<IFarmService>> GetAllFarmAsync(bool trackChange);
+        Task<IEnumerable<FarmDisplayModel>> GetAllFarmAsync(bool trackChanges);
+        Task<IEnumerable<FarmDisplayModel>> GetByCondition(QueryBaseModel model, bool trackChanges);
+        Task<bool> AddFarm(FarmCreateModel createModel);
+        Task<bool> RemoveFarm(int id);
+        Task<bool> UpdateFarm(FarmUpdateModel updateModel);
     }
 }

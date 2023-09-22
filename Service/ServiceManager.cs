@@ -1,4 +1,6 @@
-﻿using Service.Contracts;
+﻿using AutoMapper;
+using Repository.Contracts;
+using Service.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,9 @@ namespace Service
     {
         private readonly Lazy<IFarmService> farmService;
 
-        public ServiceManager()
+        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper)
         {
-            this.farmService = new Lazy<IFarmService>(() => new FarmService());
+            this.farmService = new Lazy<IFarmService>(() => new FarmService(repositoryManager, logger, mapper));
         }
 
 

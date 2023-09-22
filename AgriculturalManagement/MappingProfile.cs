@@ -8,7 +8,10 @@ namespace AgriculturalManagement
     {
         public MappingProfile()
         {
-            CreateMap<FarmEntity, FarmDisplayModel>();
+            // Farm profile
+            CreateMap<FarmEntity, FarmDisplayModel>().ReverseMap();
+            CreateMap<FarmEntity, FarmCreateModel>().ReverseMap();
+            CreateMap<FarmUpdateModel, FarmEntity>().ReverseMap();
 
         }
     }

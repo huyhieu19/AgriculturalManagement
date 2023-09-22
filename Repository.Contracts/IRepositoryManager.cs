@@ -2,7 +2,7 @@
 {
     public interface IRepositoryManager
     {
-        IFarmRepository Fram { get; }
+        IFarmRepository FarmRepository { get; }
         Task SaveAsync();
     }
 }
