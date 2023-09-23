@@ -41,8 +41,15 @@ namespace Service
 
         public async Task<bool> UpdateZone(ZoneUpdateModel updateModel)
         {
-            repositoryManager.ZoneRepository.UpdateZone(updateModel);
-            return await Task.FromResult(true);
+            try
+            {
+                repositoryManager.ZoneRepository.UpdateZone(updateModel);
+                return await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

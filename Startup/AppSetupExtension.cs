@@ -15,6 +15,7 @@ namespace Startup
                 app.UseSwaggerUI();
             }
             app.UseHttpsRedirection();
+            app.UseMiddleware<ApiResponseMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
