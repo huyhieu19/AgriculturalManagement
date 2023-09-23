@@ -54,16 +54,23 @@ namespace Repository
 
         public async void UpdateZone(ZoneUpdateModel model)
         {
-            var param = new DynamicParameters(model);
-
-            using (var connection = dapperContext.CreateConnection())
+            try
             {
-                connection.Open();
-                using (var trans = connection.BeginTransaction())
+                var param = new DynamicParameters(model);
+
+                using (var connection = dapperContext.CreateConnection())
                 {
-                    await connection.ExecuteAsync(FarmQuery.UpdateFarm, param, transaction: trans);
-                    trans.Commit();
+                    connection.Open();
+                    using (var trans = connection.BeginTransaction())
+                    {
+                        await connection.ExecuteAsync(FarmQuery.UpdateFarm, param, transaction: trans);
+                        trans.Commit();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }
