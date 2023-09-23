@@ -1,6 +1,5 @@
 ﻿using Entities;
 using Models;
-using Models.Zone;
 
 namespace Repository.Contracts
 {

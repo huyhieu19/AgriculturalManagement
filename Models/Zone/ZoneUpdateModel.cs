@@ -1,4 +1,4 @@
-﻿namespace Models.Zone
+﻿namespace Models
 {
     public class ZoneUpdateModel
     {

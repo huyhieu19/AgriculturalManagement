@@ -12,10 +12,7 @@
 
   <ItemGroup>
     <Folder Include="DeviceDriver\" />
-    <Folder Include="Instrumentation\" />
-    <Folder Include="Machine\" />
     <Folder Include="MachineWarranlyDate\" />
-    <Folder Include="Image\" />
   </ItemGroup>
 
 </Project>

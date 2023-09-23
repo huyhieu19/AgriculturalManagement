@@ -1,4 +1,4 @@
-﻿namespace Models.Farm
+﻿namespace Models
 {
     public class FarmUpdateModel
     {

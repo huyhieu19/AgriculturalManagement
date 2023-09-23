@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.Farm;
 using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers

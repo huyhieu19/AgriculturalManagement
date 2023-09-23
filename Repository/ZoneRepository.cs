@@ -4,7 +4,6 @@ using Database;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Models.Zone;
 using Repository.Contracts;
 
 namespace Repository
@@ -31,7 +30,7 @@ namespace Repository
 
         public async Task<IEnumerable<ZoneEntity>> GetZones(QueryBaseModel model, bool trackchanges)
         {
-            var Zones = await FindAll(trackchanges).ToListAsync();
+            var Zones = await FindAll(trackchanges).Include(p => p.Images).ToListAsync();
             if (!string.IsNullOrEmpty(model.SearchTerm))
             {
                 string key = model.SearchTerm;
