@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Entities;
-using Models.Farm;
-using Models.Zone;
+using Models;
 
 namespace AgriculturalManagement
 {
@@ -20,7 +19,8 @@ namespace AgriculturalManagement
             CreateMap<ZoneUpdateModel, ZoneEntity>();
             CreateMap<ZoneCreateModel, ZoneEntity>();
 
-            //
+            // Image
+            CreateMap<ImageEntity, ImageDisplayModel>().ReverseMap();
 
         }
     }

@@ -4,7 +4,6 @@ using Database;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Models.Farm;
 using Repository.Contracts;
 using Service.Contracts;
 
@@ -51,11 +50,12 @@ namespace Repository
             }
         }
 
-        public async Task<IEnumerable<FarmEntity>> GetAllFarm(bool trackChanges) => await FindAll(trackChanges).OrderBy(c => c.Name).ToListAsync();
+        public async Task<IEnumerable<FarmEntity>> GetAllFarm(bool trackChanges) => await FindAll(trackChanges).Include(p => p.Images).Include(p => p.Zones).OrderBy(c => c.Name).ToListAsync();
 
         public async Task<IEnumerable<FarmEntity>> GetByCondition(QueryBaseModel model, bool trackchanges)
         {
-            var Farms = await FindAll(trackchanges).ToListAsync();
+            var Farms = await FindAll(trackchanges).Include(p => p.Images).ToListAsync();
+
             if (!string.IsNullOrEmpty(model.SearchTerm))
             {
                 string key = model.SearchTerm;

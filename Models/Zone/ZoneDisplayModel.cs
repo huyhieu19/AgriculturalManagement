@@ -1,9 +1,10 @@
-﻿namespace Models.Zone
+﻿namespace Models
 {
     public class ZoneDisplayModel
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
+        public ICollection<ImageDisplayModel>? Images { get; set; }
         public string? Description { get; set; }
         public string? Note { get; set; }
         public DateTime? HarvestTime { get; set; }

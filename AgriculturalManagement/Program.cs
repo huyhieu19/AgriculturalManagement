@@ -1,28 +1,30 @@
 using NLog;
 using Startup;
 
-internal class Program
-{
-    private static void Main(string[] args)
-    {
+var builder = WebApplication.CreateBuilder(args)
+  .AddServicesContext()
+  .AddServicesBase()
+  ;
 
-        var builder = WebApplication.CreateBuilder(args)
-          .AddServicesContext()
-          .AddServicesBase()
-          ;
+builder.Services.AddAutoMapper(typeof(Program));
 
-        builder.Services.AddAutoMapper(typeof(Program));
+LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+var app = builder.Build();
 
-        LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
-        var app = builder.Build();
+// Add global error handling
+///var logger = app.Services.GetRequiredService<ILoggerManager>();
+///app.ConfigureExceptionHandler(logger);
 
-        // Add global error handling
-        ///var logger = app.Services.GetRequiredService<ILoggerManager>();
-        ///app.ConfigureExceptionHandler(logger);
+app.UseService();
+app.Run();
 
-        app.UseService();
-        app.Run();
+//internal class Program
+//{
+//    private static void Main(string[] args)
+//    {
 
 
-    }
-}
+
+
+//    }
+//}

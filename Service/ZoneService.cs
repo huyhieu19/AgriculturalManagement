@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Entities;
-using Models.Zone;
+using Models;
 using Repository.Contracts;
 using Service.Contracts;
 

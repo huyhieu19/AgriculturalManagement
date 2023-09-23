@@ -1,4 +1,4 @@
-﻿using Models.Zone;
+﻿using Models;
 
 namespace Service.Contracts
 {

@@ -1,6 +1,5 @@
 ﻿using Entities;
 using Models;
-using Models.Farm;
 
 namespace Repository.Contracts
 {
