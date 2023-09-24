@@ -5,5 +5,6 @@
         IFarmService FarmService { get; }
         IZoneService ZoneService { get; }
         IImageService Image { get; }
+        IInstrumentationService InstrumentationService { get; }
     }
 }

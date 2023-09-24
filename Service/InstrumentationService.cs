@@ -1,38 +1,104 @@
-﻿using Models;
+﻿using AutoMapper;
+using Entities;
+using Models;
+using Repository.Contracts;
 using Service.Contracts;
 
 namespace Service
 {
     public class InstrumentationService : IInstrumentationService
     {
+        private readonly IRepositoryManager repositoryManager;
+        private readonly IMapper mapper;
+
+        public InstrumentationService(IRepositoryManager repositoryManager, IMapper mapper)
+        {
+            this.repositoryManager = repositoryManager;
+            this.mapper = mapper;
+        }
         public Task<StatusDeviceModel> AsyncStatusInstrumentation(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteInstrumentation(int Id)
+        public async Task CreateInstrumentation(InstrumentationCreateModel createModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var createEntity = mapper.Map<InstrumentationEntity>(createModel);
+                repositoryManager.Instrumentation.CreateInstrumentation(createEntity);
+                await repositoryManager.SaveAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
-        public Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationByZoneAsync()
+        public async Task DeleteInstrumentation(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await repositoryManager.Instrumentation.DeleteInstrumentation(Id);
+                await repositoryManager.SaveAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
-        public Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationNotInZoneAsync()
+        public async Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationByZoneAsync(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var instrumentations = await repositoryManager.Instrumentation.GetInstrumentationByZoneAsync(Id);
+                return mapper.Map<IEnumerable<InstrumentationDisplayModel>>(instrumentations);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+
         }
 
-        public Task RemoveInstrumentation(int Id)
+        public async Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationNotInZoneAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var instrumentations = await repositoryManager.Instrumentation.GetInstrumentationNotInZoneAsync();
+                return mapper.Map<IEnumerable<InstrumentationDisplayModel>>(instrumentations);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
-        public Task UpdateInforInstrumentation(InstrumentationUpdateModel updateModel)
+        public async Task RemoveInstrumentation(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await repositoryManager.Instrumentation.RemoveInstrumentation(Id);
+                await repositoryManager.SaveAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
+
+        public async Task UpdateInforInstrumentation(InstrumentationUpdateModel updateModel)
+        {
+            try
+            {
+                await repositoryManager.Instrumentation.UpdateInforInstrumentation(updateModel);
+                await repositoryManager.SaveAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
     }
 }

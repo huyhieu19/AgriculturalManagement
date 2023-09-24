@@ -22,6 +22,11 @@ namespace AgriculturalManagement
             // Image
             CreateMap<ImageEntity, ImageDisplayModel>().ReverseMap();
 
+            // Instrumentation
+            CreateMap<InstrumentationEntity, InstrumentationDisplayModel>();
+            CreateMap<InstrumentationCreateModel, InstrumentationEntity>();
+
+
         }
     }
 }
