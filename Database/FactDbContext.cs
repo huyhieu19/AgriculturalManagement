@@ -41,12 +41,18 @@ namespace Database
 
             builder.ApplyConfiguration(new InstrumentationConfiguration());
             builder.ApplyConfiguration(new MachineWarranlyDateConfiguration());
+            // Zone Configuration
             builder.ApplyConfiguration(new ZoneConfiguration());
+            builder.ApplyConfiguration(new ZoneHarvestConfiguration());
+
+
             builder.ApplyConfiguration(new ZoneDeviceDriverConfiguration());
             builder.ApplyConfiguration(new DeviceDriverConfiguration());
             builder.ApplyConfiguration(new TypeTreeConfiguration());
             builder.ApplyConfiguration(new StaffConfiguration());
             builder.ApplyConfiguration(new MachineConfiguration());
+
+
         }
 
         public DbSet<StaffEntity> StaffEntities { get; set; } = null!;
@@ -58,6 +64,10 @@ namespace Database
         public DbSet<MachineWarranlyDateEntity> MachineWarranlyDateEntities { get; set; } = null!;
         public DbSet<TypeTreeEntity> TypeTreeEntities { get; set; } = null!;
         public DbSet<ZoneDeviceDriverEntity> ZoneDeviceDrivers { get; set; } = null!;
+
+        // Zone 
         public DbSet<ZoneEntity> ZoneEntityEntities { get; set; } = null!;
+        public DbSet<ZoneHarvestEntity> ZoneHarvestEntities { get; set; } = null!;
+
     }
 }

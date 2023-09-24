@@ -28,27 +28,37 @@ namespace Repository
             }
         }
 
+        public Task<IEnumerable<ImageEntity>> GetImagesByFarmId(int FarmId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<ZoneEntity>> GetZones(QueryBaseModel model, bool trackchanges)
         {
             var Zones = await FindAll(trackchanges).Include(p => p.Images).ToListAsync();
             if (!string.IsNullOrEmpty(model.SearchTerm))
             {
                 string key = model.SearchTerm;
-                Zones = Zones.Where(p => p.Name.ToLower().Contains(key.ToLower())).ToList();
+                Zones = Zones.Where(p => p.ZoneName.ToLower().Contains(key.ToLower())).ToList();
             }
             if (model.typeOrderBy is Common.Enum.TypeOrderBy.AToZByName)
             {
-                return Zones.OrderBy(p => p.Name).ToList();
+                return Zones.OrderBy(p => p.ZoneName).ToList();
             }
             else if (model.typeOrderBy is Common.Enum.TypeOrderBy.ZToAByName)
             {
-                return Zones.OrderByDescending(p => p.Name).ToList();
+                return Zones.OrderByDescending(p => p.ZoneName).ToList();
             }
             else if (model.typeOrderBy is Common.Enum.TypeOrderBy.IncreasingDay)
             {
                 return Zones.OrderByDescending(p => p.CreateDate).ToList();
             }
-            return Zones.OrderBy(p => p.Name).ToList();
+            return Zones.OrderBy(p => p.ZoneName).ToList();
+        }
+
+        public Task<IEnumerable<ZoneEntity>> GetZonesByFarmId(int FarmId)
+        {
+            throw new NotImplementedException();
         }
 
         public async void UpdateZone(ZoneUpdateModel model)

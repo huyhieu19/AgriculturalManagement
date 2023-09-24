@@ -21,19 +21,33 @@ namespace Service
 
         public async Task<bool> AddFarm(FarmCreateModel createModel)
         {
-            _logger.LogInfomation("Create farm in Farm service layer");
-            var companyEntity = _mapper.Map<FarmEntity>(createModel);
-            repositoryManager.FarmRepository.CreateFarm(companyEntity);
-            await repositoryManager.SaveAsync();
-            return true;
+            try
+            {
+                _logger.LogInfomation("Create farm in Farm service layer");
+                var companyEntity = _mapper.Map<FarmEntity>(createModel);
+                repositoryManager.FarmRepository.CreateFarm(companyEntity);
+                await repositoryManager.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
         }
 
         public async Task<IEnumerable<FarmDisplayModel>> GetAllFarmAsync(bool trackChanges)
         {
-            _logger.LogInfomation("Get all farms in Service layer");
-            var farms = await repositoryManager.FarmRepository.GetAllFarm(trackChanges);
-            var farmsDisplayModel = _mapper.Map<IEnumerable<FarmDisplayModel>>(farms);
-            return farmsDisplayModel;
+            try
+            {
+                _logger.LogInfomation("Get all farms in Service layer");
+                var farms = await repositoryManager.FarmRepository.GetAllFarm(trackChanges);
+                var farmsDisplayModel = _mapper.Map<IEnumerable<FarmDisplayModel>>(farms);
+                return farmsDisplayModel;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
         }
 
         public async Task<IEnumerable<FarmDisplayModel>> GetByCondition(QueryBaseModel model, bool trackChanges)
@@ -55,9 +69,16 @@ namespace Service
 
         public async Task<IEnumerable<FarmFilterNameModel>> GetNameFarm()
         {
-            var farms = await repositoryManager.FarmRepository.GetAllFarm(false);
-            var farmsDisplayModel = _mapper.Map<IEnumerable<FarmFilterNameModel>>(farms);
-            return farmsDisplayModel;
+            try
+            {
+                var farms = await repositoryManager.FarmRepository.GetAllFarm(false);
+                var farmsDisplayModel = _mapper.Map<IEnumerable<FarmFilterNameModel>>(farms);
+                return farmsDisplayModel;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
         }
 
         public async Task<bool> RemoveFarm(int id)
