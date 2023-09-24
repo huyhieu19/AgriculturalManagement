@@ -7,10 +7,10 @@ namespace Entities
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
+        public string ZoneName { get; set; } = null!;
         public string? Description { get; set; }
         public string? Note { get; set; }
-        public DateTime? HarvestTime { get; set; }
+
         public DateTime? TimeToStartPlanting { get; set; } = DateTime.Now;
         public string? Function { get; set; }
         public DateTime? CreateDate { get; set; } = DateTime.Now;
@@ -26,5 +26,6 @@ namespace Entities
         public ICollection<ImageEntity>? Images { get; set; }
         public ICollection<ZoneDeviceDriverEntity>? ZoneDeviceDrivers { get; set; }
         public ICollection<InstrumentationEntity>? Instrumentations { get; set; }
+        public List<ZoneHarvestEntity>? Harvests { get; set; }
     }
 }

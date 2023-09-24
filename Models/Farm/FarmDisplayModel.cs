@@ -9,7 +9,5 @@
         public string? Address { get; set; }
         public string? Note { get; set; }
         public string? UserId { get; set; }
-        public ICollection<ImageDisplayModel>? Images { get; set; }
-        public ICollection<ZoneDisplayModel>? Zones { get; set; }
     }
 }

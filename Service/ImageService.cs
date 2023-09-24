@@ -1,38 +1,31 @@
-﻿using Models;
+﻿using AutoMapper;
+using Common;
+using Models;
+using Repository.Contracts;
 using Service.Contracts;
 
 namespace Service
 {
     public class ImageService : IImageService
     {
-        public Task<bool> SetImgaeDeviceDriver(ImageCreateModel model)
+        private readonly IRepositoryManager repositoryManager;
+        private readonly IMapper mapper;
+
+        public ImageService(IRepositoryManager repositoryManager, IMapper mapper)
         {
-            throw new NotImplementedException();
+            this.repositoryManager = repositoryManager;
+            this.mapper = mapper;
+        }
+        public async Task<IEnumerable<ImageDisplayModel>> GetImages(ImageQueryDisplayModel model)
+        {
+            var imagesModel = await repositoryManager.ImageRepositoty.GetImages(model);
+            return mapper.Map<IEnumerable<ImageDisplayModel>>(imagesModel);
         }
 
-        public Task<bool> SetImgaeFarm(ImageCreateModel model)
+        public async Task<bool> SetImage(ImageCreateModel model)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> SetImgaeInstrument(ImageCreateModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> SetImgaeMachine(ImageCreateModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> SetImgaeUser(ImageCreateModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> SetImgaeZone(ImageCreateModel model)
-        {
-            throw new NotImplementedException();
+            string Url = UploadImage.UploadImageRoot(model.FileImage);
+            return await repositoryManager.ImageRepositoty.SetImage(model, Url);
         }
     }
 }

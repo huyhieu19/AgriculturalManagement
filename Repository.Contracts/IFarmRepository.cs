@@ -10,5 +10,6 @@ namespace Repository.Contracts
         void DeleteFarm(int id);
         void UpdateFarm(FarmUpdateModel model);
         Task<IEnumerable<FarmEntity>> GetByCondition(QueryBaseModel model, bool trackchanges);
+
     }
 }

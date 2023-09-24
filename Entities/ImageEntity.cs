@@ -9,6 +9,7 @@ namespace Entities
         [Key]
         public int Id { get; set; }
         public string Url { get; set; } = null!;
+        public bool? IsDefault { get; set; }
         public string? Name { get; set; }
 
 
@@ -20,11 +21,13 @@ namespace Entities
         public string? UserId { get; set; }
         [ForeignKey("Zone")]
         public int? ZoneId { get; set; }
-
+        [ForeignKey("ZoneHarvest")]
+        public int? ZoneHarvestId { get; set; }
 
         public ZoneEntity? Zone { get; set; }
         public UserEntity? User { get; set; }
         public StaffEntity? Staff { get; set; }
         public FarmEntity? Farm { get; set; }
+        public ZoneHarvestEntity? ZoneHarvest { get; set; }
     }
 }
