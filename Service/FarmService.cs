@@ -25,7 +25,7 @@ namespace Service
             {
                 _logger.LogInfomation("Create farm in Farm service layer");
                 var companyEntity = _mapper.Map<FarmEntity>(createModel);
-                repositoryManager.FarmRepository.CreateFarm(companyEntity);
+                repositoryManager.Farm.CreateFarm(companyEntity);
                 await repositoryManager.SaveAsync();
                 return true;
             }
@@ -40,7 +40,7 @@ namespace Service
             try
             {
                 _logger.LogInfomation("Get all farms in Service layer");
-                var farms = await repositoryManager.FarmRepository.GetAllFarm(trackChanges);
+                var farms = await repositoryManager.Farm.GetAllFarm(trackChanges);
                 var farmsDisplayModel = _mapper.Map<IEnumerable<FarmDisplayModel>>(farms);
                 return farmsDisplayModel;
             }
@@ -55,7 +55,7 @@ namespace Service
             try
             {
                 _logger.LogInfomation($"Farm Service| Get By Condition | start ");
-                var responseEntities = await repositoryManager.FarmRepository.GetByCondition(model, trackChanges);
+                var responseEntities = await repositoryManager.Farm.GetByCondition(model, trackChanges);
                 var response = _mapper.Map<IEnumerable<FarmDisplayModel>>(responseEntities);
                 _logger.LogInfomation($"Farm Service | Get By Condition | end ");
                 return response;
@@ -71,7 +71,7 @@ namespace Service
         {
             try
             {
-                var farms = await repositoryManager.FarmRepository.GetAllFarm(false);
+                var farms = await repositoryManager.Farm.GetAllFarm(false);
                 var farmsDisplayModel = _mapper.Map<IEnumerable<FarmFilterNameModel>>(farms);
                 return farmsDisplayModel;
             }
@@ -86,7 +86,7 @@ namespace Service
             try
             {
                 _logger.LogInfomation($"Farm Service | Remove Farm: {id}");
-                repositoryManager.FarmRepository.DeleteFarm(id);
+                repositoryManager.Farm.DeleteFarm(id);
                 await repositoryManager.SaveAsync();
                 return true;
             }
@@ -101,7 +101,7 @@ namespace Service
             try
             {
                 _logger.LogInfomation($"Farm Service | Udpate Farm: {updateModel}");
-                repositoryManager.FarmRepository.UpdateFarm(updateModel);
+                repositoryManager.Farm.UpdateFarm(updateModel);
                 return await Task.FromResult(true);
             }
             catch (Exception ex)

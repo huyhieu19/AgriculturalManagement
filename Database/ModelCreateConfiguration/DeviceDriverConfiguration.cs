@@ -9,7 +9,18 @@ namespace Database.ModelCreateConfiguration
         public void Configure(EntityTypeBuilder<DeviceDriverEntity> builder)
         {
             builder.ToTable("DeviceDriver");
-            builder.HasKey(e => e.Id);
+
+            builder.HasKey(p => p.Id);
+
+            builder.HasOne(p => p.DeviceDriverType)
+                .WithMany(p => p.DeviceDrivers)
+                .HasForeignKey(p => p.DeviceDriverTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.HasOne(p => p.Zone)
+                .WithMany(p => p.ZoneDeviceDrivers)
+                .HasForeignKey(p => p.ZoneId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

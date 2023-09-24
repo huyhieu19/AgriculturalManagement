@@ -2,17 +2,15 @@
 
 namespace Entities
 {
-    public class MachineEntity
+    public class DeviceDriverTypeEntity
     {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
-        public string? Note { get; set; }
-        public DateTime? DateStartedUsing { get; set; }
-        public bool? IsActive { get; set; } = false;
+        public string? Manufacturer { get; set; }
         public string? ImageUrl { get; set; }
+        public ICollection<DeviceDriverEntity>? DeviceDrivers { get; set; }
 
-        public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
     }
 }

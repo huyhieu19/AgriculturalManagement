@@ -2,14 +2,16 @@
 
 namespace Entities
 {
-    public class ZoneHarvestEntity
+    public class JobInZoneEntity
     {
         [Key]
         public int Id { get; set; }
-        public DateTime HarvertTime { get; set; }
+        public string NameJob { get; set; } = null!;
+        public DateTime? DateCreate { get; set; }
+        public DateTime? ReminderDate { get; set; }
         public string? Note { get; set; }
+        public string? ImageUrl { get; set; }
         public int? ZoneId { get; set; }
         public ZoneEntity? Zone { get; set; }
-        public ICollection<ImageEntity>? Images { get; set; }
     }
 }

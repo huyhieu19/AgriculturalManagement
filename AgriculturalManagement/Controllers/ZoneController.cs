@@ -12,13 +12,13 @@ namespace AgriculturalManagement.Controllers
         public ZoneController(IServiceManager serviceManager) => this.serviceManager = serviceManager;
 
         [HttpPost, Route("zones")]
-        public async Task<IEnumerable<ZoneDisplayModel>> GetZones([FromBody] ZoneQueryDisplayModel model) => await serviceManager.ZoneService.GetZones(model, trackChanges: false);
+        public async Task<IEnumerable<ZoneDisplayModel>> GetZones([FromBody] ZoneQueryDisplayModel model) => await serviceManager.Zone.GetZones(model, trackChanges: false);
         [HttpPost, Route("zone")]
-        public async Task<bool> AddZone([FromBody] ZoneCreateModel createModel) => await serviceManager.ZoneService.AddZone(createModel);
+        public async Task<bool> AddZone([FromBody] ZoneCreateModel createModel) => await serviceManager.Zone.AddZone(createModel);
         [HttpDelete, Route("zone")]
-        public async Task<bool> RemoveZone([FromQuery] int id) => await serviceManager.ZoneService.RemoveZone(id);
+        public async Task<bool> RemoveZone([FromQuery] int id) => await serviceManager.Zone.RemoveZone(id);
         [HttpPut, Route("zone")]
-        public async Task<bool> UpdateZone([FromBody] ZoneUpdateModel updateModel) => await serviceManager.ZoneService.UpdateZone(updateModel);
+        public async Task<bool> UpdateZone([FromBody] ZoneUpdateModel updateModel) => await serviceManager.Zone.UpdateZone(updateModel);
 
     }
 }

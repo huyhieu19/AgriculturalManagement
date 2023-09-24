@@ -44,18 +44,18 @@ namespace Database
             // Zone Configuration
             builder.ApplyConfiguration(new ZoneConfiguration());
             builder.ApplyConfiguration(new ZoneHarvestConfiguration());
+            builder.ApplyConfiguration(new JobInZoneConfiguration());
 
 
-            builder.ApplyConfiguration(new ZoneDeviceDriverConfiguration());
             builder.ApplyConfiguration(new DeviceDriverConfiguration());
+            builder.ApplyConfiguration(new DeviceDriverTypeConfiguration());
+
             builder.ApplyConfiguration(new TypeTreeConfiguration());
-            builder.ApplyConfiguration(new StaffConfiguration());
             builder.ApplyConfiguration(new MachineConfiguration());
 
 
         }
 
-        public DbSet<StaffEntity> StaffEntities { get; set; } = null!;
         public DbSet<DeviceDriverEntity> DeviceDriverEntities { get; set; } = null!;
         public DbSet<FarmEntity> FarmEntities { get; set; } = null!;
         public DbSet<ImageEntity> ImageEntities { get; set; } = null!;
@@ -63,7 +63,7 @@ namespace Database
         public DbSet<MachineEntity> MachineEntities { get; set; } = null!;
         public DbSet<MachineWarranlyDateEntity> MachineWarranlyDateEntities { get; set; } = null!;
         public DbSet<TypeTreeEntity> TypeTreeEntities { get; set; } = null!;
-        public DbSet<ZoneDeviceDriverEntity> ZoneDeviceDrivers { get; set; } = null!;
+        public DbSet<DeviceDriverEntity> ZoneDeviceDrivers { get; set; } = null!;
 
         // Zone 
         public DbSet<ZoneEntity> ZoneEntityEntities { get; set; } = null!;

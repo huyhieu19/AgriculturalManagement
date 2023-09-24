@@ -51,7 +51,7 @@ namespace Repository
             }
             else if (model.typeOrderBy is Common.Enum.TypeOrderBy.IncreasingDay)
             {
-                return Zones.OrderByDescending(p => p.CreateDate).ToList();
+                return Zones.OrderByDescending(p => p.DateCreateFarm).ToList();
             }
             return Zones.OrderBy(p => p.ZoneName).ToList();
         }

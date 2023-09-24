@@ -32,7 +32,6 @@ namespace Entities
 
         public ZoneEntity? Zone { get; set; }
         public UserEntity? User { get; set; }
-        public StaffEntity? Staff { get; set; }
         public FarmEntity? Farm { get; set; }
         public ZoneHarvestEntity? ZoneHarvest { get; set; }
         public InstrumentationEntity? Instrumentation { get; set; }

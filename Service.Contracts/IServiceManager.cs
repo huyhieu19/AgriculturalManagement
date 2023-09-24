@@ -2,9 +2,11 @@
 {
     public interface IServiceManager
     {
-        IFarmService FarmService { get; }
-        IZoneService ZoneService { get; }
+        IFarmService Farm { get; }
+        IZoneService Zone { get; }
         IImageService Image { get; }
-        IInstrumentationService InstrumentationService { get; }
+        IInstrumentationService Instrumentation { get; }
+        IDeviceDriverService DeviceDriver { get; }
+        IMachineService Machine { get; }
     }
 }

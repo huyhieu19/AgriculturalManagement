@@ -2,10 +2,12 @@
 {
     public interface IRepositoryManager
     {
-        IFarmRepository FarmRepository { get; }
-        IZoneRepository ZoneRepository { get; }
-        IImageRepository ImageRepositoty { get; }
+        IFarmRepository Farm { get; }
+        IZoneRepository Zone { get; }
+        IImageRepository Image { get; }
         IInstrumentationRepository Instrumentation { get; }
+        IDeviceDriverRepository DeviceDriver { get; }
+        IMachineRepository Machine { get; }
         Task SaveAsync();
     }
 }
