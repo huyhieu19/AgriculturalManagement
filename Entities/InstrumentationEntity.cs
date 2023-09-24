@@ -10,7 +10,8 @@ namespace Entities
         public string Name { get; set; } = null!;
         public string? Note { get; set; }
         public string? Description { get; set; }
-        public bool IsActive { get; set; } = false;
+        public bool? IsActive { get; set; } = false;
+        public bool? IsProblem { get; set; } = false;
         public DateTime? DateOfPurchanse { get; set; }
 
         [ForeignKey("Zone")]
@@ -19,5 +20,6 @@ namespace Entities
         public ZoneEntity? Zone { get; set; }
 
         public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
+        public ICollection<ImageEntity>? Images { get; set; }
     }
 }

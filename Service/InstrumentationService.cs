@@ -5,12 +5,7 @@ namespace Service
 {
     public class InstrumentationService : IInstrumentationService
     {
-        public Task AddInstrumentation(InstrumentationCreateModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<StatusDeviceModel> AsyncStatusMachine(int Id)
+        public Task<StatusDeviceModel> AsyncStatusInstrumentation(int Id)
         {
             throw new NotImplementedException();
         }
@@ -20,17 +15,22 @@ namespace Service
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationDisplayModelAsync()
+        public Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationByZoneAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<StatusDeviceModel> TurnOnTurnOff(int Id)
+        public Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationNotInZoneAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<InstrumentationUpdateModel> UpdateInforInstrumentation()
+        public Task RemoveInstrumentation(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateInforInstrumentation(InstrumentationUpdateModel updateModel)
         {
             throw new NotImplementedException();
         }

@@ -56,5 +56,17 @@ namespace Service
                 throw new ArgumentNullException(ex.Message);
             }
         }
+
+        public async Task SetImageDefault(int Id)
+        {
+            try
+            {
+                await repositoryManager.ImageRepositoty.SetImageDefault(Id);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
+        }
     }
 }

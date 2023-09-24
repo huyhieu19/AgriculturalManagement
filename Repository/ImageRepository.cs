@@ -77,11 +77,31 @@ namespace Repository
                 connection.Open();
                 using (var trans = connection.BeginTransaction())
                 {
+                    if (model.IsDefault == true)
+                    {
+                        await connection.ExecuteAsync(ImageQuery.SetAllDefaultToFalse, transaction: trans);
+                    }
                     await connection.ExecuteAsync(ImageQuery.CreateImage, param, transaction: trans);
                     trans.Commit();
                 }
             }
             return true;
+        }
+
+        public async Task SetImageDefault(int Id)
+        {
+            var param = new DynamicParameters();
+            param.Add("Id", Id);
+
+            using (var connection = dapperContext.CreateConnection())
+            {
+                connection.Open();
+                using (var trans = connection.BeginTransaction())
+                {
+                    await connection.ExecuteAsync(ImageQuery.SetImageDefault, param, transaction: trans);
+                    trans.Commit();
+                }
+            }
         }
     }
 }
