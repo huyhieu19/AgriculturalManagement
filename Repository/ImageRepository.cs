@@ -16,6 +16,14 @@ namespace Repository
         {
             this.dapperContext = dapperContext;
         }
+
+        public async Task<bool> DeleteImage(int Id)
+        {
+            var image = await FindByCondition(p => p.Id == Id, trackChanges: false).FirstOrDefaultAsync();
+            Delete(image!);
+            return true;
+        }
+
         public async Task<IEnumerable<ImageEntity>> GetImages(ImageQueryDisplayModel model)
         {
             if (model.IsDefault == true)

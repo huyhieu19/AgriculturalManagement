@@ -16,16 +16,45 @@ namespace Service
             this.repositoryManager = repositoryManager;
             this.mapper = mapper;
         }
+
+        public async Task<bool> DeleteImage(int Id)
+        {
+            try
+            {
+                await repositoryManager.ImageRepositoty.DeleteImage(Id);
+                await repositoryManager.SaveAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<ImageDisplayModel>> GetImages(ImageQueryDisplayModel model)
         {
-            var imagesModel = await repositoryManager.ImageRepositoty.GetImages(model);
-            return mapper.Map<IEnumerable<ImageDisplayModel>>(imagesModel);
+            try
+            {
+                var imagesModel = await repositoryManager.ImageRepositoty.GetImages(model);
+                return mapper.Map<IEnumerable<ImageDisplayModel>>(imagesModel);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
         }
 
         public async Task<bool> SetImage(ImageCreateModel model)
         {
-            string Url = UploadImage.UploadImageRoot(model.FileImage);
-            return await repositoryManager.ImageRepositoty.SetImage(model, Url);
+            try
+            {
+                string Url = UploadImage.UploadImageRoot(model.FileImage);
+                return await repositoryManager.ImageRepositoty.SetImage(model, Url);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
         }
     }
 }
