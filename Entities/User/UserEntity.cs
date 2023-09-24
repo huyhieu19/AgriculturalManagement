@@ -4,7 +4,7 @@ namespace Entities.User
 {
     public class UserEntity : IdentityUser
     {
-        public ICollection<ImageEntity>? Images { get; set; }
+        public string? AvatarUrl { get; set; }
         public ICollection<FarmEntity>? Farms { get; set; }
 
     }

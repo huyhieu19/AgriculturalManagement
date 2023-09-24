@@ -10,6 +10,8 @@ namespace Service
         private readonly Lazy<IZoneService> zoneService;
         private readonly Lazy<IImageService> imageService;
         private readonly Lazy<IInstrumentationService> instrumentationService;
+        private readonly Lazy<IDeviceDriverService> deviceDriverService;
+        private readonly Lazy<IMachineService> machineService;
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
@@ -19,15 +21,21 @@ namespace Service
             this.zoneService = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper));
             this.imageService = new Lazy<IImageService>(() => new ImageService(repositoryManager, mapper));
             this.instrumentationService = new Lazy<IInstrumentationService>(() => new InstrumentationService(repositoryManager, mapper));
+            this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper));
+            this.machineService = new Lazy<IMachineService>(() => new MachineService(repositoryManager, mapper));
         }
 
 
-        public IFarmService FarmService => farmService.Value;
+        public IFarmService Farm => farmService.Value;
 
-        public IZoneService ZoneService => zoneService.Value;
+        public IZoneService Zone => zoneService.Value;
 
         public IImageService Image => imageService.Value;
 
-        public IInstrumentationService InstrumentationService => instrumentationService.Value;
+        public IInstrumentationService Instrumentation => instrumentationService.Value;
+
+        public IDeviceDriverService DeviceDriver => deviceDriverService.Value;
+
+        public IMachineService Machine => machineService.Value;
     }
 }

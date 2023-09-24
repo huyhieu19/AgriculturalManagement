@@ -20,21 +20,21 @@ namespace Service
         public async Task<bool> AddZone(ZoneCreateModel createModel)
         {
             var entity = mapper.Map<ZoneEntity>(createModel);
-            repositoryManager.ZoneRepository.CreateZone(entity);
+            repositoryManager.Zone.CreateZone(entity);
             await repositoryManager.SaveAsync();
             return true;
         }
 
         public async Task<IEnumerable<ZoneDisplayModel>> GetZones(ZoneQueryDisplayModel model, bool trackChanges)
         {
-            var ZonesModel = await repositoryManager.ZoneRepository.GetZones(model, trackChanges);
+            var ZonesModel = await repositoryManager.Zone.GetZones(model, trackChanges);
             var result = mapper.Map<IEnumerable<ZoneDisplayModel>>(ZonesModel);
             return result;
         }
 
         public async Task<bool> RemoveZone(int id)
         {
-            repositoryManager.ZoneRepository.DeleteZone(id);
+            repositoryManager.Zone.DeleteZone(id);
             await repositoryManager.SaveAsync();
             return true;
         }
@@ -43,7 +43,7 @@ namespace Service
         {
             try
             {
-                repositoryManager.ZoneRepository.UpdateZone(updateModel);
+                repositoryManager.Zone.UpdateZone(updateModel);
                 return await Task.FromResult(true);
             }
             catch (Exception ex)

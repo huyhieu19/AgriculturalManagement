@@ -10,6 +10,8 @@ namespace Repository
         private readonly Lazy<IZoneRepository> zoneRepository;
         private readonly Lazy<IImageRepository> imageRepository;
         private readonly Lazy<IInstrumentationRepository> instrumentationRepository;
+        private readonly Lazy<IDeviceDriverRepository> deviceDriverRepository;
+        private readonly Lazy<IMachineRepository> machineRepository;
         private readonly FactDbContext factDbContext;
 
         public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext)
@@ -19,15 +21,21 @@ namespace Repository
             zoneRepository = new Lazy<IZoneRepository>(() => new ZoneRepository(factDbContext, dapperContext));
             imageRepository = new Lazy<IImageRepository>(() => new ImageRepository(factDbContext, dapperContext));
             instrumentationRepository = new Lazy<IInstrumentationRepository>(() => new InstrumentationRepository(factDbContext, dapperContext));
+            deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext));
+            machineRepository = new Lazy<IMachineRepository>(() => new MachineRepository(factDbContext, dapperContext));
         }
 
-        public IFarmRepository FarmRepository => farmRepository.Value;
+        public IFarmRepository Farm => farmRepository.Value;
 
-        public IZoneRepository ZoneRepository => zoneRepository.Value;
+        public IZoneRepository Zone => zoneRepository.Value;
 
-        public IImageRepository ImageRepositoty => imageRepository.Value;
+        public IImageRepository Image => imageRepository.Value;
 
         public IInstrumentationRepository Instrumentation => instrumentationRepository.Value;
+
+        public IDeviceDriverRepository DeviceDriver => deviceDriverRepository.Value;
+
+        public IMachineRepository Machine => machineRepository.Value;
 
         public async Task SaveAsync() => await factDbContext.SaveChangesAsync();
     }

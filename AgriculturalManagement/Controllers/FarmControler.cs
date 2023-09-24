@@ -14,32 +14,32 @@ namespace AgriculturalManagement.Controllers
         [HttpGet, Route("farms")]
         public async Task<IEnumerable<FarmDisplayModel>> GetFarmAsync()
         {
-            return await serviceManager.FarmService.GetAllFarmAsync(false);
+            return await serviceManager.Farm.GetAllFarmAsync(false);
         }
         [HttpPost, Route("farm")]
         public async Task<bool> CreateFarmAsync([FromBody] FarmCreateModel createModel)
         {
-            return await serviceManager.FarmService.AddFarm(createModel);
+            return await serviceManager.Farm.AddFarm(createModel);
         }
         [HttpPost, Route("farmsCondition")]
         public async Task<IEnumerable<FarmDisplayModel>> GetCondition([FromBody] QueryBaseModel model)
         {
-            return await serviceManager.FarmService.GetByCondition(model, false);
+            return await serviceManager.Farm.GetByCondition(model, false);
         }
         [HttpDelete, Route("farm")]
         public async Task<bool> DeleteFarm(int id)
         {
-            return await serviceManager.FarmService.RemoveFarm(id);
+            return await serviceManager.Farm.RemoveFarm(id);
         }
         [HttpPost, Route("farmupdate")]
         public async Task<bool> UpdateFarm([FromBody] FarmUpdateModel model)
         {
-            return await serviceManager.FarmService.UpdateFarm(model);
+            return await serviceManager.Farm.UpdateFarm(model);
         }
         [HttpGet, Route("names")]
         public async Task<IEnumerable<FarmFilterNameModel>> GetNamesFarmAsync()
         {
-            return await serviceManager.FarmService.GetNameFarm();
+            return await serviceManager.Farm.GetNameFarm();
         }
     }
 }

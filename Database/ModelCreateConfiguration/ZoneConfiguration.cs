@@ -17,7 +17,7 @@ namespace Database.ModelCreateConfiguration
                 .HasForeignKey(p => p.FarmId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            builder.HasOne(p => p.Type)
+            builder.HasOne(p => p.TypeTree)
                 .WithMany(p => p.Zones)
                 .HasForeignKey(p => p.TypeTreeId)
                 .OnDelete(DeleteBehavior.ClientSetNull);

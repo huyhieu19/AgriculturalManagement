@@ -13,19 +13,23 @@ namespace Entities
 
         public DateTime? TimeToStartPlanting { get; set; } = DateTime.Now;
         public string? Function { get; set; }
-        public DateTime? CreateDate { get; set; } = DateTime.Now;
+        public DateTime? DateCreateFarm { get; set; } = DateTime.Now;
+
+
 
         [ForeignKey("Farm")]
         public int? FarmId { get; set; }
-        [ForeignKey("Type")]
+        [ForeignKey("TypeTree")]
         public int? TypeTreeId { get; set; }
 
         public FarmEntity? Farm { get; set; }
-        public TypeTreeEntity? Type { get; set; }
+        public TypeTreeEntity? TypeTree { get; set; }
 
         public ICollection<ImageEntity>? Images { get; set; }
-        public ICollection<ZoneDeviceDriverEntity>? ZoneDeviceDrivers { get; set; }
+        public ICollection<DeviceDriverEntity>? ZoneDeviceDrivers { get; set; }
         public ICollection<InstrumentationEntity>? Instrumentations { get; set; }
-        public List<ZoneHarvestEntity>? Harvests { get; set; }
+        public ICollection<ZoneHarvestEntity>? Harvests { get; set; }
+        public ICollection<JobInZoneEntity>? JobInZones { get; set; }
+
     }
 }

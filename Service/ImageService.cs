@@ -21,7 +21,7 @@ namespace Service
         {
             try
             {
-                await repositoryManager.ImageRepositoty.DeleteImage(Id);
+                await repositoryManager.Image.DeleteImage(Id);
                 await repositoryManager.SaveAsync();
                 return true;
             }
@@ -35,7 +35,7 @@ namespace Service
         {
             try
             {
-                var imagesModel = await repositoryManager.ImageRepositoty.GetImages(model);
+                var imagesModel = await repositoryManager.Image.GetImages(model);
                 return mapper.Map<IEnumerable<ImageDisplayModel>>(imagesModel);
             }
             catch (Exception ex)
@@ -49,7 +49,7 @@ namespace Service
             try
             {
                 string Url = UploadImage.UploadImageRoot(model.FileImage);
-                return await repositoryManager.ImageRepositoty.SetImage(model, Url);
+                return await repositoryManager.Image.SetImage(model, Url);
             }
             catch (Exception ex)
             {
@@ -61,7 +61,7 @@ namespace Service
         {
             try
             {
-                await repositoryManager.ImageRepositoty.SetImageDefault(Id);
+                await repositoryManager.Image.SetImageDefault(Id);
             }
             catch (Exception ex)
             {
