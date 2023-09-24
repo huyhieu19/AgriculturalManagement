@@ -20,5 +20,16 @@ namespace AgriculturalManagement.Controllers
         {
             return await serviceManager.Image.SetImage(model);
         }
+        [HttpDelete, Route("image")]
+        public async Task<bool> DeleteImage(int id)
+        {
+            return await serviceManager.Image.DeleteImage(id);
+        }
+        [HttpPut, Route("imagedefault")]
+        public async Task<IActionResult> SetImageDefault(int id)
+        {
+            await serviceManager.Image.SetImageDefault(id);
+            return Ok(true);
+        }
     }
 }

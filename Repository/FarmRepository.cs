@@ -91,6 +91,7 @@ namespace Repository
                         await connection.ExecuteAsync(FarmQuery.UpdateFarm, param, transaction: trans);
                         trans.Commit();
                     }
+                    connection.Close();
                 }
 
                 logger.LogInfomation($"FarmRepository | Update | end ");

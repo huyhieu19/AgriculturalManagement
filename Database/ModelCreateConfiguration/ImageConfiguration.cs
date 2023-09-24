@@ -36,5 +36,20 @@ public class ImageConfiguration : IEntityTypeConfiguration<ImageEntity>
             .WithMany(p => p.Images)
             .HasForeignKey(p => p.ZoneHarvestId)
             .OnDelete(DeleteBehavior.ClientSetNull);
+
+        builder.HasOne(p => p.Instrumentation)
+            .WithMany(p => p.Images)
+            .HasForeignKey(p => p.InstrumentationId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        builder.HasOne(p => p.DeviceDriver)
+            .WithMany(p => p.Images)
+            .HasForeignKey(p => p.DeviceDriverId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        builder.HasOne(p => p.Machine)
+            .WithMany(p => p.Images)
+            .HasForeignKey(p => p.MachineId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

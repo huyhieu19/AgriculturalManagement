@@ -8,10 +8,11 @@ namespace Entities
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
-        public bool IsActive { get; set; } = false;
-
+        public DateTime? DateOfPurChanse { get; set; }
+        public bool? IsProblem { get; set; } = false;
 
         public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
         public ICollection<ZoneDeviceDriverEntity>? ZoneDeviceDrivers { get; set; }
+        public ICollection<ImageEntity>? Images { get; set; }
     }
 }
