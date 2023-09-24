@@ -28,11 +28,7 @@ namespace Repository
         {
             if (model.IsDefault == true)
             {
-                if (model.UserId != null)
-                {
-                    return await FindByCondition(p => p.UserId == model.UserId && p.IsDefault == true, false).ToListAsync();
-                }
-                else if (model.FarmId != null)
+                if (model.FarmId != null)
                 {
                     return await FindByCondition(p => p.FarmId == model.FarmId && p.IsDefault == true, false).ToListAsync();
                 }
@@ -44,14 +40,18 @@ namespace Repository
                 {
                     return await FindByCondition(p => p.ZoneId == model.FarmId && p.IsDefault == true, false).ToListAsync();
                 }
+                else if (model.DeviceDriverId != null)
+                {
+                    return await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.IsDefault == true, false).ToListAsync();
+                }
+                else if (model.InstrumentationId != null)
+                {
+                    return await FindByCondition(p => p.InstrumentationId == model.InstrumentationId && p.IsDefault == true, false).ToListAsync();
+                }
             }
             else
             {
-                if (model.UserId != null)
-                {
-                    return await FindByCondition(p => p.UserId == model.UserId, false).ToListAsync();
-                }
-                else if (model.FarmId != null)
+                if (model.FarmId != null)
                 {
                     return await FindByCondition(p => p.FarmId == model.FarmId, false).ToListAsync();
                 }
@@ -62,6 +62,14 @@ namespace Repository
                 else if (model.ZoneId != null)
                 {
                     return await FindByCondition(p => p.ZoneId == model.FarmId, false).ToListAsync();
+                }
+                if (model.DeviceDriverId != null)
+                {
+                    return await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId, false).ToListAsync();
+                }
+                else if (model.InstrumentationId != null)
+                {
+                    return await FindByCondition(p => p.InstrumentationId == model.InstrumentationId, false).ToListAsync();
                 }
             }
             return new List<ImageEntity>() { new ImageEntity() };
