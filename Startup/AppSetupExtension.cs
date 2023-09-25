@@ -24,6 +24,11 @@ namespace Startup
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+
+
+            ///app.UseResponseCaching();
+            ///app.UseHttpCacheHeaders();
+
             return app;
         }
     }

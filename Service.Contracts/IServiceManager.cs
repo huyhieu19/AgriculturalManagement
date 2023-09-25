@@ -8,5 +8,6 @@
         IInstrumentationService Instrumentation { get; }
         IDeviceDriverService DeviceDriver { get; }
         IMachineService Machine { get; }
+        IAuthenticationService AuthenticationService { get; }
     }
 }

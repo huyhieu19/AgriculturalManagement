@@ -27,7 +27,7 @@ namespace Service
             }
             catch (Exception ex)
             {
-                throw new ArgumentNullException(ex.Message);
+                throw new AggregateException(ex.Message);
             }
         }
 
@@ -40,7 +40,7 @@ namespace Service
             }
             catch (Exception ex)
             {
-                throw new ArgumentNullException(ex.Message);
+                throw new AggregateException(ex.Message);
             }
         }
 
@@ -53,7 +53,7 @@ namespace Service
             }
             catch (Exception ex)
             {
-                throw new ArgumentNullException(ex.Message);
+                throw new AggregateException(ex.Message);
             }
         }
 
@@ -65,7 +65,7 @@ namespace Service
             }
             catch (Exception ex)
             {
-                throw new ArgumentNullException(ex.Message);
+                throw new AggregateException(ex.Message);
             }
         }
     }

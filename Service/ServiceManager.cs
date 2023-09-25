@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Repository.Contracts;
 using Service.Contracts;
 
@@ -12,10 +15,11 @@ namespace Service
         private readonly Lazy<IInstrumentationService> instrumentationService;
         private readonly Lazy<IDeviceDriverService> deviceDriverService;
         private readonly Lazy<IMachineService> machineService;
+        private readonly Lazy<IAuthenticationService> authenticationService;
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
-            IMapper mapper)
+            IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration)
         {
             this.farmService = new Lazy<IFarmService>(() => new FarmService(repositoryManager, logger, mapper));
             this.zoneService = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper));
@@ -23,6 +27,7 @@ namespace Service
             this.instrumentationService = new Lazy<IInstrumentationService>(() => new InstrumentationService(repositoryManager, mapper));
             this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper));
             this.machineService = new Lazy<IMachineService>(() => new MachineService(repositoryManager, mapper));
+            this.authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, userManager, logger, configuration));
         }
 
 
@@ -37,5 +42,7 @@ namespace Service
         public IDeviceDriverService DeviceDriver => deviceDriverService.Value;
 
         public IMachineService Machine => machineService.Value;
+
+        public IAuthenticationService AuthenticationService => authenticationService.Value;
     }
 }

@@ -50,11 +50,11 @@ namespace Repository
             }
         }
 
-        public async Task<IEnumerable<FarmEntity>> GetAllFarm(bool trackChanges) => await FindAll(trackChanges).Include(p => p.Images).Include(p => p.Zones).OrderBy(c => c.Name).ToListAsync();
+        public async Task<IEnumerable<FarmEntity>> GetAllFarm(bool trackChanges) => await FindAll(trackChanges).OrderBy(c => c.Name).ToListAsync();
 
         public async Task<IEnumerable<FarmEntity>> GetByCondition(QueryBaseModel model, bool trackchanges)
         {
-            var Farms = await FindAll(trackchanges).Include(p => p.Images).ToListAsync();
+            var Farms = await FindAll(trackchanges).ToListAsync();
 
             if (!string.IsNullOrEmpty(model.SearchTerm))
             {

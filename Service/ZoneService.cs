@@ -48,7 +48,7 @@ namespace Service
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new AggregateException(ex.Message);
             }
         }
     }

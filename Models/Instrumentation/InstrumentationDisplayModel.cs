@@ -8,7 +8,7 @@
         public string? Description { get; set; }
         public bool IsActive { get; set; } = false;
         public bool IsProblem { get; set; } = false;
-        public DateTime? DateOfPurchanse { get; set; }
+        public DateTime? DateStartedUsing { get; set; }
         public int? ZoneId { get; set; }
     }
 }
