@@ -1,5 +1,6 @@
 ﻿using Database;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,13 @@ namespace Startup
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
             builder.Services.AddSingleton<DapperContext>();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(config =>
+            {
+                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
+                {
+                    Duration = 120
+                });
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -45,6 +52,11 @@ namespace Startup
                                .AllowAnyMethod();
                     });
             });
+
+            builder.Services.ConfigureJWT(builder.Configuration);
+
+            ///builder.Services.ConfigureResponseCaching();
+            ///builder.Services.ConfigureHttpCacheHeaders();
 
             return builder;
         }

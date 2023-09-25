@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service.Contracts;
 
@@ -12,6 +13,7 @@ namespace AgriculturalManagement.Controllers
         public FarmControler(IServiceManager serviceManager) => this.serviceManager = serviceManager;
 
         [HttpGet, Route("farms")]
+        [Authorize]
         public async Task<IEnumerable<FarmDisplayModel>> GetFarmAsync()
         {
             return await serviceManager.Farm.GetAllFarmAsync(false);
