@@ -1,6 +1,6 @@
 ﻿using Database.ModelCreateConfiguration;
+using Database.ModelCreateConfiguration.Role;
 using Entities;
-using Entities.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +32,9 @@ namespace Database
                     entityType.SetTableName(tableName.Substring(6));
                 }
             }
+            // User
+            // Identity Role
+            builder.ApplyConfiguration(new RoleConfiguration());
 
             // Image configuration
             builder.ApplyConfiguration(new ImageConfiguration());
@@ -40,7 +43,11 @@ namespace Database
             builder.ApplyConfiguration(new FarmConfiguration());
 
             builder.ApplyConfiguration(new InstrumentationConfiguration());
+            builder.ApplyConfiguration(new InstrumentationTypeConfiguration());
+
+
             builder.ApplyConfiguration(new MachineWarranlyDateConfiguration());
+
             // Zone Configuration
             builder.ApplyConfiguration(new ZoneConfiguration());
             builder.ApplyConfiguration(new ZoneHarvestConfiguration());
@@ -60,14 +67,19 @@ namespace Database
         public DbSet<FarmEntity> FarmEntities { get; set; } = null!;
         public DbSet<ImageEntity> ImageEntities { get; set; } = null!;
         public DbSet<InstrumentationEntity> InstrumentationEntities { get; set; } = null!;
+        public DbSet<InstrumentationTypeEntity> InstrumentationTypeEntities { get; set; } = null!;
+        // Machine
         public DbSet<MachineEntity> MachineEntities { get; set; } = null!;
         public DbSet<MachineWarranlyDateEntity> MachineWarranlyDateEntities { get; set; } = null!;
+
+        // Type tree
         public DbSet<TypeTreeEntity> TypeTreeEntities { get; set; } = null!;
         public DbSet<DeviceDriverEntity> ZoneDeviceDrivers { get; set; } = null!;
 
         // Zone 
         public DbSet<ZoneEntity> ZoneEntityEntities { get; set; } = null!;
         public DbSet<ZoneHarvestEntity> ZoneHarvestEntities { get; set; } = null!;
+        public DbSet<JobInZoneEntity> JobInZoneEntities { get; set; } = null!;
 
     }
 }

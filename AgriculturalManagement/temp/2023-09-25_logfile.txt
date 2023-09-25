@@ -1,0 +1,6 @@
+2023-09-25 13:32:13.2255|Info|Get all farms in Service layer | 
+2023-09-25 13:33:51.7090|Info|Farm Service | Remove Farm: 8 | 
+2023-09-25 13:33:51.7090|Info|FarmRepository | Delete: 8 | start  | 
+2023-09-25 13:33:51.8352|Info|FarmRepository | Delete | end  | 
+2023-09-25 13:34:01.5452|Info|Get all farms in Service layer | 
+2023-09-25 15:41:27.4913|Info|Get all farms in Service layer | 

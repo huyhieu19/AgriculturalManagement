@@ -1,6 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Entities.User
+
+//IdentityUser
+//IdentityRole
+//IdentityUserClaim
+//IdentityUserToken
+//IdentityUserLogin
+//IdentityRoleClaim
+//IdentityUserRole
+
+namespace Entities
 {
     public class UserEntity : IdentityUser
     {

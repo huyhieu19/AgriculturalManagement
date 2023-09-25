@@ -17,6 +17,10 @@ namespace Database.ModelCreateConfiguration
                 .HasForeignKey(p => p.ZoneId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
+            builder.HasOne(p => p.InstrumentationType)
+                .WithMany(p => p.Instrumentations)
+                .HasForeignKey(p => p.InstrumentationTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
         }
     }

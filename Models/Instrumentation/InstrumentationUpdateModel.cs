@@ -10,7 +10,8 @@ namespace Models
         public string? Description { get; set; }
         [Required]
         public bool? IsActive { get; set; } = false;
-        public DateTime? DateOfPurchanse { get; set; }
+        public DateTime? DateStartedUsing { get; set; }
         public int? ZoneId { get; set; }
+        public int? InstrumentationTypeId { get; set; }
     }
 }

@@ -18,13 +18,3 @@ var app = builder.Build();
 app.UseService();
 app.Run();
 
-//internal class Program
-//{
-//    private static void Main(string[] args)
-//    {
-
-
-
-
-//    }
-//}

@@ -17,7 +17,10 @@ namespace Entities
         public int? ZoneId { get; set; }
 
         public ZoneEntity? Zone { get; set; }
+        [ForeignKey("InstrumentationType")]
+        public int? InstrumentationTypeId { get; set; }
 
+        public InstrumentationTypeEntity? InstrumentationType { get; set; }
         public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
         public ICollection<ImageEntity>? Images { get; set; }
     }

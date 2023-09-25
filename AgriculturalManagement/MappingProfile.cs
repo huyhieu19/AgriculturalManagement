@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entities;
 using Models;
+using Models.Authentication;
 
 namespace AgriculturalManagement
 {
@@ -8,6 +9,9 @@ namespace AgriculturalManagement
     {
         public MappingProfile()
         {
+            // Authentication profile
+            CreateMap<UserRegisterationModel, UserEntity>();
+
             // Farm mapper profile
             CreateMap<FarmEntity, FarmDisplayModel>();
             CreateMap<FarmCreateModel, FarmEntity>();
