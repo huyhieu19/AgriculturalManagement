@@ -13,6 +13,9 @@ namespace Entities
 {
     public class UserEntity : IdentityUser
     {
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
+
         public string? AvatarUrl { get; set; }
         public ICollection<FarmEntity>? Farms { get; set; }
 
