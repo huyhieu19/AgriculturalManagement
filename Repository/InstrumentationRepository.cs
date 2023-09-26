@@ -8,7 +8,7 @@ using Repository.Contracts;
 
 namespace Repository
 {
-    public class InstrumentationRepository : RepositoryBase<InstrumentationEntity>, IInstrumentationRepository
+    public sealed class InstrumentationRepository : RepositoryBase<InstrumentationEntity>, IInstrumentationRepository
     {
         private readonly DapperContext dapperContext;
         public InstrumentationRepository(FactDbContext factDbContext, DapperContext dapperContext) : base(factDbContext)

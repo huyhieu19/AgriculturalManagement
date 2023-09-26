@@ -9,5 +9,7 @@
         IDeviceDriverService DeviceDriver { get; }
         IMachineService Machine { get; }
         IAuthenticationService AuthenticationService { get; }
+        IValueTypeService ValueType { get; }
+
     }
 }

@@ -4,6 +4,7 @@ using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriculturalManagement.Migrations
 {
     [DbContext(typeof(FactDbContext))]
-    partial class FactDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230926112014_update-database-20230926")]
+    partial class updatedatabase20230926
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -420,122 +423,107 @@ namespace AgriculturalManagement.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Loại cây ăn quả có thịnh hành tại Việt Nam.",
                             NameType = "Xoài"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Loại cây ăn quả thường thấy trong vườn nhà dân.",
-                            NameType = "Chuối"
+                            NameType = "Thanh long"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "Cây sầu riêng thường được trồng ở miền Nam Việt Nam.",
-                            NameType = "Sầu riêng"
+                            NameType = "Chuối"
                         },
                         new
                         {
                             Id = 4,
-                            Description = "Loại cây ăn quả có hạt lớn và ngon.",
-                            NameType = "Mít"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Vải là loại cây ăn quả có quả nhỏ màu đỏ tươi.",
-                            NameType = "Vải"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "Nhãn là cây ăn quả thường thấy tại Việt Nam.",
-                            NameType = "Nhãn"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "Loại cây ăn quả có vỏ màu đỏ và hạt trắng.",
-                            NameType = "Chôm chôm"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Description = "Bưởi là loại cây ăn quả có vị ngọt và hấp dẫn.",
-                            NameType = "Bưởi"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Description = "Cam là loại cây ăn quả chứa nhiều vitamin C.",
-                            NameType = "Cam"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Description = "Nho là loại cây ăn quả có nhiều loại khác nhau.",
-                            NameType = "Nho"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Description = "Đu đủ là cây ăn quả phổ biến ở Việt Nam.",
                             NameType = "Đu đủ"
                         },
                         new
                         {
+                            Id = 5,
+                            NameType = "Ổi"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            NameType = "Táo"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            NameType = "Nhãn"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            NameType = "Chôm chôm"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            NameType = "Vải"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            NameType = "Sầu riêng"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            NameType = "Mít"
+                        },
+                        new
+                        {
                             Id = 12,
-                            Description = "Khế là cây ăn quả có hương vị chua ngọt đặc trưng.",
                             NameType = "Khế"
                         },
                         new
                         {
                             Id = 13,
-                            Description = "Loại cây ăn quả có hình dáng độc đáo.",
-                            NameType = "Thanh long"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Description = "Dứa là cây ăn quả thường thấy trong vườn nhà dân.",
                             NameType = "Dứa"
                         },
                         new
                         {
+                            Id = 14,
+                            NameType = "Na"
+                        },
+                        new
+                        {
                             Id = 15,
-                            Description = "Cây cau thường trồng ở vùng nhiệt đới Việt Nam.",
-                            NameType = "Cây cau"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Description = "Chanh là cây ăn quả có vị chua và mùi thơm.",
-                            NameType = "Chanh"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Description = "Me là cây ăn quả có vị chua ngọt đặc trưng.",
-                            NameType = "Me"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Description = "Sapoche là loại cây ăn quả có vị ngọt và mùi thơm đặc trưng.",
                             NameType = "Sapoche"
                         },
                         new
                         {
+                            Id = 16,
+                            NameType = "Me"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            NameType = "Cam"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            NameType = "Bưởi"
+                        },
+                        new
+                        {
                             Id = 19,
-                            Description = "Cherry là loại cây ăn quả có hạt nhỏ màu đỏ.",
-                            NameType = "Cherry"
+                            NameType = "Chanh"
                         },
                         new
                         {
                             Id = 20,
-                            Description = "Lựu là cây ăn quả có hình dáng đặc trưng.",
-                            NameType = "Lựu"
+                            NameType = "Chanh dây"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            NameType = "Nho"
                         });
                 });
 
@@ -708,13 +696,13 @@ namespace AgriculturalManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cef8100c-9def-41c1-a48c-1349b4e93780",
+                            Id = "859cacb6-4d02-4335-8402-5bb1cde8130b",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "a16ab323-39f5-4b7f-80de-ac34ae22a208",
+                            Id = "2f37d35a-166d-4f37-80bf-7839dfe9c7f0",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

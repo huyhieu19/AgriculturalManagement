@@ -8,7 +8,7 @@ using Repository.Contracts;
 
 namespace Repository
 {
-    public class ImageRepository : RepositoryBase<ImageEntity>, IImageRepository
+    public sealed class ImageRepository : RepositoryBase<ImageEntity>, IImageRepository
     {
         private readonly DapperContext dapperContext;
 
@@ -92,6 +92,7 @@ namespace Repository
                     await connection.ExecuteAsync(ImageQuery.CreateImage, param, transaction: trans);
                     trans.Commit();
                 }
+                connection.Close();
             }
             return true;
         }

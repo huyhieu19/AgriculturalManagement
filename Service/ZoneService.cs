@@ -6,7 +6,7 @@ using Service.Contracts;
 
 namespace Service
 {
-    public class ZoneService : IZoneService
+    public sealed class ZoneService : IZoneService
     {
         private readonly IRepositoryManager repositoryManager;
         private readonly IMapper mapper;

@@ -4,7 +4,7 @@ using Service.Contracts;
 
 namespace Service
 {
-    public class MachineService : IMachineService
+    public sealed class MachineService : IMachineService
     {
         private readonly IRepositoryManager repositoryManager;
         private readonly IMapper mapper;

@@ -18,10 +18,35 @@ namespace Repository
 
         public void Delete(T entity) => FactDbContext.Set<T>().Remove(entity);
 
+
         public IQueryable<T> FindAll(bool trackChanges) => !trackChanges ? FactDbContext.Set<T>().AsNoTracking() : FactDbContext.Set<T>();
 
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges) => !trackChanges ? FactDbContext.Set<T>().Where(expression).AsNoTracking() : FactDbContext.Set<T>().Where(expression);
 
+        public void MultipleCreate(IEnumerable<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                FactDbContext.Set<T>().Add(entity);
+            }
+        }
+
+        public void MultipleDelete(IEnumerable<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                FactDbContext.Set<T>().Remove(entity);
+            }
+        }
+
         public void Update(T entity) => FactDbContext.Set<T>().Update(entity);
+
+        public void MultipleUpdate(IEnumerable<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                FactDbContext.Set<T>().Update(entity);
+            }
+        }
     }
 }
