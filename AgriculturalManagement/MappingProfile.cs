@@ -31,7 +31,11 @@ namespace AgriculturalManagement
 
             // Value Type
             CreateMap<InstrumentationTypeEntity, InstrumentationTypeDisplayModel>().ReverseMap();
+            CreateMap<InstrumentationTypeCreateModel, InstrumentationTypeEntity>();
+
             CreateMap<DeviceDriverTypeEntity, DeviceDriversTypeDisplayModel>().ReverseMap();
+            CreateMap<DeviceDriversTypeCreateModel, DeviceDriverTypeEntity>();
+
             CreateMap<TypeTreeEntity, TypeTreeDisplayModel>().ReverseMap();
             CreateMap<TypeTreeCreateModel, TypeTreeEntity>();
 

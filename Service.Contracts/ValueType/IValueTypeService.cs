@@ -9,16 +9,16 @@ namespace Service.Contracts
         Task<List<InstrumentationTypeDisplayModel>> GetTypeInstrumentation();
 
         Task<bool> DeleteTypeTrees(TypeTreeDisplayModel model);
-        Task<bool> DeleteTypeDeviceDrivers(List<int> Ids);
-        Task<bool> DeleteTypeInstrumentations(List<int> Ids);
+        Task<bool> DeleteTypeDeviceDrivers(DeviceDriversTypeDisplayModel model);
+        Task<bool> DeleteTypeInstrumentations(InstrumentationTypeDisplayModel model);
 
         Task<bool> UpdateTypeTree(TypeTreeDisplayModel model);
         Task<bool> UpdateTypeDeviceDriver(DeviceDriversTypeDisplayModel model);
         Task<bool> UpdateTypeInstrumentation(InstrumentationTypeDisplayModel model);
 
         Task<bool> CreateTypeTrees(TypeTreeCreateModel model);
-        Task<bool> CreateTypeDeviceDrivers(List<DeviceDriversTypeDisplayModel> model);
-        Task<bool> CreateTypeInstrumentations(List<InstrumentationTypeDisplayModel> model);
+        Task<bool> CreateTypeDeviceDrivers(DeviceDriversTypeCreateModel model);
+        Task<bool> CreateTypeInstrumentations(InstrumentationTypeCreateModel model);
 
     }
 }

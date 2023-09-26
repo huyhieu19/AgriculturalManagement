@@ -1,6 +1,6 @@
 ﻿using Database;
 using Entities;
-using Models;
+using Microsoft.EntityFrameworkCore;
 using Repository.Contracts;
 
 namespace Repository
@@ -13,24 +13,24 @@ namespace Repository
             this.dapperContext = dapperContext;
         }
 
-        public Task<bool> CreateTypeDeviceDrivers(List<DeviceDriversTypeDisplayModel> model)
+        public void CreateTypeDeviceDrivers(DeviceDriverTypeEntity entity)
         {
-            throw new NotImplementedException();
+            Create(entity);
         }
 
-        public Task<bool> DeleteTypeDeviceDrivers(List<int> Ids)
+        public void DeleteTypeDeviceDrivers(DeviceDriverTypeEntity entity)
         {
-            throw new NotImplementedException();
+            Delete(entity);
         }
 
-        public Task<List<DeviceDriverTypeEntity>> GetTypeDeviceDrivers()
+        public async Task<List<DeviceDriverTypeEntity>> GetTypeDeviceDrivers()
         {
-            throw new NotImplementedException();
+            return await FindAll(trackChanges: false).ToListAsync();
         }
 
-        public Task<bool> UpdateTypeDeviceDriver(DeviceDriversTypeDisplayModel model)
+        public void UpdateTypeDeviceDriver(DeviceDriverTypeEntity entity)
         {
-            throw new NotImplementedException();
+            Update(entity);
         }
     }
 }

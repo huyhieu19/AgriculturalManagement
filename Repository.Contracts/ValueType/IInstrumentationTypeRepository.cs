@@ -1,13 +1,12 @@
 ﻿using Entities;
-using Models;
 
 namespace Repository.Contracts
 {
     public interface IInstrumentationTypeRepository
     {
-        Task<bool> CreateTypeInstrumentations(List<InstrumentationTypeDisplayModel> model);
-        Task<bool> UpdateTypeInstrumentation(InstrumentationTypeDisplayModel model);
-        Task<bool> DeleteTypeInstrumentations(List<int> Ids);
+        void CreateTypeInstrumentations(InstrumentationTypeEntity entity);
+        void UpdateTypeInstrumentation(InstrumentationTypeEntity entity);
+        void DeleteTypeInstrumentations(InstrumentationTypeEntity entity);
         Task<List<InstrumentationTypeEntity>> GetTypeInstrumentation();
     }
 }

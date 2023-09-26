@@ -20,7 +20,7 @@ namespace AgriculturalManagement.Controllers.Type
         {
             return await service.ValueType.GetTypeTrees();
         }
-        [HttpPost, Route("typetrees")]
+        [HttpPost, Route("typetree")]
         public async Task<bool> CreateTypeTrees(TypeTreeCreateModel model)
         {
             return await service.ValueType.CreateTypeTrees(model);
@@ -30,7 +30,7 @@ namespace AgriculturalManagement.Controllers.Type
         {
             return await service.ValueType.UpdateTypeTree(model);
         }
-        [HttpDelete, Route("typetrees")]
+        [HttpDelete, Route("typetree")]
         public async Task<bool> DeleteTypeTrees(TypeTreeDisplayModel model)
         {
             return await service.ValueType.DeleteTypeTrees(model);

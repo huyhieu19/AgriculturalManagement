@@ -1,6 +1,6 @@
 ﻿using Database;
 using Entities;
-using Models;
+using Microsoft.EntityFrameworkCore;
 using Repository.Contracts;
 
 namespace Repository
@@ -13,24 +13,24 @@ namespace Repository
             this.dapperContext = dapperContext;
         }
 
-        public Task<bool> CreateTypeInstrumentations(List<InstrumentationTypeDisplayModel> model)
+        public void CreateTypeInstrumentations(InstrumentationTypeEntity entity)
         {
-            throw new NotImplementedException();
+            Create(entity);
         }
 
-        public Task<bool> DeleteTypeInstrumentations(List<int> Ids)
+        public void DeleteTypeInstrumentations(InstrumentationTypeEntity entity)
         {
-            throw new NotImplementedException();
+            Delete(entity);
         }
 
-        public Task<List<InstrumentationTypeEntity>> GetTypeInstrumentation()
+        public async Task<List<InstrumentationTypeEntity>> GetTypeInstrumentation()
         {
-            throw new NotImplementedException();
+            return await FindAll(trackChanges: false).ToListAsync();
         }
 
-        public Task<bool> UpdateTypeInstrumentation(InstrumentationTypeDisplayModel model)
+        public void UpdateTypeInstrumentation(InstrumentationTypeEntity entity)
         {
-            throw new NotImplementedException();
+            Update(entity);
         }
 
     }

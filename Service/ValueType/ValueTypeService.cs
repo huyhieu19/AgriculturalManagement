@@ -19,93 +19,213 @@ namespace Service
             this.mapper = mapper;
         }
 
-        public Task<bool> CreateTypeDeviceDrivers(List<DeviceDriversTypeDisplayModel> model)
+        public async Task<bool> CreateTypeDeviceDrivers(DeviceDriversTypeCreateModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                logger.LogInfomation($"ValueTypeService - CreateTypeDeviceDrivers - Start");
+                var entity = mapper.Map<DeviceDriverTypeEntity>(model);
+                repository.DeviceDriverType.CreateTypeDeviceDrivers(entity);
+                await repository.SaveAsync();
+                logger.LogInfomation($"ValueTypeService - CreateTypeDeviceDrivers - End");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.LogInfomation($"Value Type Service - CreateTypeDeviceDrivers - Exeption: {ex.Message}");
+                throw new AggregateException(ex.Message);
+            }
         }
 
-        public Task<bool> CreateTypeInstrumentations(List<InstrumentationTypeDisplayModel> model)
+        public async Task<bool> CreateTypeInstrumentations(InstrumentationTypeCreateModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                logger.LogInfomation($"Value Type Service - Create Type Instrumentations - Start");
+                var entity = mapper.Map<InstrumentationTypeEntity>(model);
+                repository.InstrumentationType.CreateTypeInstrumentations(entity);
+                await repository.SaveAsync();
+                logger.LogInfomation($"Value Type Service - Create Type Instrumentations - End");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.LogInfomation($"Value Type Service - CreateTypeInstrumentations - Exeption: {ex.Message}");
+                throw new AggregateException(ex.Message);
+            }
         }
 
         public async Task<bool> CreateTypeTrees(TypeTreeCreateModel model)
         {
             try
             {
+                logger.LogInfomation($"Value Type Service - CreateTypeTrees - Start");
                 var entity = mapper.Map<TypeTreeEntity>(model);
                 repository.TypeTree.CreateTypeTrees(entity);
                 await repository.SaveAsync();
+                logger.LogInfomation($"Value Type Service - CreateTypeTrees - End");
                 return true;
             }
             catch (Exception ex)
             {
+                logger.LogInfomation($"Value Type Service - CreateTypeTrees - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
 
-        public Task<bool> DeleteTypeDeviceDrivers(List<int> Ids)
+        public async Task<bool> DeleteTypeDeviceDrivers(DeviceDriversTypeDisplayModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                logger.LogInfomation($"Value Type Service - DeleteTypeDeviceDrivers - Start");
+                var entity = mapper.Map<DeviceDriverTypeEntity>(model);
+                repository.DeviceDriverType.DeleteTypeDeviceDrivers(entity);
+                await repository.SaveAsync();
+                logger.LogInfomation($"Value Type Service - DeleteTypeDeviceDrivers - End");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.LogInfomation($"Value Type Service - DeleteTypeDeviceDrivers - Exeption: {ex.Message}");
+                throw new AggregateException(ex.Message);
+            }
         }
 
-        public Task<bool> DeleteTypeInstrumentations(List<int> Ids)
+        public async Task<bool> DeleteTypeInstrumentations(InstrumentationTypeDisplayModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                logger.LogInfomation($"Value Type Service - DeleteTypeInstrumentations - Start");
+                var entity = mapper.Map<InstrumentationTypeEntity>(model);
+                repository.InstrumentationType.DeleteTypeInstrumentations(entity);
+                await repository.SaveAsync();
+                logger.LogInfomation($"Value Type Service - DeleteTypeInstrumentations - End");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.LogInfomation($"Value Type Service - DeleteTypeInstrumentations - Exeption: {ex.Message}");
+                throw new AggregateException(ex.Message);
+            }
         }
 
         public async Task<bool> DeleteTypeTrees(TypeTreeDisplayModel model)
         {
             try
             {
+                logger.LogInfomation($"Value Type Service - DeleteTypeInstrumentations - Start");
                 var typeTree = mapper.Map<TypeTreeEntity>(model);
                 repository.TypeTree.DeleteTypeTrees(typeTree);
+                logger.LogInfomation($"Value Type Service - DeleteTypeInstrumentations - End");
                 await repository.SaveAsync();
                 return true;
             }
             catch (Exception ex)
             {
+                logger.LogInfomation($"Value Type Service - DeleteTypeTrees - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
 
-        public Task<List<DeviceDriversTypeDisplayModel>> GetTypeDeviceDrivers()
+        public async Task<List<DeviceDriversTypeDisplayModel>> GetTypeDeviceDrivers()
         {
-            throw new NotImplementedException();
+            try
+            {
+                logger.LogInfomation($"Value Type Service - GetTypeDeviceDrivers - Start");
+                var result = mapper.Map<List<DeviceDriversTypeDisplayModel>>(await repository.DeviceDriverType.GetTypeDeviceDrivers());
+                logger.LogInfomation($"Value Type Service - GetTypeDeviceDrivers - End");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                logger.LogInfomation($"Value Type Service - GetTypeDeviceDrivers - Exeption: {ex.Message}");
+                throw new AggregateException(ex.Message);
+            }
         }
 
-        public Task<List<InstrumentationTypeDisplayModel>> GetTypeInstrumentation()
+        public async Task<List<InstrumentationTypeDisplayModel>> GetTypeInstrumentation()
         {
-            throw new NotImplementedException();
+            try
+            {
+                logger.LogInfomation($"Value Type Service - GetTypeInstrumentation - Start");
+                var result = mapper.Map<List<InstrumentationTypeDisplayModel>>(await repository.InstrumentationType.GetTypeInstrumentation());
+                logger.LogInfomation($"Value Type Service - GetTypeInstrumentation - End");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                logger.LogInfomation($"Value Type Service - GetTypeInstrumentation - Exeption: {ex.Message}");
+                throw new AggregateException(ex.Message);
+            }
         }
 
         public async Task<List<TypeTreeDisplayModel>> GetTypeTrees()
         {
-            var typeTrees = await repository.TypeTree.GetTypeTree();
-            return mapper.Map<List<TypeTreeDisplayModel>>(typeTrees);
+            try
+            {
+                logger.LogInfomation($"Value Type Service - GetTypeTrees - Start");
+                var typeTrees = await repository.TypeTree.GetTypeTree();
+                var result = mapper.Map<List<TypeTreeDisplayModel>>(typeTrees);
+                logger.LogInfomation($"Value Type Service - GetTypeTrees - End");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                logger.LogInfomation($"Value Type Service - GetTypeTrees - Exeption: {ex.Message}");
+                throw new AggregateException(ex.Message);
+            }
         }
 
-        public Task<bool> UpdateTypeDeviceDriver(DeviceDriversTypeDisplayModel model)
+        public async Task<bool> UpdateTypeDeviceDriver(DeviceDriversTypeDisplayModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                logger.LogInfomation($"Value Type Service - UpdateTypeDeviceDriver - Start");
+                var entity = mapper.Map<DeviceDriverTypeEntity>(model);
+                repository.DeviceDriverType.UpdateTypeDeviceDriver(entity);
+                await repository.SaveAsync();
+                logger.LogInfomation($"Value Type Service - UpdateTypeDeviceDriver - End");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.LogInfomation($"Value Type Service - UpdateTypeDeviceDriver - Exeption: {ex.Message}");
+                throw new AggregateException(ex.Message);
+            }
         }
 
-        public Task<bool> UpdateTypeInstrumentation(InstrumentationTypeDisplayModel model)
+        public async Task<bool> UpdateTypeInstrumentation(InstrumentationTypeDisplayModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                logger.LogInfomation($"Value Type Service - UpdateTypeInstrumentation - Start");
+                var entity = mapper.Map<InstrumentationTypeEntity>(model);
+                repository.InstrumentationType.UpdateTypeInstrumentation(entity);
+                await repository.SaveAsync();
+                logger.LogInfomation($"Value Type Service - UpdateTypeInstrumentation - End");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.LogInfomation($"Value Type Service - UpdateTypeDeviceDriver - Exeption: {ex.Message}");
+                throw new AggregateException(ex.Message);
+            }
         }
 
         public async Task<bool> UpdateTypeTree(TypeTreeDisplayModel model)
         {
             try
             {
+                logger.LogInfomation($"Value Type Service - UpdateTypeTree - Start");
                 var entity = mapper.Map<TypeTreeEntity>(model);
                 repository.TypeTree.UpdateTypeTree(entity);
                 await repository.SaveAsync();
+                logger.LogInfomation($"Value Type Service - UpdateTypeTree - End");
                 return true;
             }
             catch (Exception ex)
             {
+                logger.LogInfomation($"Value Type Service - UpdateTypeTree - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }

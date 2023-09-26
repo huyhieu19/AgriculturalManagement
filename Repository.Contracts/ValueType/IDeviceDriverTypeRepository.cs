@@ -1,13 +1,12 @@
 ﻿using Entities;
-using Models;
 
 namespace Repository.Contracts
 {
     public interface IDeviceDriverTypeRepository
     {
-        Task<bool> CreateTypeDeviceDrivers(List<DeviceDriversTypeDisplayModel> model);
-        Task<bool> UpdateTypeDeviceDriver(DeviceDriversTypeDisplayModel model);
-        Task<bool> DeleteTypeDeviceDrivers(List<int> Ids);
+        void CreateTypeDeviceDrivers(DeviceDriverTypeEntity entity);
+        void UpdateTypeDeviceDriver(DeviceDriverTypeEntity entity);
+        void DeleteTypeDeviceDrivers(DeviceDriverTypeEntity entity);
         Task<List<DeviceDriverTypeEntity>> GetTypeDeviceDrivers();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers.Type
 {
@@ -6,5 +7,12 @@ namespace AgriculturalManagement.Controllers.Type
     [ApiController]
     public class DeviceDriverTypeController : ControllerBase
     {
+        private readonly IServiceManager service;
+
+        public DeviceDriverTypeController(IServiceManager service)
+        {
+            this.service = service;
+        }
+
     }
 }
