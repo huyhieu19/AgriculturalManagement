@@ -6,7 +6,7 @@ using Service.Contracts;
 
 namespace Service
 {
-    public class ImageService : IImageService
+    public sealed class ImageService : IImageService
     {
         private readonly IRepositoryManager repositoryManager;
         private readonly IMapper mapper;

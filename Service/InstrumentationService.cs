@@ -6,7 +6,7 @@ using Service.Contracts;
 
 namespace Service
 {
-    public class InstrumentationService : IInstrumentationService
+    public sealed class InstrumentationService : IInstrumentationService
     {
         private readonly IRepositoryManager repositoryManager;
         private readonly IMapper mapper;

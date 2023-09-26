@@ -5,7 +5,7 @@ using Service.Contracts;
 
 namespace Service
 {
-    public class DeviceDriverService : IDeviceDriverService
+    public sealed class DeviceDriverService : IDeviceDriverService
     {
         private readonly IRepositoryManager repositoryManager;
         private readonly IMapper mapper;

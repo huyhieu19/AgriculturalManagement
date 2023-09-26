@@ -12,13 +12,5 @@ namespace Entities
         public string? ImageUrl { get; set; }
         public ICollection<DeviceDriverEntity>? DeviceDrivers { get; set; }
 
-        public DeviceDriverTypeEntity(int Id, string name, string? description = null, string? manufacturer = null, string? imageUrl = null)
-        {
-            this.Id = Id;
-            Name = name;
-            Description = description;
-            Manufacturer = manufacturer;
-            ImageUrl = imageUrl;
-        }
     }
 }

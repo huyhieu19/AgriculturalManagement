@@ -11,9 +11,9 @@ namespace Database.ModelCreateConfiguration
             builder.ToTable("DeviceDriverType");
             builder.HasKey(e => e.Id);
             builder.HasData(
-                new DeviceDriverTypeEntity(1, "Máy bơm"),
-                new DeviceDriverTypeEntity(2, "Quạt gió"),
-                new DeviceDriverTypeEntity(3, "Rèm cửa")
+                new DeviceDriverTypeEntity() { Id = 1, Name = "Máy bơm" },
+                new DeviceDriverTypeEntity() { Id = 2, Name = "Quạt gió" },
+                new DeviceDriverTypeEntity() { Id = 3, Name = "Rèm cửa" }
                 );
         }
     }

@@ -16,6 +16,7 @@ namespace Service
         private readonly Lazy<IDeviceDriverService> deviceDriverService;
         private readonly Lazy<IMachineService> machineService;
         private readonly Lazy<IAuthenticationService> authenticationService;
+        private readonly Lazy<IValueTypeService> valueTypeService;
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
@@ -28,6 +29,7 @@ namespace Service
             this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper));
             this.machineService = new Lazy<IMachineService>(() => new MachineService(repositoryManager, mapper));
             this.authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, userManager, logger, configuration));
+            this.valueTypeService = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));
         }
 
 
@@ -44,5 +46,7 @@ namespace Service
         public IMachineService Machine => machineService.Value;
 
         public IAuthenticationService AuthenticationService => authenticationService.Value;
+
+        public IValueTypeService ValueType => valueTypeService.Value;
     }
 }

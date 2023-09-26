@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Service
 {
-    public class AuthenticationService : IAuthenticationService
+    public sealed class AuthenticationService : IAuthenticationService
     {
         private readonly IMapper mapper;
         private readonly UserManager<UserEntity> userManager;

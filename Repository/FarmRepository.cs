@@ -9,7 +9,7 @@ using Service.Contracts;
 
 namespace Repository
 {
-    public class FarmRepository : RepositoryBase<FarmEntity>, IFarmRepository
+    public sealed class FarmRepository : RepositoryBase<FarmEntity>, IFarmRepository
     {
         private readonly ILoggerManager logger;
         private readonly DapperContext dapperContext;

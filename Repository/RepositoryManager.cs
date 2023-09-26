@@ -12,6 +12,9 @@ namespace Repository
         private readonly Lazy<IInstrumentationRepository> instrumentationRepository;
         private readonly Lazy<IDeviceDriverRepository> deviceDriverRepository;
         private readonly Lazy<IMachineRepository> machineRepository;
+        private readonly Lazy<IDeviceDriverTypeRepository> deviceDriverTypeRepository;
+        private readonly Lazy<IInstrumentationTypeRepository> instrumentationTypeRepository;
+        private readonly Lazy<ITypeTreeRepository> typeTreeRepository;
         private readonly FactDbContext factDbContext;
 
         public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext)
@@ -23,6 +26,9 @@ namespace Repository
             instrumentationRepository = new Lazy<IInstrumentationRepository>(() => new InstrumentationRepository(factDbContext, dapperContext));
             deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext));
             machineRepository = new Lazy<IMachineRepository>(() => new MachineRepository(factDbContext, dapperContext));
+            deviceDriverTypeRepository = new Lazy<IDeviceDriverTypeRepository>(() => new DeviceDriverTypeRepository(factDbContext, dapperContext));
+            instrumentationTypeRepository = new Lazy<IInstrumentationTypeRepository>(() => new InstrumentationTypeRepository(factDbContext, dapperContext));
+            typeTreeRepository = new Lazy<ITypeTreeRepository>(() => new TypeTreeRepository(factDbContext, dapperContext));
         }
 
         public IFarmRepository Farm => farmRepository.Value;
@@ -36,6 +42,12 @@ namespace Repository
         public IDeviceDriverRepository DeviceDriver => deviceDriverRepository.Value;
 
         public IMachineRepository Machine => machineRepository.Value;
+
+        public IDeviceDriverTypeRepository DeviceDriverType => deviceDriverTypeRepository.Value;
+
+        public IInstrumentationTypeRepository InstrumentationType => instrumentationTypeRepository.Value;
+
+        public ITypeTreeRepository TypeTree => typeTreeRepository.Value;
 
         public async Task SaveAsync() => await factDbContext.SaveChangesAsync();
     }
