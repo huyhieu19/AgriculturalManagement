@@ -6,7 +6,7 @@ namespace Service.Contracts
     public interface IAuthenticationService
     {
         Task<IdentityResult> RegisterUser(UserRegisterationModel userRegisterationModel);
-        Task<bool> ValidateUser(LoginModel userForAuth);
-        Task<string> CreateToken();
+        Task<bool> ValidateUser(LoginModel userForAuth);// login feature 
+        Task<TokenModel> CreateToken(bool populateExp); // login feature
     }
 }

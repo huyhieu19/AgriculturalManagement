@@ -26,16 +26,21 @@ namespace AgriculturalManagement.Controllers
         {
             if (!await _service.AuthenticationService.ValidateUser(user))
                 return Unauthorized();
-            return Ok(new
-            {
-                Token = await _service
-            .AuthenticationService.CreateToken()
-            });
+            var tokenModel = await _service.AuthenticationService.CreateToken(populateExp: true);
+            return Ok(tokenModel);
         }
 
         //"firstName": "Hieu",
         //"lastName": "Nguyen Huy",
         //"userName": "HuyHieu",
+        //"password": "String123",
+        //"email": "Hieu@gmail.com",
+        //"phoneNumber": "string",
+        //"roles": null
+
+        //"firstName": "Hieu",
+        //"lastName": "Nguyen Huy",
+        //"userName": "huyhieu",
         //"password": "String123",
         //"email": "Hieu@gmail.com",
         //"phoneNumber": "string",
