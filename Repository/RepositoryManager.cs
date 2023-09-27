@@ -1,4 +1,5 @@
-﻿using Database;
+﻿using AutoMapper;
+using Database;
 using Repository.Contracts;
 using Service.Contracts;
 
@@ -17,14 +18,14 @@ namespace Repository
         private readonly Lazy<ITypeTreeRepository> typeTreeRepository;
         private readonly FactDbContext factDbContext;
 
-        public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext)
+        public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext, IMapper mapper)
         {
             this.factDbContext = factDbContext;
             farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext, logger, dapperContext));
             zoneRepository = new Lazy<IZoneRepository>(() => new ZoneRepository(factDbContext, dapperContext));
             imageRepository = new Lazy<IImageRepository>(() => new ImageRepository(factDbContext, dapperContext));
             instrumentationRepository = new Lazy<IInstrumentationRepository>(() => new InstrumentationRepository(factDbContext, dapperContext));
-            deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext));
+            deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext, mapper));
             machineRepository = new Lazy<IMachineRepository>(() => new MachineRepository(factDbContext, dapperContext));
             deviceDriverTypeRepository = new Lazy<IDeviceDriverTypeRepository>(() => new DeviceDriverTypeRepository(factDbContext, dapperContext));
             instrumentationTypeRepository = new Lazy<IInstrumentationTypeRepository>(() => new InstrumentationTypeRepository(factDbContext, dapperContext));

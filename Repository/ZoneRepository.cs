@@ -72,7 +72,7 @@ namespace Repository
                     connection.Open();
                     using (var trans = connection.BeginTransaction())
                     {
-                        await connection.ExecuteAsync(FarmQuery.UpdateFarm, param, transaction: trans);
+                        await connection.ExecuteAsync(FarmQuery.UpdateFarmSQL, param, transaction: trans);
                         trans.Commit();
                     }
                 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Entities;
 using Models;
 using Repository.Contracts;
 using Service.Contracts;
@@ -16,34 +17,42 @@ namespace Service
             this.mapper = mapper;
         }
 
-        public Task CreateInstrumentation(InstrumentationCreateModel createModel)
+        public async Task CreateDeviceDriver(DeviceDriverCreateModel createModel)
         {
-            throw new NotImplementedException();
+            DeviceDriverEntity entity = mapper.Map<DeviceDriverEntity>(createModel);
+            repositoryManager.DeviceDriver.CreateDeviceDriver(entity);
+            await repositoryManager.SaveAsync();
         }
 
-        public Task DeleteInstrumentation(int Id)
+        public async Task DeleteDeviceDriver(int Id)
         {
-            throw new NotImplementedException();
+
+            repositoryManager.DeviceDriver.DeleteDeviceDriver(new DeviceDriverEntity() { Id = Id });
+            await repositoryManager.SaveAsync();
         }
 
-        public Task<IEnumerable<InstrumentationDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
+        public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
         {
-            throw new NotImplementedException();
+            return await repositoryManager.DeviceDriver.GetDeviceDriverByZoneAsync(Id);
         }
 
-        public Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationNotInZoneAsync()
+        public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync()
         {
-            throw new NotImplementedException();
+            IEnumerable<DeviceDriverEntity> models = await repositoryManager.DeviceDriver.GetDeviceDriverNotInZoneAsync();
+            return mapper.Map<IEnumerable<DeviceDriverDisplayModel>>(models);
         }
 
-        public Task RemoveInstrumentation(int Id)
+        public async Task RemoveDeviceDriver(int Id)
         {
-            throw new NotImplementedException();
+            await repositoryManager.DeviceDriver.RemoveDeviceDriver(Id);
+            await repositoryManager.SaveAsync();
         }
 
-        public Task UpdateInforInstrumentation(InstrumentationUpdateModel updateModel)
+        public async Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel)
         {
-            throw new NotImplementedException();
+            DeviceDriverEntity entity = mapper.Map<DeviceDriverEntity>(updateModel);
+            repositoryManager.DeviceDriver.UpdateInforDeviceDriver(entity);
+            await repositoryManager.SaveAsync();
         }
     }
 }

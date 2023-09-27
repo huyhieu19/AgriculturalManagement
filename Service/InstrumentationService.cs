@@ -39,7 +39,8 @@ namespace Service
         {
             try
             {
-                await repositoryManager.Instrumentation.DeleteInstrumentation(Id);
+
+                repositoryManager.Instrumentation.DeleteInstrumentation(new InstrumentationEntity() { Id = Id });
                 await repositoryManager.SaveAsync();
             }
             catch (Exception ex)
@@ -52,8 +53,7 @@ namespace Service
         {
             try
             {
-                var instrumentations = await repositoryManager.Instrumentation.GetInstrumentationByZoneAsync(Id);
-                return mapper.Map<IEnumerable<InstrumentationDisplayModel>>(instrumentations);
+                return await repositoryManager.Instrumentation.GetInstrumentationByZoneAsync(Id);
             }
             catch (Exception ex)
             {

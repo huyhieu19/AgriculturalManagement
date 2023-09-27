@@ -4,7 +4,7 @@ using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Token")]
     [ApiController]
     public class TokenController : ControllerBase
     {

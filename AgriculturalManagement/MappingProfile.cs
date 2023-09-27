@@ -39,6 +39,11 @@ namespace AgriculturalManagement
             CreateMap<TypeTreeEntity, TypeTreeDisplayModel>().ReverseMap();
             CreateMap<TypeTreeCreateModel, TypeTreeEntity>();
 
+            // Device Driver profile mapping
+            CreateMap<DeviceDriverEntity, DeviceDriverDisplayModel>();
+            CreateMap<DeviceDriverUpdateModel, DeviceDriverEntity>();
+            CreateMap<DeviceDriverCreateModel, DeviceDriverEntity>();
+
         }
     }
 }

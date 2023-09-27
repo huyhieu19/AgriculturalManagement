@@ -4,11 +4,11 @@ namespace Service.Contracts
 {
     public interface IDeviceDriverService
     {
-        Task<IEnumerable<InstrumentationDisplayModel>> GetDeviceDriverByZoneAsync(int Id);
-        Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationNotInZoneAsync();
-        Task UpdateInforInstrumentation(InstrumentationUpdateModel updateModel);
-        Task CreateInstrumentation(InstrumentationCreateModel createModel);
-        Task DeleteInstrumentation(int Id); //  Xóa hẳn => bị hỏng máy
-        Task RemoveInstrumentation(int Id); //chuyển Zone Id  = null
+        Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id);
+        Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync();
+        Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel);
+        Task CreateDeviceDriver(DeviceDriverCreateModel createModel);
+        Task DeleteDeviceDriver(int Id); //  Xóa hẳn => bị hỏng máy
+        Task RemoveDeviceDriver(int Id); //chuyển Zone Id  = null
     }
 }

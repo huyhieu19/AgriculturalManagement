@@ -11,7 +11,6 @@ namespace Service
         private readonly IRepositoryManager repositoryManager;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
-
         public FarmService(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper)
         {
             this.repositoryManager = repositoryManager;
@@ -50,13 +49,15 @@ namespace Service
             }
         }
 
-        public async Task<IEnumerable<FarmDisplayModel>> GetByCondition(QueryBaseModel model, bool trackChanges)
+        public async Task<IEnumerable<FarmDisplayModel>> GetByCondition(FarmQueryModel model, bool trackChanges)
         {
             try
             {
                 _logger.LogInfomation($"Farm Service| Get By Condition | start ");
+
                 var responseEntities = await repositoryManager.Farm.GetByCondition(model, trackChanges);
                 var response = _mapper.Map<IEnumerable<FarmDisplayModel>>(responseEntities);
+
                 _logger.LogInfomation($"Farm Service | Get By Condition | end ");
                 return response;
             }
@@ -81,12 +82,12 @@ namespace Service
             }
         }
 
-        public async Task<bool> RemoveFarm(int id)
+        public async Task<bool> RemoveFarm(int id, string UserId)
         {
             try
             {
                 _logger.LogInfomation($"Farm Service | Remove Farm: {id}");
-                repositoryManager.Farm.DeleteFarm(id);
+                repositoryManager.Farm.DeleteFarm(id, UserId);
                 await repositoryManager.SaveAsync();
                 return true;
             }

@@ -7,9 +7,9 @@ namespace Repository.Contracts
     {
         Task<IEnumerable<FarmEntity>> GetAllFarm(bool trackChanges);
         void CreateFarm(FarmEntity entity);
-        void DeleteFarm(int id);
+        void DeleteFarm(int id, string UserId);
         void UpdateFarm(FarmUpdateModel model);
-        Task<IEnumerable<FarmEntity>> GetByCondition(QueryBaseModel model, bool trackchanges);
+        Task<IEnumerable<FarmEntity>> GetByCondition(FarmQueryModel model, bool trackchanges);
 
     }
 }
