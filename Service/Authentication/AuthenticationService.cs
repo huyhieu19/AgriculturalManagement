@@ -28,6 +28,39 @@ namespace Service
             this._logger = _logger;
             this._configuration = _configuration;
         }
+        public string GetIdbyToken(string token)
+        {
+
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+            // Xác định các thông tin cần thiết cho việc giải mã
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings["validIssuer"],
+                ValidAudience = jwtSettings["validAudience"],
+                ValidateLifetime = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("SECRETVariable").ToString()!)),
+            };
+
+            //var tokenHandler = new JwtSecurityTokenHandler();
+            //var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
+            var tokenHander = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHander.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid Token");
+            }
+
+            // Lấy thông tin từ token
+            var jwtToken = (JwtSecurityToken)securityToken;
+            var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            return userId;
+        }
 
         public async Task<TokenModel> CreateToken(bool populateExp)
         {

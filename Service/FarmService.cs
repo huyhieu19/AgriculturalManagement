@@ -11,7 +11,6 @@ namespace Service
         private readonly IRepositoryManager repositoryManager;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
-
         public FarmService(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper)
         {
             this.repositoryManager = repositoryManager;
@@ -55,8 +54,10 @@ namespace Service
             try
             {
                 _logger.LogInfomation($"Farm Service| Get By Condition | start ");
+
                 var responseEntities = await repositoryManager.Farm.GetByCondition(model, trackChanges);
                 var response = _mapper.Map<IEnumerable<FarmDisplayModel>>(responseEntities);
+
                 _logger.LogInfomation($"Farm Service | Get By Condition | end ");
                 return response;
             }

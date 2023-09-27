@@ -54,7 +54,7 @@ namespace Repository
 
         public async Task<IEnumerable<FarmEntity>> GetByCondition(QueryBaseModel model, bool trackchanges)
         {
-            var Farms = await FindAll(trackchanges).ToListAsync();
+            var Farms = await FindByCondition(p => p.UserId == model.UserId, trackchanges).ToListAsync();
 
             if (!string.IsNullOrEmpty(model.SearchTerm))
             {

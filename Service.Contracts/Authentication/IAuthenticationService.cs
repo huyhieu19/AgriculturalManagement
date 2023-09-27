@@ -10,5 +10,6 @@ namespace Service.Contracts
         Task<TokenModel> CreateToken(bool populateExp); // login feature
 
         Task<TokenModel> RefreshToken(TokenModel tokenModel);
+        string GetIdbyToken(string token);
     }
 }

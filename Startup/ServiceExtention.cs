@@ -39,7 +39,7 @@ namespace Startup
 
 
             builder.Services.AddAuthentication();
-            builder.Services.AddAuthentication();
+
             builder.Services.ConfigureIdentity();
 
             builder.Services.AddCors(options =>
@@ -70,6 +70,9 @@ namespace Startup
             builder.Services.AddSwaggerGen(opt =>
             {
                 opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Agricultural Management", Version = "v1" });
+
+                //opt.MapType<QueryBaseModel>(() => new OpenApiSchema { Type = "object" });
+
                 opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,

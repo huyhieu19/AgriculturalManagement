@@ -2,15 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service.Contracts;
+using System.Security.Claims;
 
 namespace AgriculturalManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FarmControler : ControllerBase
+    public class FarmController : ControllerBase
     {
         private readonly IServiceManager serviceManager;
-        public FarmControler(IServiceManager serviceManager) => this.serviceManager = serviceManager;
+        public FarmController(IServiceManager serviceManager) => this.serviceManager = serviceManager;
 
         [HttpGet, Route("farms")]
         [Authorize]
@@ -23,9 +24,15 @@ namespace AgriculturalManagement.Controllers
         {
             return await serviceManager.Farm.AddFarm(createModel);
         }
+        [Authorize]
         [HttpPost, Route("farmsCondition")]
         public async Task<IEnumerable<FarmDisplayModel>> GetCondition([FromBody] QueryBaseModel model)
         {
+            //model.Token = GetTokenFromHeader(HttpContext);
+            //var id = serviceManager.AuthenticationService.GetIdbyToken(model.Token);
+
+            model.Token = User.FindFirst(ClaimTypes.Name)?.Value;
+            model.UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             return await serviceManager.Farm.GetByCondition(model, false);
         }
         [HttpDelete, Route("farm")]
@@ -42,6 +49,14 @@ namespace AgriculturalManagement.Controllers
         public async Task<IEnumerable<FarmFilterNameModel>> GetNamesFarmAsync()
         {
             return await serviceManager.Farm.GetNameFarm();
+        }
+
+        public static string GetTokenFromHeader(HttpContext contex)
+        {
+            contex.Request.Headers.TryGetValue("Authorization", out var token);
+            var result = token.ToString();
+            result = result.Substring(6).Trim();
+            return result;
         }
     }
 }
