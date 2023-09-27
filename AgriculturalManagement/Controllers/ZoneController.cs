@@ -4,7 +4,7 @@ using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Zone")]
     [ApiController]
     public class ZoneController : ControllerBase
     {

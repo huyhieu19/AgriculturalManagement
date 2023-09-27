@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Models;
-using Models.DeviceDriver;
 using Repository.Contracts;
 using Service.Contracts;
 
@@ -17,34 +16,34 @@ namespace Service
             this.mapper = mapper;
         }
 
-        public Task CreateDeviceDrivern(DeviceDriverCreateModel createModel)
+        public async Task CreateDeviceDrivern(DeviceDriverCreateModel createModel)
         {
-            throw new NotImplementedException();
+            await repositoryManager.DeviceDriver.CreateDeviceDriver(createModel);
         }
 
-        public Task DeleteDeviceDriver(int Id)
+        public async Task DeleteDeviceDriver(int Id)
         {
-            throw new NotImplementedException();
+            await repositoryManager.DeviceDriver.DeleteDeviceDriver(Id);
         }
 
-        public Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
+        public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
         {
-            throw new NotImplementedException();
+            return await repositoryManager.DeviceDriver.GetDeviceDriverByZoneAsync(Id);
         }
 
-        public Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDrivernNotInZoneAsync()
+        public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync()
         {
-            throw new NotImplementedException();
+            return await repositoryManager.DeviceDriver.GetDeviceDriverNotInZoneAsync();
         }
 
-        public Task RemoveDeviceDriver(int Id)
+        public async Task RemoveDeviceDriver(int Id)
         {
-            throw new NotImplementedException();
+            await repositoryManager.DeviceDriver.RemoveDeviceDriver(Id);
         }
 
-        public Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel)
+        public async Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel)
         {
-            throw new NotImplementedException();
+            await repositoryManager.DeviceDriver.UpdateInforDeviceDriver(updateModel);
         }
     }
 }

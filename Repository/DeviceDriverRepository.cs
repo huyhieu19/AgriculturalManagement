@@ -1,7 +1,9 @@
-﻿using Database;
+﻿using AutoMapper;
+using Common.Queries;
+using Dapper;
+using Database;
 using Entities;
 using Models;
-using Models.DeviceDriver;
 using Repository.Contracts;
 
 namespace Repository
@@ -10,13 +12,15 @@ namespace Repository
     {
         private readonly DapperContext dapperContext;
         private readonly FactDbContext factDbContext;
-        public DeviceDriverRepository(FactDbContext factDbContext, DapperContext dapperContext) : base(factDbContext)
+        private readonly IMapper mapper;
+        public DeviceDriverRepository(FactDbContext factDbContext, DapperContext dapperContext, IMapper mapper) : base(factDbContext)
         {
+            this.mapper = mapper;
             this.dapperContext = dapperContext;
             this.factDbContext = factDbContext;
         }
 
-        public Task CreateDeviceDriver(InstrumentationCreateModel createModel)
+        public Task CreateDeviceDriver(DeviceDriverCreateModel createModel)
         {
             throw new NotImplementedException();
         }
@@ -26,9 +30,41 @@ namespace Repository
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
+        public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
         {
-            factDbContext.
+            /**
+             * Using --- EF CORE
+                var deviceDriverByZone = await FindByCondition(p => p.ZoneId == Id, trackChanges: false).ToListAsync();
+                ZoneEntity? zone = await factDbContext.ZoneEntityEntities.Where(p => p.Id == Id).FirstOrDefaultAsync();
+                List<DeviceDriverDisplayModel> result = new List<DeviceDriverDisplayModel>();
+                for (int i = 0; i < deviceDriverByZone.Count; i++)
+                {
+                    DeviceDriverTypeEntity? deviceDriverType = await factDbContext.DeviceDriversTypeEntities.Where(p => p.Id == deviceDriverByZone[i].DeviceDriverTypeId).FirstOrDefaultAsync();
+
+                    var deviceDisplayModel = mapper.Map<DeviceDriverDisplayModel>(deviceDriverByZone[i]);
+
+                    deviceDisplayModel.ZoneId = deviceDriverByZone[i].ZoneId;
+                    deviceDisplayModel.ZoneName = zone!.ZoneName ?? null;
+                    deviceDisplayModel.DescriptionZone = zone!.Description ?? null;
+
+                    deviceDisplayModel.DeviceDriverTypeId = deviceDriverByZone[i].DeviceDriverTypeId ?? null;
+                    deviceDisplayModel.DeviceDriverTypeName = deviceDriverType!.Name ?? null;
+                    deviceDisplayModel.DeviceDriverTypeDescription = deviceDriverType!.Description ?? null;
+                    deviceDisplayModel.DeviceDriverTypeManufacturer = deviceDriverType!.Manufacturer ?? null;
+                    deviceDisplayModel.DeviceDriverTypeImageUrl = deviceDriverType!.ImageUrl ?? null;
+
+                    result.Add(deviceDisplayModel);
+                }
+                return result;
+            */
+            /// -- Using Dapper
+            var query = DeviceDriverQuery.GetDeviceDriverByZone;
+            using (var connection = dapperContext.CreateConnection())
+            {
+                var result = await connection.QueryAsync<DeviceDriverDisplayModel>(query, new { ZoneId = Id });
+                return result;
+            }
+
         }
 
         public Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync()
@@ -41,7 +77,7 @@ namespace Repository
             throw new NotImplementedException();
         }
 
-        public Task UpdateInforDeviceDriver(InstrumentationUpdateModel updateModel)
+        public Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel)
         {
             throw new NotImplementedException();
         }

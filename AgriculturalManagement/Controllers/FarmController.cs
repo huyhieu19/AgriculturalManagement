@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace AgriculturalManagement.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Farm")]
     [ApiController]
     public class FarmController : ControllerBase
     {

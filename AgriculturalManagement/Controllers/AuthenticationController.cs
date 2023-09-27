@@ -5,7 +5,7 @@ using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Authentication")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {

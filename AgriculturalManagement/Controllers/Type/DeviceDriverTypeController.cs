@@ -4,7 +4,7 @@ using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers.Type
 {
-    [Route("api/[controller]")]
+    [Route("api/DeviceDriverType")]
     [ApiController]
     public class DeviceDriverTypeController : ControllerBase
     {

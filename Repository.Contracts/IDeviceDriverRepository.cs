@@ -1,5 +1,4 @@
 ﻿using Models;
-using Models.DeviceDriver;
 
 namespace Repository.Contracts
 {
@@ -7,8 +6,8 @@ namespace Repository.Contracts
     {
         Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id);
         Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync();
-        Task UpdateInforDeviceDriver(InstrumentationUpdateModel updateModel);
-        Task CreateDeviceDriver(InstrumentationCreateModel createModel);
+        Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel);
+        Task CreateDeviceDriver(DeviceDriverCreateModel createModel);
         Task DeleteDeviceDriver(int Id); //  Xóa hẳn => bị hỏng máy
         Task RemoveDeviceDriver(int Id); //chuyển Zone Id  = null
     }

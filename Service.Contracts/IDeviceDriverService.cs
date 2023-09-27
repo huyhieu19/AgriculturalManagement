@@ -1,12 +1,11 @@
 ﻿using Models;
-using Models.DeviceDriver;
 
 namespace Service.Contracts
 {
     public interface IDeviceDriverService
     {
         Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id);
-        Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDrivernNotInZoneAsync();
+        Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync();
         Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel);
         Task CreateDeviceDrivern(DeviceDriverCreateModel createModel);
         Task DeleteDeviceDriver(int Id); //  Xóa hẳn => bị hỏng máy
