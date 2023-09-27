@@ -59,7 +59,7 @@ namespace Repository
                 return result;
             */
             /// -- Using Dapper
-            var query = DeviceDriverQuery.GetDeviceDriverByZone;
+            var query = DeviceDriverQuery.GetDeviceDriverByZoneSQL;
             using (var connection = dapperContext.CreateConnection())
             {
                 var result = await connection.QueryAsync<DeviceDriverDisplayModel>(query, new { ZoneId = Id });

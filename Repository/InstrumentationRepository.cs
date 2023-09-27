@@ -28,12 +28,11 @@ namespace Repository
             }
         }
 
-        public async Task DeleteInstrumentation(int Id)
+        public void DeleteInstrumentation(InstrumentationEntity entity)
         {
             try
             {
-                var instrumentation = await FindByCondition(p => p.Id == Id, trackChanges: false).FirstOrDefaultAsync();
-                Delete(instrumentation!);
+                Delete(entity!);
             }
             catch (Exception ex)
             {
@@ -41,12 +40,17 @@ namespace Repository
             }
         }
 
-        public async Task<IEnumerable<InstrumentationEntity>> GetInstrumentationByZoneAsync(int Id)
+        public async Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationByZoneAsync(int Id)
         {
             try
             {
-                var instrumentations = await FindByCondition(p => p.ZoneId == Id, trackChanges: false).ToListAsync();
-                return instrumentations ?? Enumerable.Empty<InstrumentationEntity>();
+                using (var connection = dapperContext.CreateConnection())
+                {
+                    connection.Open();
+                    var query = await connection.QueryAsync<InstrumentationDisplayModel>(InstrumentationQuery.GetInstrumentationByZoneSQL, new { ZoneId = Id });
+                    connection.Close();
+                    return query;
+                }
             }
             catch (Exception ex)
             {
@@ -76,7 +80,7 @@ namespace Repository
                 connection.Open();
                 using (var trans = connection.BeginTransaction())
                 {
-                    await connection.ExecuteAsync(InstrumentationQuery.ZoneIdToNull, param, transaction: trans);
+                    await connection.ExecuteAsync(InstrumentationQuery.ZoneIdToNullSQL, param, transaction: trans);
                     trans.Commit();
                 }
                 connection.Close();
@@ -91,7 +95,7 @@ namespace Repository
                 connection.Open();
                 using (var trans = connection.BeginTransaction())
                 {
-                    await connection.ExecuteAsync(InstrumentationQuery.UpdateInfo, param, transaction: trans);
+                    await connection.ExecuteAsync(InstrumentationQuery.UpdateInfoSQL, param, transaction: trans);
                     trans.Commit();
                 }
                 connection.Close();

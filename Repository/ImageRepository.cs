@@ -87,9 +87,9 @@ namespace Repository
                 {
                     if (model.IsDefault == true)
                     {
-                        await connection.ExecuteAsync(ImageQuery.SetAllDefaultToFalse, transaction: trans);
+                        await connection.ExecuteAsync(ImageQuery.SetAllDefaultToFalseSQL, transaction: trans);
                     }
-                    await connection.ExecuteAsync(ImageQuery.CreateImage, param, transaction: trans);
+                    await connection.ExecuteAsync(ImageQuery.CreateImageSQL, param, transaction: trans);
                     trans.Commit();
                 }
                 connection.Close();
@@ -107,7 +107,7 @@ namespace Repository
                 connection.Open();
                 using (var trans = connection.BeginTransaction())
                 {
-                    await connection.ExecuteAsync(ImageQuery.SetImageDefault, param, transaction: trans);
+                    await connection.ExecuteAsync(ImageQuery.SetImageDefaultSQl, param, transaction: trans);
                     trans.Commit();
                 }
             }

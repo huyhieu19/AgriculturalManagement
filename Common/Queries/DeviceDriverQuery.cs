@@ -2,7 +2,7 @@
 {
     public static class DeviceDriverQuery
     {
-        public const string GetDeviceDriverByZone = @"SELECT
+        public const string GetDeviceDriverByZoneSQL = @"SELECT
                     DD.*,
 
                     F.Name AS FarmName,
