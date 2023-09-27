@@ -41,6 +41,8 @@ namespace AgriculturalManagement
 
             // Device Driver profile mapping
             CreateMap<DeviceDriverEntity, DeviceDriverDisplayModel>();
+            CreateMap<DeviceDriverUpdateModel, DeviceDriverEntity>();
+            CreateMap<DeviceDriverCreateModel, DeviceDriverEntity>();
 
         }
     }

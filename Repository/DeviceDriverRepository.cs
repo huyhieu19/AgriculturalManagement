@@ -3,6 +3,7 @@ using Common.Queries;
 using Dapper;
 using Database;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Repository.Contracts;
 
@@ -20,14 +21,14 @@ namespace Repository
             this.factDbContext = factDbContext;
         }
 
-        public Task CreateDeviceDriver(DeviceDriverCreateModel createModel)
+        public void CreateDeviceDriver(DeviceDriverEntity createModel)
         {
-            throw new NotImplementedException();
+            Create(createModel);
         }
 
-        public Task DeleteDeviceDriver(int Id)
+        public void DeleteDeviceDriver(DeviceDriverEntity entity)
         {
-            throw new NotImplementedException();
+            Delete(entity);
         }
 
         public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
@@ -67,19 +68,22 @@ namespace Repository
 
         }
 
-        public Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync()
+        public async Task<IEnumerable<DeviceDriverEntity>> GetDeviceDriverNotInZoneAsync()
         {
-            throw new NotImplementedException();
+            var deviceDriverNotInZone = await FindByCondition(p => p.ZoneId == null, trackChanges: false).ToListAsync();
+            return deviceDriverNotInZone;
         }
 
-        public Task RemoveDeviceDriver(int Id)
+        public async Task RemoveDeviceDriver(int Id)
         {
-            throw new NotImplementedException();
+            var entity = await FindByCondition(p => p.Id == Id, false).FirstOrDefaultAsync();
+            entity!.ZoneId = null;
+            Update(entity!);
         }
 
-        public Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel)
+        public void UpdateInforDeviceDriver(DeviceDriverEntity updateModel)
         {
-            throw new NotImplementedException();
+            Update(updateModel);
         }
     }
 }

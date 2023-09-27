@@ -5,14 +5,14 @@
         public const string GetDeviceDriverByZone = @"SELECT
                     DD.*,
 
-                    F.Name AS FarmName
+                    F.Name AS FarmName,
 
                     Z.ZoneName,
-                    Z.Description AS ZoneDescription
+                    Z.Description AS ZoneDescription,
 
                     DDT.Name AS DeviceDriverTypeName,
                     DDT.Manufacturer AS DeviceDriverTypeManufacturer,
-                    DDT.ImageUrl AS DeviceDriverTypeImageUrl,
+                    DDT.ImageUrl AS DeviceDriverTypeImageUrl
 
                 FROM
                     DeviceDriver DD
