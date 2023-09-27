@@ -34,12 +34,12 @@ namespace Repository
             }
         }
 
-        public void DeleteFarm(int id)
+        public void DeleteFarm(int id, string UserId)
         {
             try
             {
                 logger.LogInfomation($"FarmRepository | Delete: {id} | start ");
-                var entity = FindByCondition(p => p.Id == id, false).First();
+                var entity = FindByCondition(p => p.Id == id && p.UserId == UserId, false).First();
                 Delete(entity);
                 logger.LogInfomation($"FarmRepository | Delete | end ");
             }
@@ -52,7 +52,7 @@ namespace Repository
 
         public async Task<IEnumerable<FarmEntity>> GetAllFarm(bool trackChanges) => await FindAll(trackChanges).OrderBy(c => c.Name).ToListAsync();
 
-        public async Task<IEnumerable<FarmEntity>> GetByCondition(QueryBaseModel model, bool trackchanges)
+        public async Task<IEnumerable<FarmEntity>> GetByCondition(FarmQueryModel  model, bool trackchanges)
         {
             var Farms = await FindByCondition(p => p.UserId == model.UserId, trackchanges).ToListAsync();
 

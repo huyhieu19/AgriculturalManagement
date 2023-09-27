@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Models;
+using Models.DeviceDriver;
 using Repository.Contracts;
 using Service.Contracts;
 
@@ -16,32 +17,32 @@ namespace Service
             this.mapper = mapper;
         }
 
-        public Task CreateInstrumentation(InstrumentationCreateModel createModel)
+        public Task CreateDeviceDrivern(DeviceDriverCreateModel createModel)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteInstrumentation(int Id)
+        public Task DeleteDeviceDriver(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<InstrumentationDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
+        public Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<InstrumentationDisplayModel>> GetInstrumentationNotInZoneAsync()
+        public Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDrivernNotInZoneAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task RemoveInstrumentation(int Id)
+        public Task RemoveDeviceDriver(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateInforInstrumentation(InstrumentationUpdateModel updateModel)
+        public Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel)
         {
             throw new NotImplementedException();
         }

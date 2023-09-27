@@ -48,7 +48,8 @@ namespace Service
             //var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
             var tokenHander = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
-            var principal = tokenHander.ValidateToken(token, tokenValidationParameters, out securityToken);
+            tokenHander.ValidateToken(token, tokenValidationParameters, out securityToken);
+            
             var jwtSecurityToken = securityToken as JwtSecurityToken;
 
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
@@ -132,7 +133,10 @@ namespace Service
         {
             var claims = new List<Claim>
                 {
-                new Claim(ClaimTypes.Name, _user.UserName)
+                    new Claim(ClaimTypes.Name, _user!.UserName!),
+                    new Claim("Id", _user.Id),
+                    new Claim(ClaimTypes.NameIdentifier, _user.Id),
+
                 };
             var roles = await userManager.GetRolesAsync(_user);
             foreach (var role in roles)
@@ -210,7 +214,7 @@ namespace Service
         {
             var principal = GetPrincipalFromExpiredToken(tokenModel.AccessToken);
 
-            var user = await userManager.FindByNameAsync(principal.Identity.Name);
+            var user = await userManager.FindByNameAsync(principal.Identity!.Name!);
             if (user == null || user.RefreshToken != tokenModel.RefreshToken)
             {
                 throw new AggregateException("Invalid client request. The tokenDto has some invalid values.");

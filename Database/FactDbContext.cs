@@ -67,14 +67,14 @@ namespace Database
         public DbSet<FarmEntity> FarmEntities { get; set; } = null!;
         public DbSet<ImageEntity> ImageEntities { get; set; } = null!;
         public DbSet<InstrumentationEntity> InstrumentationEntities { get; set; } = null!;
-        public DbSet<InstrumentationTypeEntity> InstrumentationTypeEntities { get; set; } = null!;
         // Machine
         public DbSet<MachineEntity> MachineEntities { get; set; } = null!;
         public DbSet<MachineWarranlyDateEntity> MachineWarranlyDateEntities { get; set; } = null!;
 
-        // Type tree
+        // Type
         public DbSet<TypeTreeEntity> TypeTreeEntities { get; set; } = null!;
-        public DbSet<DeviceDriverEntity> ZoneDeviceDrivers { get; set; } = null!;
+        public DbSet<InstrumentationTypeEntity> InstrumentationTypeEntities { get; set; } = null!;
+        public DbSet<DeviceDriverTypeEntity> DeviceDriversTypeEntities { get; set; } = null!;
 
         // Zone 
         public DbSet<ZoneEntity> ZoneEntityEntities { get; set; } = null!;

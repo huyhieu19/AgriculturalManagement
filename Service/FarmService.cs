@@ -49,7 +49,7 @@ namespace Service
             }
         }
 
-        public async Task<IEnumerable<FarmDisplayModel>> GetByCondition(QueryBaseModel model, bool trackChanges)
+        public async Task<IEnumerable<FarmDisplayModel>> GetByCondition(FarmQueryModel model, bool trackChanges)
         {
             try
             {
@@ -82,12 +82,12 @@ namespace Service
             }
         }
 
-        public async Task<bool> RemoveFarm(int id)
+        public async Task<bool> RemoveFarm(int id, string UserId)
         {
             try
             {
                 _logger.LogInfomation($"Farm Service | Remove Farm: {id}");
-                repositoryManager.Farm.DeleteFarm(id);
+                repositoryManager.Farm.DeleteFarm(id, UserId);
                 await repositoryManager.SaveAsync();
                 return true;
             }

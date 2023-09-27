@@ -30,43 +30,75 @@ namespace Startup
 
                     // Continue processing the request
                     await _next(context);
-
+                    string responseContent = "abc";
                     // Intercept and modify the response
                     if (context.Response.StatusCode == 200)
                     {
                         // Replace this with your custom logic to modify the response
-                        var responseContent = await FormatResponse(context.Response);
+                        responseContent = await FormatResponseCode200(context.Response);
 
                         // Write the modified response content to the memory stream
-                        var bytes = Encoding.UTF8.GetBytes(responseContent);
-                        await responseBody.WriteAsync(bytes, 0, bytes.Length);
-
-                        // Copy the memory stream back to the original response stream
-                        responseBody.Seek(0, SeekOrigin.Begin);
-                        await responseBody.CopyToAsync(originalBodyStream);
+                        
                     }
+                    if (context.Response.StatusCode == 401)
+                    {
+                        // Handle exceptions here
+                        context.Response.StatusCode = 200; // Internal Server Error
+                        var errorMessage = "you have no permissions to access this website.";
+
+                        // Create an ApiResponseModel with error details
+                        var apiResponse = new ApiResponseModel<object>
+                        {
+                            Success = false,
+                            ErrorMessage = errorMessage,
+                            StatusCode = 401
+                        };
+
+                        // Serialize the ApiResponseModel to JSON
+                        responseContent = JsonConvert.SerializeObject(apiResponse);
+
+                        // Write the formatted response to the original response stream
+                        ////var bytes = Encoding.UTF8.GetBytes(formattedResponse);
+                        ////await originalBodyStream.WriteAsync(bytes, 0, bytes.Length);
+                        ////responseBody.Seek(0, SeekOrigin.Begin);
+                        ////await responseBody.CopyToAsync(originalBodyStream);
+                    }
+
+                    // Write the formatted response to the original response stream
+                    var bytes = Encoding.UTF8.GetBytes(responseContent);
+                    await responseBody.WriteAsync(bytes, 0, bytes.Length);
+
+                    //Copy the memory stream back to the original response stream
+                    responseBody.Seek(0, SeekOrigin.Begin);
+                    await responseBody.CopyToAsync(originalBodyStream);
                 }
             }
             catch (Exception ex)
             {
-                // Handle exceptions here
-                context.Response.StatusCode = 200; // Internal Server Error
-                var errorMessage = ex.Message;
-
-                // Create an ApiResponseModel with error details
-                var apiResponse = new ApiResponseModel<object>
+                using (var responseBody = new MemoryStream())
                 {
-                    Success = false,
-                    ErrorMessage = errorMessage,
-                    StatusCode = context.Response.StatusCode
-                };
+                    // Handle exceptions here
+                    context.Response.StatusCode = 200; // Internal Server Error
+                    var errorMessage = ex.Message;
 
-                // Serialize the ApiResponseModel to JSON
-                var formattedResponse = JsonConvert.SerializeObject(apiResponse);
+                    // Create an ApiResponseModel with error details
+                    var apiResponse = new ApiResponseModel<object>
+                    {
+                        Success = false,
+                        ErrorMessage = errorMessage,
+                        StatusCode = 500
+                    };
 
-                // Write the formatted response to the original response stream
-                var bytes = Encoding.UTF8.GetBytes(formattedResponse);
-                await originalBodyStream.WriteAsync(bytes, 0, bytes.Length);
+                    // Serialize the ApiResponseModel to JSON
+                    var formattedResponse = JsonConvert.SerializeObject(apiResponse);
+
+                    // Write the formatted response to the original response stream
+                    var bytes = Encoding.UTF8.GetBytes(formattedResponse);
+                    await originalBodyStream.WriteAsync(bytes, 0, bytes.Length);
+                    responseBody.Seek(0, SeekOrigin.Begin);
+                    await responseBody.CopyToAsync(originalBodyStream);
+                }
+                    
             }
             finally
             {
@@ -74,7 +106,7 @@ namespace Startup
             }
         }
 
-        private async Task<string> FormatResponse(HttpResponse response)
+        private async Task<string> FormatResponseCode200(HttpResponse response)
         {
             // Read the original response content
             response.Body.Seek(0, SeekOrigin.Begin);
