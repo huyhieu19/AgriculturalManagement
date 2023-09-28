@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using Repository;
 using Repository.Contracts;
 using Service;
+using Service.BackgroundJob;
 using Service.Contracts;
 using Service.Extention;
 
@@ -24,8 +25,11 @@ namespace Startup
             builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+
             builder.Services.AddSingleton<DapperContext>();
 
+            builder.Services.AddHostedService<JobForDeviceDriverService>();
             builder.Services.AddControllers(config =>
             {
                 config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
