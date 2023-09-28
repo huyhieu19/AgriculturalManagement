@@ -4,6 +4,7 @@ using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriculturalManagement.Migrations
 {
     [DbContext(typeof(FactDbContext))]
-    partial class FactDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230928155039_Update-20230928-2")]
+    partial class Update202309282
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -390,7 +393,7 @@ namespace AgriculturalManagement.Migrations
                     b.Property<int?>("DeviceDriverId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsAuto")
+                    b.Property<bool?>("IsAuto")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsDaily")
@@ -401,10 +404,10 @@ namespace AgriculturalManagement.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<DateTime>("OpenTimer")
+                    b.Property<DateTime?>("OpenTimer")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ShutDownTimer")
+                    b.Property<DateTime?>("ShutDownTimer")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -731,13 +734,13 @@ namespace AgriculturalManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "698715da-7735-41b8-8533-4c5f9c6b8b57",
+                            Id = "e21d687f-cfe5-473a-a716-84e9cbc59de0",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "c400bf07-1713-452c-92e2-06f1456b6a64",
+                            Id = "ac24a0c9-848a-401f-ad70-d8804c2158f9",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

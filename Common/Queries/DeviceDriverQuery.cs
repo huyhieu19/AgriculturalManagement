@@ -32,19 +32,13 @@
                     Z.Id = @ZoneId";
 
 
-        public const string GetTurnOnAndTurnOff = @"SELECT [Id]
-                                                  ,[IsProblem]
-                                                  ,[IsAction]
-                                                  ,[IsAuto]
-                                                  ,[IsDaily]
-                                                  ,[OpenTimer]
-                                                  ,[ShutDownTime]
-                                              FROM [AgriculturalManagement].[dbo].[DeviceDriver]";
-        public const string UpdateTurnOn = @"Update [DeviceDriver]
-                                            Set IsAction = 1
-                                            Where Id = @Id";
-        public const string UpdateTurnOff = @"Update [DeviceDriver]
-                                            Set IsAction = 0
-                                            Where Id = @Id";
+        public const string GetTurnOnAndTurnOffSQL = @"SELECT [Id]
+                          ,[IsDaily]
+                          ,[IsAuto]
+                          ,[ShutDownTimer]
+                          ,[OpenTimer]
+                          ,[DeviceDriverId]
+                      FROM [AgriculturalManagement].[dbo].[TimerDeviceDriver]";
+
     }
 }

@@ -13,5 +13,9 @@ namespace Repository.Contracts
         Task RemoveDeviceDriver(int Id); //chuyển Zone Id  = null
 
         Task<IEnumerable<DeviceDriverEntity>> GetDeviceDriver();
+
+        // timer
+        void CreateTimer(TimerDeviceDriverEntity entity);
+        void UpdateTimer(TimerDeviceDriverEntity entity);
     }
 }

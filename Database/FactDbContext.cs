@@ -53,19 +53,28 @@ namespace Database
             builder.ApplyConfiguration(new ZoneHarvestConfiguration());
             builder.ApplyConfiguration(new JobInZoneConfiguration());
 
-
+            // Device Driver Configuration
             builder.ApplyConfiguration(new DeviceDriverConfiguration());
             builder.ApplyConfiguration(new DeviceDriverTypeConfiguration());
+            builder.ApplyConfiguration(new TimerDeviceDriverConfiguration());
 
             builder.ApplyConfiguration(new TypeTreeConfiguration());
             builder.ApplyConfiguration(new MachineConfiguration());
 
 
         }
-
+        // DeviceDriver Dataset
         public DbSet<DeviceDriverEntity> DeviceDriverEntities { get; set; } = null!;
+        public DbSet<TimerDeviceDriverEntity> TimerDeviceDriverEntities { get; set; } = null!;
+        public DbSet<DeviceDriverTypeEntity> DeviceDriversTypeEntities { get; set; } = null!;
+
+        // Farm
         public DbSet<FarmEntity> FarmEntities { get; set; } = null!;
+
+        // Image
         public DbSet<ImageEntity> ImageEntities { get; set; } = null!;
+
+        // Instrumentation
         public DbSet<InstrumentationEntity> InstrumentationEntities { get; set; } = null!;
         // Machine
         public DbSet<MachineEntity> MachineEntities { get; set; } = null!;
@@ -74,7 +83,6 @@ namespace Database
         // Type
         public DbSet<TypeTreeEntity> TypeTreeEntities { get; set; } = null!;
         public DbSet<InstrumentationTypeEntity> InstrumentationTypeEntities { get; set; } = null!;
-        public DbSet<DeviceDriverTypeEntity> DeviceDriversTypeEntities { get; set; } = null!;
 
         // Zone 
         public DbSet<ZoneEntity> ZoneEntityEntities { get; set; } = null!;
