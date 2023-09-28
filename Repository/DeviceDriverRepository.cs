@@ -85,5 +85,9 @@ namespace Repository
         {
             Update(updateModel);
         }
+        public async Task<IEnumerable<DeviceDriverEntity>> GetDeviceDriver()
+        {
+            return await FindAll(false).ToListAsync();
+        }
     }
 }
