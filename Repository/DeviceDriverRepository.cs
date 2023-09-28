@@ -89,5 +89,15 @@ namespace Repository
         {
             return await FindAll(false).ToListAsync();
         }
+
+        public async void CreateTimer(TimerDeviceDriverEntity entity)
+        {
+            await factDbContext.TimerDeviceDriverEntities.AddAsync(entity);
+        }
+
+        public void UpdateTimer(TimerDeviceDriverEntity entity)
+        {
+            factDbContext.TimerDeviceDriverEntities.Update(entity);
+        }
     }
 }

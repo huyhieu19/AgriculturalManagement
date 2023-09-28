@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Database;
 using Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -20,13 +21,13 @@ namespace Service
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
-            IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration)
+            IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration, DapperContext dapperContext)
         {
             this.farmService = new Lazy<IFarmService>(() => new FarmService(repositoryManager, logger, mapper));
             this.zoneService = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper));
             this.imageService = new Lazy<IImageService>(() => new ImageService(repositoryManager, mapper));
             this.instrumentationService = new Lazy<IInstrumentationService>(() => new InstrumentationService(repositoryManager, mapper));
-            this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper));
+            this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper, dapperContext));
             this.machineService = new Lazy<IMachineService>(() => new MachineService(repositoryManager, mapper));
             this.authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, userManager, logger, configuration));
             this.valueTypeService = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));

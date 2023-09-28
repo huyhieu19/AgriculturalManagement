@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entities;
 using Models;
+using Models.DeviceDriver;
 
 namespace AgriculturalManagement
 {
@@ -43,6 +44,10 @@ namespace AgriculturalManagement
             CreateMap<DeviceDriverEntity, DeviceDriverDisplayModel>();
             CreateMap<DeviceDriverUpdateModel, DeviceDriverEntity>();
             CreateMap<DeviceDriverCreateModel, DeviceDriverEntity>();
+
+            // Timer Device Driver
+            CreateMap<TimerDeviceDriverDisplayModel, TimerDeviceDriverEntity>().ReverseMap();
+            CreateMap<TimerDeviceDriverCreateModel, TimerDeviceDriverEntity>();
 
         }
     }
