@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.DeviceDriver;
+using Models.DeviceDriver.Timer;
 using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers

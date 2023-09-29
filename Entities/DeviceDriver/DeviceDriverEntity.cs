@@ -8,9 +8,9 @@ namespace Entities
         [Key]
         public int Id { get; set; }
         public DateTime? DateStartedUsing { get; set; }
-        public bool? IsAction { get; set; } = false;
-        public bool? IsProblem { get; set; } = false;
-
+        public bool IsAction { get; set; } = false;
+        public bool IsProblem { get; set; } = false;
+        public bool IsAuto { get; set; } = false;
 
         [ForeignKey("DeviceDriverType")]
         public int? DeviceDriverTypeId { get; set; }

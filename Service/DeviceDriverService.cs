@@ -4,7 +4,7 @@ using Dapper;
 using Database;
 using Entities;
 using Models;
-using Models.DeviceDriver;
+using Models.DeviceDriver.Timer;
 using Repository.Contracts;
 using Service.Contracts;
 

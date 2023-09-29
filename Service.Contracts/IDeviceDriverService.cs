@@ -1,5 +1,5 @@
 ﻿using Models;
-using Models.DeviceDriver;
+using Models.DeviceDriver.Timer;
 
 namespace Service.Contracts
 {
