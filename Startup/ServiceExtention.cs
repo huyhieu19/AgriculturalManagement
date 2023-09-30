@@ -11,6 +11,7 @@ using Quartz.Impl;
 using Repository;
 using Repository.Contracts;
 using Service;
+using Service.BackgroundJob;
 using Service.Contracts;
 using Service.Extention;
 
@@ -45,7 +46,7 @@ namespace Startup
 
 
             //// job chay background 5s 1 lần
-            ////builder.Services.AddHostedService<JobForDeviceDriverService>();
+            builder.Services.AddHostedService<JobForDeviceDriverService>();
 
 
             builder.Services.AddControllers(config =>

@@ -34,14 +34,14 @@ namespace Service.BackgroundJob
         /// </summary>
         private async Task<IEnumerable<DeviceDriverTurnOnTurnOffModel>> GetDeviceDriverTurnOnTurnOffModels()
         {
-            logger.LogInfomation("GetDeviceDriverTurnOnTurnOffModels --> start");
+            logger.LogInfomation("Job background device driver --> start");
             var query = TimerDeviceDriverQuery.GetAllTimerSQL;
             IEnumerable<DeviceDriverTurnOnTurnOffModel> listTime;
             using (var connection = dapperContext.CreateConnection())
             {
                 listTime = await connection.QueryAsync<DeviceDriverTurnOnTurnOffModel>(query);
             }
-            logger.LogInfomation("GetDeviceDriverTurnOnTurnOffModels --> end");
+            logger.LogInfomation("Job background device driver --> end");
             return listTime;
         }
         // Hàm này dùng để tắt device driver ---> IsAcction = true
