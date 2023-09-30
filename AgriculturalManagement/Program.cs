@@ -1,5 +1,9 @@
-using NLog;
+﻿using NLog;
+using Quartz.Impl;
 using Startup;
+// lấy ra scheduler để làm hàm tạo
+var schedulerFactory = new StdSchedulerFactory();
+var scheduler = await schedulerFactory.GetScheduler();
 
 var builder = WebApplication.CreateBuilder(args)
   .AddServicesContext()

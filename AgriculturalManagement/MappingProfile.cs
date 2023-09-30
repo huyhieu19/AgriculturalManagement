@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Entities;
 using Models;
-using Models.DeviceDriver.Timer;
 
 namespace AgriculturalManagement
 {

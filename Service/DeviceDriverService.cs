@@ -4,7 +4,6 @@ using Dapper;
 using Database;
 using Entities;
 using Models;
-using Models.DeviceDriver.Timer;
 using Repository.Contracts;
 using Service.Contracts;
 
@@ -15,13 +14,17 @@ namespace Service
         private readonly IRepositoryManager repositoryManager;
         private readonly IMapper mapper;
         private readonly DapperContext dapperContext;
+        private readonly ILoggerManager logger;
 
-
-        public DeviceDriverService(IRepositoryManager repositoryManager, IMapper mapper, DapperContext dapperContext)
+        public DeviceDriverService(IRepositoryManager repositoryManager,
+            IMapper mapper,
+            DapperContext dapperContext,
+            ILoggerManager logger)
         {
             this.repositoryManager = repositoryManager;
             this.mapper = mapper;
             this.dapperContext = dapperContext;
+            this.logger = logger;
         }
 
         public async Task CreateDeviceDriver(DeviceDriverCreateModel createModel)
@@ -135,20 +138,10 @@ namespace Service
         public async Task UpdateTimer(TimerDeviceDriverDisplayModel model)
         {
             var entity = mapper.Map<TimerDeviceDriverEntity>(model);
+
             repositoryManager.DeviceDriver.UpdateTimer(entity);
             await repositoryManager.SaveAsync();
-            //var query = TimerDeviceDriverQuery.UpdateTimerSQL;
-            //var param = new DynamicParameters(model);
-            //using (var connection = dapperContext.CreateConnection())
-            //{
-            //    connection.Open();
-            //    using (var trans = connection.BeginTransaction())
-            //    {
-            //        await connection.ExecuteAsync(query, param, transaction: trans);
-            //        trans.Commit();
-            //    }
-            //    connection.Close();
-            //}
+            //await new JobSchedulerDeviceDriver().RescheduleJobs(entity.Id);
         }
     }
 }
