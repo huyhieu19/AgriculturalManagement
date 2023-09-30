@@ -100,7 +100,7 @@ namespace Service.BackgroundJob
                     int? Id = entity!.DeviceDriverId;
                     await DeviceDriverTurnOn((int)Id);
                 }
-                await Task.Delay(TimeSpan.FromMinutes(1));
+                await Task.Delay(TimeSpan.FromMinutes(30));
             }
 
 
@@ -114,7 +114,7 @@ namespace Service.BackgroundJob
                     await DeviceDriverTurnOff((int)Id);
                     await DeleteTimer((int)Id);
                 }
-                await Task.Delay(TimeSpan.FromMinutes(1));
+                await Task.Delay(TimeSpan.FromMinutes(30));
             }
         }
     }
