@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.DeviceDriver;
 using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Repository.Contracts": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53549;http://localhost:53550"
+    }
+  }
+}

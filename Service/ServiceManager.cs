@@ -27,7 +27,7 @@ namespace Service
             this.zoneService = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper));
             this.imageService = new Lazy<IImageService>(() => new ImageService(repositoryManager, mapper));
             this.instrumentationService = new Lazy<IInstrumentationService>(() => new InstrumentationService(repositoryManager, mapper));
-            this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper, dapperContext));
+            this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper, dapperContext, logger));
             this.machineService = new Lazy<IMachineService>(() => new MachineService(repositoryManager, mapper));
             this.authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, userManager, logger, configuration));
             this.valueTypeService = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));

@@ -1,10 +1,13 @@
 ﻿using Database;
+using JobBackground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Quartz;
+using Quartz.Impl;
 using Repository;
 using Repository.Contracts;
 using Service;
@@ -29,7 +32,23 @@ namespace Startup
 
             builder.Services.AddSingleton<DapperContext>();
 
+
+            builder.Services.AddSingleton<IScheduler>(provider =>
+            {
+                var schedulerFactory = new StdSchedulerFactory();
+                return schedulerFactory.GetScheduler().Result;
+            });
+
+            builder.Services.AddSingleton<JobSchedulerDeviceDriver>();
+
+            builder.Services.AddHostedService<JobSchedulerHostedService>();
+
+
+
+            //// job chay background 5s 1 lần
             builder.Services.AddHostedService<JobForDeviceDriverService>();
+
+
             builder.Services.AddControllers(config =>
             {
                 config.CacheProfiles.Add("120SecondsDuration", new CacheProfile

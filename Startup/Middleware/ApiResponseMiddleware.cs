@@ -38,7 +38,7 @@ namespace Startup
                         responseContent = await FormatResponseCode200(context.Response);
 
                         // Write the modified response content to the memory stream
-                        
+
                     }
                     if (context.Response.StatusCode == 401)
                     {
@@ -98,7 +98,7 @@ namespace Startup
                     responseBody.Seek(0, SeekOrigin.Begin);
                     await responseBody.CopyToAsync(originalBodyStream);
                 }
-                    
+
             }
             finally
             {

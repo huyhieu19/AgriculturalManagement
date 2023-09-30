@@ -1,5 +1,4 @@
 ﻿using Models;
-using Models.DeviceDriver;
 
 namespace Service.Contracts
 {

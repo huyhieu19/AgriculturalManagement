@@ -1,4 +1,5 @@
-﻿using Common.Queries;
+﻿using Common;
+using Common.Queries;
 using Dapper;
 using Database;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +12,7 @@ namespace Service.BackgroundJob
     {
         private readonly ILoggerManager logger;
         private readonly DapperContext dapperContext;
-
+        private readonly DateTime timeZoneNow = SetTimeZone.GetTimeZone();
 
         public JobForDeviceDriverService(ILoggerManager logger, DapperContext dapperContext)
         {
@@ -24,68 +25,65 @@ namespace Service.BackgroundJob
             // Run every 5 seconds
             while (!stoppingToken.IsCancellationRequested)
             {
-                logger.LogInfomation("1 Background job is running...");
                 await ToDoAsyncIsAuto();
-                logger.LogInfomation("2 Background job is running...");
                 await Task.Delay(TimeSpan.FromSeconds(7), stoppingToken);
             }
         }
-
+        /// <summary>
+        /// Lấy giá trị list giá trị ngày giờ đóng mở và các giá trị ngưỡng
+        /// </summary>
         private async Task<IEnumerable<DeviceDriverTurnOnTurnOffModel>> GetDeviceDriverTurnOnTurnOffModels()
         {
-            logger.LogInfomation("GetDeviceDriverTurnOnTurnOffModels - start");
-            var query = DeviceDriverQuery.GetTurnOnAndTurnOffSQL;
+            logger.LogInfomation("Job background device driver --> start");
+            var query = TimerDeviceDriverQuery.GetAllTimerSQL;
             IEnumerable<DeviceDriverTurnOnTurnOffModel> listTime;
             using (var connection = dapperContext.CreateConnection())
             {
                 listTime = await connection.QueryAsync<DeviceDriverTurnOnTurnOffModel>(query);
             }
-            logger.LogInfomation("GetDeviceDriverTurnOnTurnOffModels - end");
+            logger.LogInfomation("Job background device driver --> end");
             return listTime;
         }
-
+        // Hàm này dùng để tắt device driver ---> IsAcction = true
         private async Task DeviceDriverTurnOn(int DeviceDriverId)
         {
-            logger.LogInfomation($"Turn on --> DeviceDriverId:  {DeviceDriverId}");
-            using (var connection = dapperContext.CreateConnection())
+            logger.LogInfomation($"DeviceDriver: Turn on --> DeviceDriverId:  {DeviceDriverId}");
+            var connection = dapperContext.CreateConnection();
+            connection.Open();
+            using (var trans = connection.BeginTransaction())
             {
-                connection.Open();
-                using (var trans = connection.BeginTransaction())
-                {
-                    await connection.ExecuteAsync(TimerDeviceDriverQuery.UpdateTurnOnSQL, new { Id = DeviceDriverId }, transaction: trans);
-                    trans.Commit();
-                }
-                connection.Close();
+                await connection.ExecuteAsync(TimerDeviceDriverQuery.UpdateTurnOnSQL, new { Id = DeviceDriverId }, transaction: trans);
+                trans.Commit();
             }
+            connection.Close();
         }
+        // Hàm này dùng để tắt device driver ---> IsAcction = false
         private async Task DeviceDriverTurnOff(int DeviceDriverId)
         {
-            logger.LogInfomation($"Turn off --> DeviceDriverId: {DeviceDriverId}");
-            using (var connection = dapperContext.CreateConnection())
+            logger.LogInfomation($"DeviceDriver: Turn off --> DeviceDriverId: {DeviceDriverId}");
+            var connection = dapperContext.CreateConnection();
+            connection.Open();
+            using (var trans = connection.BeginTransaction())
             {
-                connection.Open();
-                using (var trans = connection.BeginTransaction())
-                {
-                    await connection.ExecuteAsync(TimerDeviceDriverQuery.UpdateTurnOffSQL, new { Id = DeviceDriverId }, transaction: trans);
-                    trans.Commit();
-                }
-                connection.Close();
+                await connection.ExecuteAsync(TimerDeviceDriverQuery.UpdateTurnOffSQL, new { Id = DeviceDriverId }, transaction: trans);
+                trans.Commit();
             }
+            connection.Close();
         }
 
-        private async Task DeleteTimer(int Id)
+        // Hàm này dùng để set cho trạng thái của IsRemve = true và IsSuccess = true
+        private async Task DeleteTimer(int id)
         {
+            logger.LogInfomation($"DeviceDriver: Set status to complete --> DeviceDriverId: {id}");
             var query = TimerDeviceDriverQuery.RemoveTimerSQL;
-            using (var connection = dapperContext.CreateConnection())
+            var connection = dapperContext.CreateConnection();
+            connection.Open();
+            using (var trans = connection.BeginTransaction())
             {
-                connection.Open();
-                using (var trans = connection.BeginTransaction())
-                {
-                    await connection.ExecuteAsync(query, new { Id = Id }, transaction: trans);
-                    trans.Commit();
-                }
-                connection.Close();
+                await connection.ExecuteAsync(query, new { Id = id }, transaction: trans);
+                trans.Commit();
             }
+            connection.Close();
         }
 
         private async Task ToDoAsyncIsAuto()
@@ -93,35 +91,28 @@ namespace Service.BackgroundJob
 
             var listTime = await GetDeviceDriverTurnOnTurnOffModels();
 
-            if (listTime != null && listTime.Any(p => p.OpenTimer.Minute == DateTime.Now.Minute && p.IsAuto))
+            if (listTime != null && listTime.Any(p => p.OpenTimer.Value.Minute == timeZoneNow.Minute && p.IsAuto))
             {
-                var entities = listTime.Where(p => p.OpenTimer.Minute == DateTime.Now.Minute)!.ToList();
+                var entities = listTime.Where(p => p.OpenTimer.Value.Minute == timeZoneNow.Minute)!.ToList();
 
                 foreach (var entity in entities)
                 {
                     int? Id = entity!.DeviceDriverId;
-                    if (Id is not null)
-                    {
-                        await DeviceDriverTurnOn((int)Id);
-                    }
+                    await DeviceDriverTurnOn((int)Id);
                 }
                 await Task.Delay(TimeSpan.FromMinutes(1));
             }
 
 
-            if (listTime != null && listTime.Any(p => p.ShutDownTimer.Minute == DateTime.Now.Minute && p.IsAuto))
+            if (listTime != null && listTime.Any(p => p.ShutDownTimer.Value.Minute == timeZoneNow.Minute && p.IsAuto))
             {
-                var entities = listTime.Where(p => p.ShutDownTimer.Minute == DateTime.Now.Minute)!.ToList();
+                var entities = listTime.Where(p => p.ShutDownTimer.Value.Minute == timeZoneNow.Minute)!.ToList();
 
                 foreach (var entity in entities)
                 {
                     int? Id = entity!.DeviceDriverId;
-                    if (Id is not null)
-                    {
-                        await DeviceDriverTurnOff((int)Id);
-                        await DeleteTimer((int)Id);
-                    }
-
+                    await DeviceDriverTurnOff((int)Id);
+                    await DeleteTimer((int)Id);
                 }
                 await Task.Delay(TimeSpan.FromMinutes(1));
             }
