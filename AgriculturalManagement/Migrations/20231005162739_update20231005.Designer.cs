@@ -4,6 +4,7 @@ using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriculturalManagement.Migrations
 {
     [DbContext(typeof(FactDbContext))]
-    partial class FactDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231005162739_update20231005")]
+    partial class update20231005
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,9 +124,7 @@ namespace AgriculturalManagement.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDelete")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<double?>("ThresholdValueOff")
                         .HasColumnType("float");
@@ -137,7 +138,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("InstrumentationId");
 
-                    b.ToTable("DeviceInstrumentOnOff", (string)null);
+                    b.ToTable("DeviceInstrumentOnOffEntity");
                 });
 
             modelBuilder.Entity("Entities.FarmEntity", b =>
@@ -785,13 +786,13 @@ namespace AgriculturalManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8f9b8173-1ede-4f54-83aa-5c8858904d11",
+                            Id = "15fb6761-a08d-44e8-b095-1dec117c7d54",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "eef7b0cb-2626-4e7d-b0fc-84b58151f8cd",
+                            Id = "628f0ce7-ab09-44ae-bbeb-8ae8a03174ac",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

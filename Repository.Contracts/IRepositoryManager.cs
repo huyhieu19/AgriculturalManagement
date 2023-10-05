@@ -9,6 +9,8 @@
         IDeviceDriverRepository DeviceDriver { get; }
         IMachineRepository Machine { get; }
 
+        IInstrumentSetThresholdRepository InstrumentSetThreshold { get; }
+
         #region Value Type Repository
         IDeviceDriverTypeRepository DeviceDriverType { get; }
         IInstrumentationTypeRepository InstrumentationType { get; }

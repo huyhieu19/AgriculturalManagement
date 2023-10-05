@@ -16,6 +16,7 @@ namespace Repository
         private readonly Lazy<IDeviceDriverTypeRepository> deviceDriverTypeRepository;
         private readonly Lazy<IInstrumentationTypeRepository> instrumentationTypeRepository;
         private readonly Lazy<ITypeTreeRepository> typeTreeRepository;
+        private readonly Lazy<IInstrumentSetThresholdRepository> instrumentSetThresholdRepository;
         private readonly FactDbContext factDbContext;
 
         public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext, IMapper mapper)
@@ -30,6 +31,7 @@ namespace Repository
             deviceDriverTypeRepository = new Lazy<IDeviceDriverTypeRepository>(() => new DeviceDriverTypeRepository(factDbContext, dapperContext));
             instrumentationTypeRepository = new Lazy<IInstrumentationTypeRepository>(() => new InstrumentationTypeRepository(factDbContext, dapperContext));
             typeTreeRepository = new Lazy<ITypeTreeRepository>(() => new TypeTreeRepository(factDbContext, dapperContext));
+            instrumentSetThresholdRepository = new Lazy<IInstrumentSetThresholdRepository>(() => new InstrumentSetThresholdRepository(factDbContext));
         }
 
         public IFarmRepository Farm => farmRepository.Value;
@@ -49,6 +51,8 @@ namespace Repository
         public IInstrumentationTypeRepository InstrumentationType => instrumentationTypeRepository.Value;
 
         public ITypeTreeRepository TypeTree => typeTreeRepository.Value;
+
+        public IInstrumentSetThresholdRepository InstrumentSetThreshold => instrumentSetThresholdRepository.Value;
 
         public async Task SaveAsync() => await factDbContext.SaveChangesAsync();
     }
