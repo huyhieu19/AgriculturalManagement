@@ -11,5 +11,6 @@
         IAuthenticationService AuthenticationService { get; }
         IValueTypeService ValueType { get; }
 
+        IInstrumentSetThresholdService InstrumentSetThreshold { get; }
     }
 }

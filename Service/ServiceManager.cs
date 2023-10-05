@@ -18,6 +18,7 @@ namespace Service
         private readonly Lazy<IMachineService> machineService;
         private readonly Lazy<IAuthenticationService> authenticationService;
         private readonly Lazy<IValueTypeService> valueTypeService;
+        private readonly Lazy<IInstrumentSetThresholdService> instrumentSetThresholdService;
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
@@ -31,6 +32,7 @@ namespace Service
             this.machineService = new Lazy<IMachineService>(() => new MachineService(repositoryManager, mapper));
             this.authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, userManager, logger, configuration));
             this.valueTypeService = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));
+            this.instrumentSetThresholdService = new Lazy<IInstrumentSetThresholdService>(() => new InstrumentSetThresholdService(repositoryManager, mapper));
         }
 
 
@@ -49,5 +51,7 @@ namespace Service
         public IAuthenticationService AuthenticationService => authenticationService.Value;
 
         public IValueTypeService ValueType => valueTypeService.Value;
+
+        public IInstrumentSetThresholdService InstrumentSetThreshold => instrumentSetThresholdService.Value;
     }
 }

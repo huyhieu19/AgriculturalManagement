@@ -59,7 +59,9 @@ namespace Database
             builder.ApplyConfiguration(new TypeTreeConfiguration());
             builder.ApplyConfiguration(new MachineConfiguration());
 
+            // InstrumentSetThreshold
 
+            builder.ApplyConfiguration(new DeviceInstrumentOnOffConfiguration());
         }
         // DeviceDriver Dataset
         public DbSet<DeviceDriverEntity> DeviceDriverEntities { get; set; } = null!;
@@ -87,5 +89,8 @@ namespace Database
         public DbSet<ZoneHarvestEntity> ZoneHarvestEntities { get; set; } = null!;
         public DbSet<JobInZoneEntity> JobInZoneEntities { get; set; } = null!;
 
+        // InstrumentSetThreshold
+
+        public DbSet<DeviceInstrumentOnOffEntity> DeviceInstrumentOnOffEntities { get; set; } = null!;
     }
 }

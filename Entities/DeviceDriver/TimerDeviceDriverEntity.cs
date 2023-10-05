@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Entities
+﻿namespace Entities
 {
     public class TimerDeviceDriverEntity
     {
@@ -11,10 +9,6 @@ namespace Entities
 
         public DateTime? ShutDownTimer { get; set; }
         public DateTime? OpenTimer { get; set; }
-
-        // Case: Device return value
-        public double? ThresholdValueOn { get; set; }
-        public double? ThresholdValueOff { get; set; }
 
         // Case: Detect rain, ....
         public bool? IsAffected { get; set; }

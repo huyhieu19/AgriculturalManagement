@@ -48,6 +48,10 @@ namespace AgriculturalManagement
             CreateMap<TimerDeviceDriverDisplayModel, TimerDeviceDriverEntity>().ReverseMap();
             CreateMap<TimerDeviceDriverCreateModel, TimerDeviceDriverEntity>();
 
+            // InstrumentSetThreshold
+            CreateMap<DeviceInstrumentOnOffEntity, InstrumentSetThresholdDisplayModel>();
+            CreateMap<InstrumentSetThresholdUpdateModel, DeviceInstrumentOnOffEntity>();
+            CreateMap<InstrumentSetThresholdCreateModel, DeviceInstrumentOnOffEntity>();
         }
     }
 }
