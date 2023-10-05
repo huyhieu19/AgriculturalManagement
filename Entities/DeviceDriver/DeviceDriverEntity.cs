@@ -22,5 +22,6 @@ namespace Entities
         public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
         public ICollection<ImageEntity>? Images { get; set; }
         public ICollection<TimerDeviceDriverEntity>? TimerDevices { get; set; }
+        public ICollection<DeviceInstrumentOnOffEntity>? DeviceInstrumentOnOffs { get; set; }
     }
 }
