@@ -54,7 +54,6 @@ namespace Service.Extention
             });
         }
 
-
         //// không phù hợp vì kết quả sai
         ////public static void ConfigureResponseCaching(this IServiceCollection service)
         ////{

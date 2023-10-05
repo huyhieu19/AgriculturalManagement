@@ -49,7 +49,7 @@ namespace Service
             var tokenHander = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
             tokenHander.ValidateToken(token, tokenValidationParameters, out securityToken);
-            
+
             var jwtSecurityToken = securityToken as JwtSecurityToken;
 
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
@@ -110,7 +110,7 @@ namespace Service
         }
         public async Task<bool> ValidateUser(LoginModel userForAuth)
         {
-            _user = await userManager.FindByNameAsync(userForAuth.UserName!);
+            _user = await userManager.FindByEmailAsync(userForAuth.Email!);
             var result = (_user != null && await userManager.CheckPasswordAsync(_user,
             userForAuth.Password!));
             if (!result)

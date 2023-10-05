@@ -26,7 +26,6 @@ namespace Startup
             app.MapControllers();
 
             app.UseRouting();
-
             ////startupTask.StartAsync(CancellationToken.None).Wait();
             ///app.UseResponseCaching();
             ///app.UseHttpCacheHeaders();
