@@ -3,14 +3,12 @@ using Database.ModelCreateConfiguration.Role;
 using Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
 namespace Database
 {
     public class FactDbContext : IdentityDbContext<UserEntity>
     {
         public FactDbContext(DbContextOptions<FactDbContext> options) : base(options)
         {
-
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
