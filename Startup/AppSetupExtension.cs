@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Startup
@@ -10,14 +9,19 @@ namespace Startup
         public static WebApplication UseService(this WebApplication app)
         {
             app.UseCors();
-            if (app.Environment.IsDevelopment())
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseSwagger();
+            //    app.UseSwaggerUI(options =>
+            //    {
+            //        options.DocExpansion(DocExpansion.None);
+            //    });
+            //}
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.DocExpansion(DocExpansion.None);
-                });
-            }
+                options.DocExpansion(DocExpansion.None);
+            });
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseMiddleware<ApiResponseMiddleware>();
