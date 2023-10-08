@@ -44,7 +44,7 @@ namespace JobBackground
                     .Build();
                 var trigger1 = TriggerBuilder.Create()
                     .WithIdentity($"Trigger_TurnOn_{job.Id}")
-                    .StartAt(job.OpenTimer.Value)
+                    .StartAt(job!.OpenTimer!.Value)
                     .Build();
 
                 await _scheduler.ScheduleJob(jobDetail1, trigger1);
@@ -56,7 +56,7 @@ namespace JobBackground
 
                 var trigger2 = TriggerBuilder.Create()
                     .WithIdentity($"Trigger_TurnOff_{job.Id}")
-                    .StartAt(job.ShutDownTimer.Value)
+                    .StartAt(job!.ShutDownTimer!.Value)
                     .Build();
 
                 await _scheduler.ScheduleJob(jobDetail2, trigger2);
@@ -89,7 +89,7 @@ namespace JobBackground
                 {
                     // Lấy thời gian kế tiếp của công việc
                     var nextFireTime = existingTriggerOn.GetNextFireTimeUtc();
-                    if (nextFireTime != null && nextFireTime.Value.Minute != job.OpenTimer.Value.Minute)
+                    if (nextFireTime != null && nextFireTime.Value.Minute != job!.OpenTimer!.Value.Minute)
                     {
                         // Hủy bỏ công việc cũ
                         await _scheduler.UnscheduleJob(triggerKeyOn);
@@ -129,7 +129,7 @@ namespace JobBackground
 
                         var trigger = TriggerBuilder.Create()
                             .WithIdentity($"Trigger_TurnOff_{job.Id}")
-                            .StartAt(job.ShutDownTimer.Value)
+                            .StartAt(job!.ShutDownTimer!.Value)
                             .Build();
 
                         await _scheduler.ScheduleJob(jobDetail, trigger);

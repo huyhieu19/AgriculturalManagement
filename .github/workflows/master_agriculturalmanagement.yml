@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - AgriculturalManagemen
 on:
   push:
     branches:
-      - master
+      - deployment_branch
   workflow_dispatch:
 
 jobs:

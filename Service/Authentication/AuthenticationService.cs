@@ -43,9 +43,6 @@ namespace Service
                 ValidateLifetime = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("SECRETVariable").ToString()!)),
             };
-
-            //var tokenHandler = new JwtSecurityTokenHandler();
-            //var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
             var tokenHander = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
             tokenHander.ValidateToken(token, tokenValidationParameters, out securityToken);
@@ -76,7 +73,7 @@ namespace Service
                 var tokenOptions = GenerateTokenOptions(signingCredentials, claims); // Lấy ra JWTSecurityToken thích hợp để tạo Token
 
                 var refreshToken = GenerateRefreshToken();
-                _user.RefreshToken = refreshToken;
+                _user!.RefreshToken = refreshToken;
                 if (populateExp)
                     _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(DayRefreshTokenExpiryTime);
 

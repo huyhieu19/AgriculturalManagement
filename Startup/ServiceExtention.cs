@@ -1,5 +1,4 @@
 ﻿using Database;
-using JobBackground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,6 @@ using Quartz.Impl;
 using Repository;
 using Repository.Contracts;
 using Service;
-using Service.BackgroundJob;
 using Service.Contracts;
 using Service.Extention;
 
@@ -39,14 +37,13 @@ namespace Startup
                 return schedulerFactory.GetScheduler().Result;
             });
 
-            builder.Services.AddSingleton<JobSchedulerDeviceDriver>();
+            // config xong thì bỏ comment -> deploy
+            ///builder.Services.AddSingleton<JobSchedulerDeviceDriver>();
 
-            builder.Services.AddHostedService<JobSchedulerHostedService>();
+            ///builder.Services.AddHostedService<JobSchedulerHostedService>();
 
-
-
-            //// job chay background 5s 1 lần
-            builder.Services.AddHostedService<JobForDeviceDriverService>();
+            ////// job chay background 5s 1 lần
+            ///builder.Services.AddHostedService<JobForDeviceDriverService>();
 
 
             builder.Services.AddControllers(config =>
@@ -93,8 +90,6 @@ namespace Startup
             builder.Services.AddSwaggerGen(opt =>
             {
                 opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Agricultural Management", Version = "v1" });
-
-                //opt.MapType<QueryBaseModel>(() => new OpenApiSchema { Type = "object" });
 
                 opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

@@ -47,7 +47,7 @@ namespace AgriculturalManagement.Controllers
         public async Task<bool> DeleteFarm(int id)
         {
             var UserId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return await serviceManager.Farm.RemoveFarm(id, UserId);
+            return await serviceManager.Farm.RemoveFarm(id, UserId!);
         }
         [HttpPost, Route("farmupdate")]
         public async Task<bool> UpdateFarm([FromBody] FarmUpdateModel model)
