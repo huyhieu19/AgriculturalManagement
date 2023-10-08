@@ -28,7 +28,7 @@ namespace Service
             this._logger = _logger;
             this._configuration = _configuration;
         }
-        public string GetIdbyToken(string token)
+        public ProfileUser GetProfilebyToken(string token)
         {
 
             var jwtSettings = _configuration.GetSection("JwtSettings");
@@ -59,8 +59,9 @@ namespace Service
 
             // Lấy thông tin từ token
             var jwtToken = (JwtSecurityToken)securityToken;
-            var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
-            return userId;
+            var userEmail = jwtToken.Claims.FirstOrDefault(c => c.Type == "Email")?.Value;
+            var userName = jwtToken.Claims.FirstOrDefault(c => c.Type == "Name")?.Value;
+            return new ProfileUser(userName, userEmail);
         }
 
         public async Task<TokenModel> CreateToken(bool populateExp)
@@ -133,10 +134,11 @@ namespace Service
         {
             var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, _user!.UserName!),
+                    new Claim("Name", _user!.UserName!),
+                    new Claim("Email", _user!.Email!),
                     new Claim("Id", _user.Id),
                     new Claim(ClaimTypes.NameIdentifier, _user.Id),
-
+                    new Claim(ClaimTypes.Name, _user!.UserName!),
                 };
             var roles = await userManager.GetRolesAsync(_user);
             foreach (var role in roles)
