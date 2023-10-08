@@ -91,9 +91,9 @@ namespace Service.BackgroundJob
 
             var listTime = await GetDeviceDriverTurnOnTurnOffModels();
 
-            if (listTime != null && listTime.Any(p => p.OpenTimer.Value.Minute == timeZoneNow.Minute && p.IsAuto))
+            if (listTime != null && listTime.Any(p => p!.OpenTimer!.Value.Minute == timeZoneNow.Minute && p.IsAuto))
             {
-                var entities = listTime.Where(p => p.OpenTimer.Value.Minute == timeZoneNow.Minute)!.ToList();
+                var entities = listTime.Where(p => p!.OpenTimer!.Value.Minute == timeZoneNow.Minute)!.ToList();
 
                 foreach (var entity in entities)
                 {
@@ -104,9 +104,9 @@ namespace Service.BackgroundJob
             }
 
 
-            if (listTime != null && listTime.Any(p => p.ShutDownTimer.Value.Minute == timeZoneNow.Minute && p.IsAuto))
+            if (listTime != null && listTime.Any(p => p!.ShutDownTimer!.Value.Minute == timeZoneNow.Minute && p.IsAuto))
             {
-                var entities = listTime.Where(p => p.ShutDownTimer.Value.Minute == timeZoneNow.Minute)!.ToList();
+                var entities = listTime.Where(p => p!.ShutDownTimer!.Value.Minute == timeZoneNow.Minute)!.ToList();
 
                 foreach (var entity in entities)
                 {
