@@ -37,7 +37,7 @@ namespace Startup
                 return schedulerFactory.GetScheduler().Result;
             });
 
-            // config xong thì bỏ comment deploy
+            // config xong thì bỏ comment -> deploy
             ///builder.Services.AddSingleton<JobSchedulerDeviceDriver>();
 
             ///builder.Services.AddHostedService<JobSchedulerHostedService>();
