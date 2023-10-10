@@ -1,6 +1,5 @@
 ﻿using Database;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +26,7 @@ namespace Startup
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 
+            builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
 
             builder.Services.AddSingleton<DapperContext>();
 
@@ -46,21 +46,22 @@ namespace Startup
             ///builder.Services.AddHostedService<JobForDeviceDriverService>();
 
 
-            builder.Services.AddControllers(config =>
-            {
-                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
-                {
-                    Duration = 120
-                });
-            });
+            builder.Services.AddControllers(
+            ////    config =>
+            ////{
+            ////    config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
+            ////    {
+            ////        Duration = 120
+            ////    });
+            ////}
+            );
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-
             builder.Services.AddAuthentication();
-
             builder.Services.ConfigureIdentity();
+            builder.Services.ConfigureJWT(builder.Configuration);
 
             builder.Services.AddCors(options =>
             {
@@ -73,8 +74,14 @@ namespace Startup
                     });
             });
 
-            builder.Services.ConfigureJWT(builder.Configuration);
 
+
+            ////// 5s up dữ liệu lên mongo db 1 lần
+            ////builder.Services.AddHostedService<UploadInstrumentValueToMongoDbService>();
+            ////// add config mongodb
+            ////builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection("MongoDbConfig"));
+
+            // add caching
             ///builder.Services.ConfigureResponseCaching();
             ///builder.Services.ConfigureHttpCacheHeaders();
 
