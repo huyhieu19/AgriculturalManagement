@@ -8,7 +8,7 @@ namespace Startup
 
         public static WebApplication UseService(this WebApplication app)
         {
-            app.UseCors();
+            app.UseCors("AllowAllHeaders");
             //if (app.Environment.IsDevelopment())
             //{
             //    app.UseSwagger();
