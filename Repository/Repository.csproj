@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Service.Contracts\Service.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="User\" />
+  </ItemGroup>
+
 </Project>
