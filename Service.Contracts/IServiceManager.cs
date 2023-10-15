@@ -12,5 +12,7 @@
         IValueTypeService ValueType { get; }
 
         IInstrumentSetThresholdService InstrumentSetThreshold { get; }
+
+        IUserService User { get; }
     }
 }

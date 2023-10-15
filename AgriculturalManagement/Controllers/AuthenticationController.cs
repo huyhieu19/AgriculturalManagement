@@ -10,9 +10,11 @@ namespace AgriculturalManagement.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IServiceManager _service;
-        public AuthenticationController(IServiceManager service)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public AuthenticationController(IServiceManager service, IHttpContextAccessor contextAccessor)
         {
             _service = service;
+            _contextAccessor = contextAccessor;
         }
         [HttpPost, Route("register")]
         public async Task<IdentityResult> RegisterUser(UserRegisterationModel userRegisterationModel)
@@ -35,6 +37,7 @@ namespace AgriculturalManagement.Controllers
 
             return Ok(new { profile, tokenModel });
         }
+
 
         //"firstName": "Hieu",
         //"lastName": "Nguyen Huy",

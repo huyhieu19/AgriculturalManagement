@@ -56,9 +56,12 @@ namespace Service
 
             // Lấy thông tin từ token
             var jwtToken = (JwtSecurityToken)securityToken;
+            var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
             var userEmail = jwtToken.Claims.FirstOrDefault(c => c.Type == "Email")?.Value;
-            var userName = jwtToken.Claims.FirstOrDefault(c => c.Type == "Name")?.Value;
-            return new ProfileUser(userName, userEmail);
+            var userName = jwtToken.Claims.FirstOrDefault(c => c.Type == "UserName")?.Value;
+            var phoneNumber = jwtToken.Claims.FirstOrDefault(c => c.Type == "PhoneNumber")?.Value;
+            var address = jwtToken.Claims.FirstOrDefault(c => c.Type == "Address")?.Value;
+            return new ProfileUser(Id: userId!, userName, userEmail, Address: address, PhoneNumber: phoneNumber);
         }
 
         public async Task<TokenModel> CreateToken(bool populateExp)
@@ -131,11 +134,12 @@ namespace Service
         {
             var claims = new List<Claim>
                 {
-                    new Claim("Name", _user!.UserName!),
-                    new Claim("Email", _user!.Email!),
-                    new Claim("Id", _user.Id),
-                    new Claim(ClaimTypes.NameIdentifier, _user.Id),
-                    new Claim(ClaimTypes.Name, _user!.UserName!),
+                    new Claim("Id", _user!.Id),
+                    new Claim("UserName", _user.UserName ?? ""),
+                    new Claim("Email", _user.Email!),
+                    new Claim("PhoneNumber", _user.PhoneNumber ?? ""),
+                    new Claim("Address", _user.Address ?? ""),
+
                 };
             var roles = await userManager.GetRolesAsync(_user);
             foreach (var role in roles)

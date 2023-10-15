@@ -54,6 +54,7 @@ namespace Repository
 
         public IInstrumentSetThresholdRepository InstrumentSetThreshold => instrumentSetThresholdRepository.Value;
 
+
         public async Task SaveAsync() => await factDbContext.SaveChangesAsync();
     }
 }
