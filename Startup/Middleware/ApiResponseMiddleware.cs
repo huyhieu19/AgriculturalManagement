@@ -30,7 +30,7 @@ namespace Startup
 
                     // Continue processing the request
                     await _next(context);
-                    string responseContent = "abc";
+                    string responseContent = "Xin Chào đến với quản lý nông trại!";
                     // Intercept and modify the response
                     if (context.Response.StatusCode == 200)
                     {
