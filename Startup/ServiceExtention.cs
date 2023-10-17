@@ -60,6 +60,7 @@ namespace Startup
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddAuthentication();
+            builder.Services.AddHttpContextAccessor();
             builder.Services.ConfigureIdentity();
             builder.Services.ConfigureJWT(builder.Configuration);
 

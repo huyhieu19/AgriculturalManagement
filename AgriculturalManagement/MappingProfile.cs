@@ -52,6 +52,10 @@ namespace AgriculturalManagement
             CreateMap<DeviceInstrumentOnOffEntity, InstrumentSetThresholdDisplayModel>();
             CreateMap<InstrumentSetThresholdUpdateModel, DeviceInstrumentOnOffEntity>();
             CreateMap<InstrumentSetThresholdCreateModel, DeviceInstrumentOnOffEntity>();
+
+            // User
+
+            CreateMap<UserEntity, ProfileUser>();
         }
     }
 }
