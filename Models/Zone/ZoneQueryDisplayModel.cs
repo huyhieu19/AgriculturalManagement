@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class ZoneQueryDisplayModel : QueryBaseModel
+    public class ZoneQueryDisplayModel
     {
         public int FarmId { get; set; }
     }

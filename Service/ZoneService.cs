@@ -25,9 +25,9 @@ namespace Service
             return true;
         }
 
-        public async Task<IEnumerable<ZoneDisplayModel>> GetZones(ZoneQueryDisplayModel model, bool trackChanges)
+        public async Task<IEnumerable<ZoneDisplayModel>> GetZones(int farmId, bool trackChanges)
         {
-            var ZonesModel = await repositoryManager.Zone.GetZones(model, trackChanges);
+            var ZonesModel = await repositoryManager.Zone.GetZones(farmId, trackChanges);
             var result = mapper.Map<IEnumerable<ZoneDisplayModel>>(ZonesModel);
             return result;
         }
