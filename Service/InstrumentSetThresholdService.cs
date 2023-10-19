@@ -31,7 +31,7 @@ namespace Service
 
         public async Task DeviceInstrumentOnOffCreate(InstrumentSetThresholdCreateModel model)
         {
-            var create = mapper.Map<DeviceInstrumentOnOffEntity>(model);
+            var create = mapper.Map<DeviceInstrumentThresholdEntity>(model);
             repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffCreate(create);
             await repositoryManager.SaveAsync();
         }
@@ -56,7 +56,7 @@ namespace Service
 
         public async Task DeviceInstrumentOnOffUpdate(InstrumentSetThresholdUpdateModel updateModel)
         {
-            var update = mapper.Map<DeviceInstrumentOnOffEntity>(updateModel);
+            var update = mapper.Map<DeviceInstrumentThresholdEntity>(updateModel);
             repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffUpdate(update);
             await repositoryManager.SaveAsync();
         }

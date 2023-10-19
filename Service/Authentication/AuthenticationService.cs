@@ -139,7 +139,6 @@ namespace Service
                     new Claim("Email", _user.Email!),
                     new Claim("PhoneNumber", _user.PhoneNumber ?? ""),
                     new Claim("Address", _user.Address ?? ""),
-
                 };
             var roles = await userManager.GetRolesAsync(_user);
             foreach (var role in roles)

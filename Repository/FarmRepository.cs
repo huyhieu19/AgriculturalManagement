@@ -52,29 +52,7 @@ namespace Repository
 
         public async Task<IEnumerable<FarmEntity>> GetAllFarm(bool trackChanges) => await FindAll(trackChanges).OrderBy(c => c.Name).ToListAsync();
 
-        public async Task<IEnumerable<FarmEntity>> GetByCondition(FarmQueryModel  model, bool trackchanges)
-        {
-            var Farms = await FindByCondition(p => p.UserId == model.UserId, trackchanges).ToListAsync();
-
-            if (!string.IsNullOrEmpty(model.SearchTerm))
-            {
-                string key = model.SearchTerm;
-                Farms = Farms.Where(p => p.Name.ToLower().Contains(key.ToLower())).ToList();
-            }
-            if (model.typeOrderBy is Common.Enum.TypeOrderBy.AToZByName)
-            {
-                return Farms.OrderBy(p => p.Name).ToList();
-            }
-            else if (model.typeOrderBy is Common.Enum.TypeOrderBy.ZToAByName)
-            {
-                return Farms.OrderByDescending(p => p.Name).ToList();
-            }
-            else if (model.typeOrderBy is Common.Enum.TypeOrderBy.IncreasingDay)
-            {
-                return Farms.OrderByDescending(p => p.CreatedDate).ToList();
-            }
-            return Farms.OrderBy(p => p.Name).ToList();
-        }
+        public async Task<IEnumerable<FarmEntity>> GetFarms(string userId, bool trackchanges) => await FindByCondition(p => p.UserId == userId, trackchanges).OrderBy(p => p.Name).ToListAsync();
 
         public async void UpdateFarm(FarmUpdateModel model)
         {
