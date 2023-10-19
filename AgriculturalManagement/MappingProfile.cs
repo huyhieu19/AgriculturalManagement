@@ -49,9 +49,9 @@ namespace AgriculturalManagement
             CreateMap<TimerDeviceDriverCreateModel, TimerDeviceDriverEntity>();
 
             // InstrumentSetThreshold
-            CreateMap<DeviceInstrumentOnOffEntity, InstrumentSetThresholdDisplayModel>();
-            CreateMap<InstrumentSetThresholdUpdateModel, DeviceInstrumentOnOffEntity>();
-            CreateMap<InstrumentSetThresholdCreateModel, DeviceInstrumentOnOffEntity>();
+            CreateMap<DeviceInstrumentThresholdEntity, InstrumentSetThresholdDisplayModel>();
+            CreateMap<InstrumentSetThresholdUpdateModel, DeviceInstrumentThresholdEntity>();
+            CreateMap<InstrumentSetThresholdCreateModel, DeviceInstrumentThresholdEntity>();
 
             // User
 

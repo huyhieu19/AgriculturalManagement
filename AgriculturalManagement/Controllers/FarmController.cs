@@ -19,53 +19,44 @@ namespace AgriculturalManagement.Controllers
         }
 
         [HttpGet, Route("farms")]
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public async Task<IEnumerable<FarmDisplayModel>> GetFarmAsync()
         {
             return await serviceManager.Farm.GetAllFarmAsync(false);
         }
         [HttpPost, Route("farm")]
+        [Authorize(Roles = "Administrator")]
         public async Task<bool> CreateFarmAsync([FromBody] FarmCreateModel createModel)
         {
-            createModel.UserId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            createModel.UserId = httpContextAccessor.HttpContext?.User.FindFirstValue("Id");
             return await serviceManager.Farm.AddFarm(createModel);
         }
-        [Authorize]
-        [HttpPost, Route("farmsCondition")]
-        public async Task<IEnumerable<FarmDisplayModel>> GetCondition([FromBody] FarmQueryModel model)
+        [Authorize(Roles = "Administrator")]
+        [HttpPost, Route("farms")]
+        public async Task<IEnumerable<FarmDisplayModel>> GetFarms()
         {
-            ////model.Token = GetTokenFromHeader(HttpContext);
-            ////var id = serviceManager.AuthenticationService.GetIdbyToken(model.Token);
-            ////model.Token = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
-            ////model.Token = User.FindFirst(ClaimTypes.Name)?.Value;
-            ////model.UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            model.UserId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return await serviceManager.Farm.GetByCondition(model, false);
+            string UserId = httpContextAccessor.HttpContext?.User.FindFirstValue("Id")!;
+            return await serviceManager.Farm.GetFarms(UserId, false);
         }
         [HttpDelete, Route("farm")]
+        [Authorize(Roles = "Administrator")]
         public async Task<bool> DeleteFarm(int id)
         {
-            var UserId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var UserId = httpContextAccessor.HttpContext?.User.FindFirstValue("Id");
             return await serviceManager.Farm.RemoveFarm(id, UserId!);
         }
         [HttpPost, Route("farmupdate")]
+        [Authorize(Roles = "Administrator")]
         public async Task<bool> UpdateFarm([FromBody] FarmUpdateModel model)
         {
             return await serviceManager.Farm.UpdateFarm(model);
         }
         [HttpGet, Route("names")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IEnumerable<FarmFilterNameModel>> GetNamesFarmAsync()
         {
-            return await serviceManager.Farm.GetNameFarm();
-        }
-
-        public static string GetTokenFromHeader(HttpContext contex)
-        {
-            contex.Request.Headers.TryGetValue("Authorization", out var token);
-            var result = token.ToString();
-            result = result.Substring(6).Trim();
-            return result;
+            string UserId = httpContextAccessor.HttpContext?.User.FindFirstValue("Id")!;
+            return await serviceManager.Farm.GetNameFarm(UserId);
         }
     }
 }

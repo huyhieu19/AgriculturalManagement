@@ -33,33 +33,8 @@ namespace Repository
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<ZoneEntity>> GetZones(QueryBaseModel model, bool trackchanges)
-        {
-            var Zones = await FindAll(trackchanges).Include(p => p.Images).ToListAsync();
-            if (!string.IsNullOrEmpty(model.SearchTerm))
-            {
-                string key = model.SearchTerm;
-                Zones = Zones.Where(p => p.ZoneName.ToLower().Contains(key.ToLower())).ToList();
-            }
-            if (model.typeOrderBy is Common.Enum.TypeOrderBy.AToZByName)
-            {
-                return Zones.OrderBy(p => p.ZoneName).ToList();
-            }
-            else if (model.typeOrderBy is Common.Enum.TypeOrderBy.ZToAByName)
-            {
-                return Zones.OrderByDescending(p => p.ZoneName).ToList();
-            }
-            else if (model.typeOrderBy is Common.Enum.TypeOrderBy.IncreasingDay)
-            {
-                return Zones.OrderByDescending(p => p.DateCreateFarm).ToList();
-            }
-            return Zones.OrderBy(p => p.ZoneName).ToList();
-        }
+        public async Task<IEnumerable<ZoneEntity>> GetZones(int farmId, bool trackchanges) => await FindByCondition(p => p.FarmId == farmId, trackchanges).OrderBy(p => p.ZoneName).ToListAsync();
 
-        public Task<IEnumerable<ZoneEntity>> GetZonesByFarmId(int FarmId)
-        {
-            throw new NotImplementedException();
-        }
 
         public async void UpdateZone(ZoneUpdateModel model)
         {

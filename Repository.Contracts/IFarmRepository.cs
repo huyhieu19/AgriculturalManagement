@@ -9,7 +9,7 @@ namespace Repository.Contracts
         void CreateFarm(FarmEntity entity);
         void DeleteFarm(int id, string UserId);
         void UpdateFarm(FarmUpdateModel model);
-        Task<IEnumerable<FarmEntity>> GetByCondition(FarmQueryModel model, bool trackchanges);
+        Task<IEnumerable<FarmEntity>> GetFarms(string userId, bool trackchanges);
 
     }
 }

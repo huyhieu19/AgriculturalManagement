@@ -61,7 +61,7 @@ namespace Database
 
             // InstrumentSetThreshold
 
-            builder.ApplyConfiguration(new DeviceInstrumentOnOffConfiguration());
+            builder.ApplyConfiguration(new DeviceInstrumentThresholdConfiguration());
         }
         // DeviceDriver Dataset
         public DbSet<DeviceDriverEntity> DeviceDriverEntities { get; set; } = null!;
@@ -91,6 +91,6 @@ namespace Database
 
         // InstrumentSetThreshold
 
-        public DbSet<DeviceInstrumentOnOffEntity> DeviceInstrumentOnOffEntities { get; set; } = null!;
+        public DbSet<DeviceInstrumentThresholdEntity> DeviceInstrumentThresholdEntities { get; set; } = null!;
     }
 }

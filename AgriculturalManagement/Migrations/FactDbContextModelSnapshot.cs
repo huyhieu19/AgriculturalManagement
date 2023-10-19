@@ -106,18 +106,15 @@ namespace AgriculturalManagement.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Entities.DeviceInstrumentOnOffEntity", b =>
+            modelBuilder.Entity("Entities.DeviceInstrumentThresholdEntity", b =>
                 {
+                    b.Property<int>("DeviceDriverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InstrumentationId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("DeviceDriverId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("InstrumentationId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDelete")
@@ -125,19 +122,22 @@ namespace AgriculturalManagement.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<bool?>("OnInUpperThreshold")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<double?>("ThresholdValueOff")
                         .HasColumnType("float");
 
                     b.Property<double?>("ThresholdValueOn")
                         .HasColumnType("float");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceDriverId");
+                    b.HasKey("DeviceDriverId", "InstrumentationId");
 
                     b.HasIndex("InstrumentationId");
 
-                    b.ToTable("DeviceInstrumentOnOff", (string)null);
+                    b.ToTable("DeviceInstrumentThreshold", (string)null);
                 });
 
             modelBuilder.Entity("Entities.FarmEntity", b =>
@@ -788,13 +788,13 @@ namespace AgriculturalManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "bb2e40ce-a56b-4bea-b3e8-e1e6399efb67",
+                            Id = "5282e09c-ef56-4323-b52b-f5f00562f356",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "171c5abc-d4e6-49a4-8b8d-1d098722e626",
+                            Id = "13015d4d-63db-4a46-98e3-6f5f89fea024",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -921,15 +921,17 @@ namespace AgriculturalManagement.Migrations
                     b.Navigation("Zone");
                 });
 
-            modelBuilder.Entity("Entities.DeviceInstrumentOnOffEntity", b =>
+            modelBuilder.Entity("Entities.DeviceInstrumentThresholdEntity", b =>
                 {
                     b.HasOne("Entities.DeviceDriverEntity", "DeviceDriver")
                         .WithMany("DeviceInstrumentOnOffs")
-                        .HasForeignKey("DeviceDriverId");
+                        .HasForeignKey("DeviceDriverId")
+                        .IsRequired();
 
                     b.HasOne("Entities.InstrumentationEntity", "Instrumentation")
                         .WithMany("DeviceInstrumentOnOffs")
-                        .HasForeignKey("InstrumentationId");
+                        .HasForeignKey("InstrumentationId")
+                        .IsRequired();
 
                     b.Navigation("DeviceDriver");
 

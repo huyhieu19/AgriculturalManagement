@@ -49,13 +49,13 @@ namespace Service
             }
         }
 
-        public async Task<IEnumerable<FarmDisplayModel>> GetByCondition(FarmQueryModel model, bool trackChanges)
+        public async Task<IEnumerable<FarmDisplayModel>> GetFarms(string userId, bool trackChanges)
         {
             try
             {
                 _logger.LogInfomation($"Farm Service| Get By Condition | start ");
 
-                var responseEntities = await repositoryManager.Farm.GetByCondition(model, trackChanges);
+                var responseEntities = await repositoryManager.Farm.GetFarms(userId, trackChanges);
                 var response = _mapper.Map<IEnumerable<FarmDisplayModel>>(responseEntities);
 
                 _logger.LogInfomation($"Farm Service | Get By Condition | end ");
@@ -68,11 +68,11 @@ namespace Service
             }
         }
 
-        public async Task<IEnumerable<FarmFilterNameModel>> GetNameFarm()
+        public async Task<IEnumerable<FarmFilterNameModel>> GetNameFarm(string userId)
         {
             try
             {
-                var farms = await repositoryManager.Farm.GetAllFarm(false);
+                var farms = await repositoryManager.Farm.GetFarms(userId, false);
                 var farmsDisplayModel = _mapper.Map<IEnumerable<FarmFilterNameModel>>(farms);
                 return farmsDisplayModel;
             }
@@ -82,12 +82,12 @@ namespace Service
             }
         }
 
-        public async Task<bool> RemoveFarm(int id, string UserId)
+        public async Task<bool> RemoveFarm(int id, string userId)
         {
             try
             {
                 _logger.LogInfomation($"Farm Service | Remove Farm: {id}");
-                repositoryManager.Farm.DeleteFarm(id, UserId);
+                repositoryManager.Farm.DeleteFarm(id, userId);
                 await repositoryManager.SaveAsync();
                 return true;
             }
