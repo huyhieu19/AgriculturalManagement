@@ -5,8 +5,6 @@ using System.Text;
 
 namespace Startup
 {
-
-
     public class ApiResponseMiddleware
     {
         private readonly RequestDelegate _next;

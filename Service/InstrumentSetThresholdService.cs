@@ -48,11 +48,11 @@ namespace Service
             return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);
         }
 
-        public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete()
-        {
-            var result = await repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffNotDelete();
-            return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);
-        }
+        //public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete()
+        //{
+        //    var result = await repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffNotDelete();
+        //    return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);
+        //}
 
         public async Task DeviceInstrumentOnOffUpdate(InstrumentSetThresholdUpdateModel updateModel)
         {
