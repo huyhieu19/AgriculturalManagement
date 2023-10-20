@@ -27,6 +27,7 @@ namespace Service
             this.logger = logger;
         }
 
+        #region Device
         public async Task CreateDeviceDriver(DeviceDriverCreateModel createModel)
         {
             DeviceDriverEntity entity = mapper.Map<DeviceDriverEntity>(createModel);
@@ -34,13 +35,29 @@ namespace Service
             await repositoryManager.SaveAsync();
         }
 
-        public async Task CreateTimer(TimerDeviceDriverCreateModel model)
+        public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
         {
-            var entity = mapper.Map<TimerDeviceDriverEntity>(model);
-            repositoryManager.DeviceDriver.CreateTimer(entity);
+            return await repositoryManager.DeviceDriver.GetDeviceDriverByZoneAsync(Id);
+        }
+
+        public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync()
+        {
+            IEnumerable<DeviceDriverEntity> models = await repositoryManager.DeviceDriver.GetDeviceDriverNotInZoneAsync();
+            return mapper.Map<IEnumerable<DeviceDriverDisplayModel>>(models);
+        }
+
+        public async Task RemoveDeviceDriver(int Id)
+        {
+            await repositoryManager.DeviceDriver.RemoveDeviceDriver(Id);
             await repositoryManager.SaveAsync();
         }
 
+        public async Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel)
+        {
+            DeviceDriverEntity entity = mapper.Map<DeviceDriverEntity>(updateModel);
+            repositoryManager.DeviceDriver.UpdateInforDeviceDriver(entity);
+            await repositoryManager.SaveAsync();
+        }
         public async Task DeleteDeviceDriver(int Id)
         {
 
@@ -48,19 +65,15 @@ namespace Service
             await repositoryManager.SaveAsync();
         }
 
-        public async Task DeleteTimer(int Id)
+
+        #endregion
+
+        #region Timer
+        public async Task CreateTimer(TimerDeviceDriverCreateModel model)
         {
-            var query = TimerDeviceDriverQuery.RemoveTimerSQL;
-            using (var connection = dapperContext.CreateConnection())
-            {
-                connection.Open();
-                using (var trans = connection.BeginTransaction())
-                {
-                    await connection.ExecuteAsync(query, new { Id = Id }, transaction: trans);
-                    trans.Commit();
-                }
-                connection.Close();
-            }
+            var entity = mapper.Map<TimerDeviceDriverEntity>(model);
+            repositoryManager.DeviceDriver.CreateTimer(entity);
+            await repositoryManager.SaveAsync();
         }
 
         public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimer()
@@ -105,34 +118,24 @@ namespace Service
             using (var connection = dapperContext.CreateConnection())
             {
                 connection.Open();
-                var result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query, new { Id = Id });
+                var result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query, new { Id });
                 connection.Close();
                 return result;
             }
         }
-
-        public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
+        // Hàm này dùng để set cho trạng thái của IsRemve = true và IsSuccess = true
+        public async Task DeleteTimer(int id)
         {
-            return await repositoryManager.DeviceDriver.GetDeviceDriverByZoneAsync(Id);
-        }
-
-        public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync()
-        {
-            IEnumerable<DeviceDriverEntity> models = await repositoryManager.DeviceDriver.GetDeviceDriverNotInZoneAsync();
-            return mapper.Map<IEnumerable<DeviceDriverDisplayModel>>(models);
-        }
-
-        public async Task RemoveDeviceDriver(int Id)
-        {
-            await repositoryManager.DeviceDriver.RemoveDeviceDriver(Id);
-            await repositoryManager.SaveAsync();
-        }
-
-        public async Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel)
-        {
-            DeviceDriverEntity entity = mapper.Map<DeviceDriverEntity>(updateModel);
-            repositoryManager.DeviceDriver.UpdateInforDeviceDriver(entity);
-            await repositoryManager.SaveAsync();
+            logger.LogInfomation($"DeviceDriver: Set status to complete --> DeviceDriverId: {id}");
+            var query = TimerDeviceDriverQuery.RemoveTimerSQL;
+            var connection = dapperContext.CreateConnection();
+            connection.Open();
+            using (var trans = connection.BeginTransaction())
+            {
+                await connection.ExecuteAsync(query, new { Id = id }, transaction: trans);
+                trans.Commit();
+            }
+            connection.Close();
         }
 
         public async Task UpdateTimer(TimerDeviceDriverDisplayModel model)
@@ -141,7 +144,7 @@ namespace Service
 
             repositoryManager.DeviceDriver.UpdateTimer(entity);
             await repositoryManager.SaveAsync();
-            //await new JobSchedulerDeviceDriver().RescheduleJobs(entity.Id);
         }
+        #endregion
     }
 }

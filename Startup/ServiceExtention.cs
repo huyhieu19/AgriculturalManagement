@@ -5,10 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Quartz;
-using Quartz.Impl;
 using Repository;
 using Repository.Contracts;
 using Service;
+using Service.BackgroundJob;
 using Service.Contracts;
 using Service.Extention;
 
@@ -27,24 +27,26 @@ namespace Startup
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
+            builder.Services.AddSingleton<IDeviceAutoService, DeviceAutoService>();
+
 
             builder.Services.AddSingleton<DapperContext>();
 
 
-            builder.Services.AddSingleton<IScheduler>(provider =>
-            {
-                var schedulerFactory = new StdSchedulerFactory();
-                return schedulerFactory.GetScheduler().Result;
-            });
+            //builder.Services.AddSingleton<IScheduler>(provider =>
+            //{
+            //    var schedulerFactory = new StdSchedulerFactory();
+            //    return schedulerFactory.GetScheduler().Result;
+            //});
 
             // config xong thì bỏ comment -> deploy
             ///builder.Services.AddSingleton<JobSchedulerDeviceDriver>();
 
             ///builder.Services.AddHostedService<JobSchedulerHostedService>();
 
-            ////// job chay background 5s 1 lần
-            ///builder.Services.AddHostedService<JobForDeviceDriverService>();
-
+            //// job chay background 5s 1 lần
+            //builder.Services.AddHostedService<JobForDeviceDriverService>();
+            builder.Services.AddHostedService<JobThresholdService>();
 
             builder.Services.AddControllers(
             ////    config =>
