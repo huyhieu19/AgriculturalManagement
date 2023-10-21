@@ -12,30 +12,30 @@ public class ImageConfiguration : IEntityTypeConfiguration<ImageEntity>
 
         builder.HasKey(x => x.Id);
 
-        builder.HasOne(p => p.Farm)
-            .WithMany(p => p.Images)
-            .HasForeignKey(p => p.FarmId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        ////builder.HasOne(p => p.Farm)
+        ////    .WithMany(p => p.Images)
+        ////    .HasForeignKey(p => p.FarmId)
+        ////    .OnDelete(DeleteBehavior.ClientSetNull);
 
-        builder.HasOne(p => p.Zone)
-            .WithMany(p => p.Images)
-            .HasForeignKey(p => p.ZoneId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        ////builder.HasOne(p => p.Zone)
+        ////    .WithMany(p => p.Images)
+        ////    .HasForeignKey(p => p.ZoneId)
+        ////    .OnDelete(DeleteBehavior.ClientSetNull);
 
-        builder.HasOne(p => p.ZoneHarvest)
-            .WithMany(p => p.Images)
-            .HasForeignKey(p => p.ZoneHarvestId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        ////builder.HasOne(p => p.ZoneHarvest)
+        ////    .WithMany(p => p.Images)
+        ////    .HasForeignKey(p => p.ZoneHarvestId)
+        ////    .OnDelete(DeleteBehavior.ClientSetNull);
 
-        builder.HasOne(p => p.Instrumentation)
-            .WithMany(p => p.Images)
-            .HasForeignKey(p => p.InstrumentationId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        ////builder.HasOne(p => p.Instrumentation)
+        ////    .WithMany(p => p.Images)
+        ////    .HasForeignKey(p => p.InstrumentationId)
+        ////    .OnDelete(DeleteBehavior.ClientSetNull);
 
-        builder.HasOne(p => p.DeviceDriver)
-            .WithMany(p => p.Images)
-            .HasForeignKey(p => p.DeviceDriverId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        ////builder.HasOne(p => p.DeviceDriver)
+        ////    .WithMany(p => p.Images)
+        ////    .HasForeignKey(p => p.DeviceDriverId)
+        ////    .OnDelete(DeleteBehavior.ClientSetNull);
 
     }
 }

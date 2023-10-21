@@ -24,7 +24,7 @@ namespace Service.BackgroundJob
                 logger.LogInfomation("Start job device driver on off according to timer");
                 await ToDoAsyncIsAuto();
                 logger.LogInfomation("End job device driver on off according to timer");
-                await Task.Delay(TimeSpan.FromSeconds(7), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(50), stoppingToken);
             }
         }
 
@@ -40,12 +40,11 @@ namespace Service.BackgroundJob
 
                 foreach (var entity in entities)
                 {
-                    int? Id = entity!.DeviceDriverId;
-                    await deviceAutoService.DeviceDriverTurnOn((int)Id);
+                    int Id = entity!.DeviceDriverId;
+                    await deviceAutoService.DeviceDriverTurnOn(Id);
                 }
-                await Task.Delay(TimeSpan.FromMinutes(30));
             }
-
+            await Task.Delay(TimeSpan.FromSeconds(5));
 
             if (listTime != null && listTime.Any(p => p!.ShutDownTimer!.Value.Minute == timeZoneNow.Minute && p.IsAuto))
             {
@@ -53,12 +52,12 @@ namespace Service.BackgroundJob
 
                 foreach (var entity in entities)
                 {
-                    int? Id = entity!.DeviceDriverId;
-                    await deviceAutoService.DeviceDriverTurnOff((int)Id);
-                    await deviceAutoService.DeleteTimer((int)Id);
+                    int Id = entity!.DeviceDriverId;
+                    await deviceAutoService.DeviceDriverTurnOff(Id);
+                    await deviceAutoService.DeleteTimer(Id);
                 }
-                await Task.Delay(TimeSpan.FromMinutes(30));
             }
+            await Task.Delay(TimeSpan.FromSeconds(5));
         }
     }
 }

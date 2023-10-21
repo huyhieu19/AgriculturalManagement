@@ -8,7 +8,6 @@ using Quartz;
 using Repository;
 using Repository.Contracts;
 using Service;
-using Service.BackgroundJob;
 using Service.Contracts;
 using Service.Extention;
 
@@ -33,20 +32,18 @@ namespace Startup
             builder.Services.AddSingleton<DapperContext>();
 
 
-            //builder.Services.AddSingleton<IScheduler>(provider =>
-            //{
-            //    var schedulerFactory = new StdSchedulerFactory();
-            //    return schedulerFactory.GetScheduler().Result;
-            //});
+            ////builder.Services.AddSingleton<IScheduler>(provider =>
+            ////{
+            ////    var schedulerFactory = new StdSchedulerFactory();
+            ////    return schedulerFactory.GetScheduler().Result;
+            ////});
 
             // config xong thì bỏ comment -> deploy
-            ///builder.Services.AddSingleton<JobSchedulerDeviceDriver>();
-
             ///builder.Services.AddHostedService<JobSchedulerHostedService>();
 
-            //// job chay background 5s 1 lần
+            //// job chay background
             //builder.Services.AddHostedService<JobForDeviceDriverService>();
-            builder.Services.AddHostedService<JobThresholdService>();
+            //builder.Services.AddHostedService<JobThresholdService>();
 
             builder.Services.AddControllers(
             ////    config =>

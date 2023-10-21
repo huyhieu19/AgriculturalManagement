@@ -9,6 +9,7 @@ namespace Entities
         public int Id { get; set; }
         public string ZoneName { get; set; } = null!;
         public string? Description { get; set; }
+        public double? Area { get; set; }
         public string? Note { get; set; }
 
         public DateTime? TimeToStartPlanting { get; set; } = DateTime.Now;
@@ -24,8 +25,6 @@ namespace Entities
 
         public FarmEntity? Farm { get; set; }
         public TypeTreeEntity? TypeTree { get; set; }
-
-        public ICollection<ImageEntity>? Images { get; set; }
         public ICollection<DeviceDriverEntity>? ZoneDeviceDrivers { get; set; }
         public ICollection<InstrumentationEntity>? Instrumentations { get; set; }
         public ICollection<ZoneHarvestEntity>? Harvests { get; set; }

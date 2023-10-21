@@ -7,6 +7,7 @@
         public DateTime? CreateDate { get; set; }
         public string? Description { get; set; }
         public string? Address { get; set; }
+        public double? Area { get; set; }
         public string? Note { get; set; }
         public string? UserId { get; set; }
     }
