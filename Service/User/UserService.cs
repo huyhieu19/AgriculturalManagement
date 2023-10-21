@@ -27,6 +27,18 @@ namespace Service
             return userProfile;
         }
 
+        public async Task<List<string>> GetRoles(string Id)
+        {
+            var user = await userManager.FindByIdAsync(Id);
+            if (user == null)
+            {
+                return new List<string>();
+            }
+            var originalList = await userManager.GetRolesAsync(user);
+            List<string> newList = originalList.ToList();
+            return newList;
+        }
+
         public async Task<IdentityResult> UpdateProfile(ProfileUser profileUser)
         {
 
@@ -38,7 +50,6 @@ namespace Service
                 user.Email = profileUser.Email;
                 user.Address = profileUser.Address;
             }
-
             IdentityResult result = await userManager.UpdateAsync(user);
             await repository.SaveAsync();
             return result;

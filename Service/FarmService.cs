@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using Common.Queries;
+using Dapper;
+using Database;
 using Entities;
 using Models;
 using Repository.Contracts;
@@ -11,11 +14,13 @@ namespace Service
         private readonly IRepositoryManager repositoryManager;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
-        public FarmService(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper)
+        private readonly DapperContext dapperContext;
+        public FarmService(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper, DapperContext dapperContext)
         {
             this.repositoryManager = repositoryManager;
             _logger = logger;
             _mapper = mapper;
+            this.dapperContext = dapperContext;
         }
 
         public async Task<bool> AddFarm(FarmCreateModel createModel)
@@ -53,12 +58,14 @@ namespace Service
         {
             try
             {
-                _logger.LogInfomation($"Farm Service| Get By Condition | start ");
-
-                var responseEntities = await repositoryManager.Farm.GetFarms(userId, trackChanges);
-                var response = _mapper.Map<IEnumerable<FarmDisplayModel>>(responseEntities);
-
-                _logger.LogInfomation($"Farm Service | Get By Condition | end ");
+                _logger.LogInfomation($"Farm Service| Get farm by user | start ");
+                string query = FarmQuery.GetFarmSQL;
+                IEnumerable<FarmDisplayModel> response;
+                using (var connection = dapperContext.CreateConnection())
+                {
+                    response = await connection.QueryAsync<FarmDisplayModel>(query, new { UserID = userId });
+                }
+                _logger.LogInfomation($"Farm Service | Get farm by user | end ");
                 return response;
             }
             catch (Exception ex)

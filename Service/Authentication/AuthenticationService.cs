@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Database;
 using Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models;
@@ -20,13 +22,15 @@ namespace Service
         private readonly IConfiguration _configuration;
         private UserEntity? _user;
         private const int DayRefreshTokenExpiryTime = 7;
+        private readonly FactDbContext factDbContext;
 
-        public AuthenticationService(IMapper mapper, UserManager<UserEntity> userManager, ILoggerManager _logger, IConfiguration _configuration)
+        public AuthenticationService(IMapper mapper, FactDbContext factDbContext, UserManager<UserEntity> userManager, ILoggerManager _logger, IConfiguration _configuration)
         {
             this.mapper = mapper;
             this.userManager = userManager;
             this._logger = _logger;
             this._configuration = _configuration;
+            this.factDbContext = factDbContext;
         }
         public ProfileUser GetProfilebyToken(string token)
         {
@@ -223,6 +227,28 @@ namespace Service
             }
             _user = user;
             return await CreateToken(populateExp: false);
+        }
+
+
+        public async Task<bool> AddRoleToUser(string roleName, string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return false;
+            }
+            var result = await userManager.AddToRoleAsync(user!, roleName);
+            if (!result.Succeeded)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<List<IdentityRole>> GetRoles()
+        {
+            return await factDbContext.Roles.ToListAsync();
         }
     }
 }
