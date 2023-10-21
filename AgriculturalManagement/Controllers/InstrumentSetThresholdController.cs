@@ -9,15 +9,17 @@ namespace AgriculturalManagement.Controllers
     public class InstrumentSetThresholdController : ControllerBase
     {
         private readonly IServiceManager serviceManager;
+        private readonly IDeviceAutoService deviceAutoService;
 
-        public InstrumentSetThresholdController(IServiceManager serviceManager)
+        public InstrumentSetThresholdController(IServiceManager serviceManager, IDeviceAutoService deviceAutoService)
         {
             this.serviceManager = serviceManager;
+            this.deviceAutoService = deviceAutoService;
         }
         [HttpGet, Route("NotDelete")]
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete()
         {
-            return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffNotDelete();
+            return await deviceAutoService.DeviceInstrumentOnOffNotDelete();
         }
         [HttpGet, Route("Delete")]
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffDelete()
