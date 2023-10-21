@@ -7,5 +7,6 @@ namespace Service.Contracts
     {
         Task<IdentityResult> UpdateProfile(ProfileUser profileUser);
         Task<ProfileUser> GetProfile(string Id);
+        Task<List<string>> GetRoles(string Id);
     }
 }

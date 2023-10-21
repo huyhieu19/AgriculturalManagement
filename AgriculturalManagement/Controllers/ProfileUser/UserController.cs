@@ -36,5 +36,12 @@ namespace AgriculturalManagement.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("roles")]
+        public async Task<List<string>> GetRoles()
+        {
+            var Id = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
+            return await service.User.GetRoles(Id);
+        }
+
     }
 }

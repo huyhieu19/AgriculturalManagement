@@ -23,15 +23,15 @@ namespace Service
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
-            IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration, DapperContext dapperContext)
+            IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration, DapperContext dapperContext, FactDbContext factDbContext)
         {
-            this.farmService = new Lazy<IFarmService>(() => new FarmService(repositoryManager, logger, mapper));
+            this.farmService = new Lazy<IFarmService>(() => new FarmService(repositoryManager, logger, mapper, dapperContext));
             this.zoneService = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper));
             this.imageService = new Lazy<IImageService>(() => new ImageService(repositoryManager, mapper));
             this.instrumentationService = new Lazy<IInstrumentationService>(() => new InstrumentationService(repositoryManager, mapper));
             this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper, dapperContext, logger));
             this.machineService = new Lazy<IMachineService>(() => new MachineService(repositoryManager, mapper));
-            this.authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, userManager, logger, configuration));
+            this.authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, factDbContext, userManager, logger, configuration));
             this.valueTypeService = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));
             this.instrumentSetThresholdService = new Lazy<IInstrumentSetThresholdService>(() => new InstrumentSetThresholdService(repositoryManager, mapper));
             this.userService = new Lazy<IUserService>(() => new UserService(repositoryManager, mapper, userManager));
