@@ -22,7 +22,6 @@ namespace Entities
 
         public InstrumentationTypeEntity? InstrumentationType { get; set; }
         public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
-        public ICollection<ImageEntity>? Images { get; set; }
         public ICollection<DeviceInstrumentThresholdEntity>? DeviceInstrumentOnOffs { get; set; }
     }
 }

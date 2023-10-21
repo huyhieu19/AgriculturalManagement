@@ -20,7 +20,6 @@ namespace Entities
         public int? ZoneId { get; set; }
         public ZoneEntity? Zone { get; set; }
         public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
-        public ICollection<ImageEntity>? Images { get; set; }
         public ICollection<TimerDeviceDriverEntity>? TimerDevices { get; set; }
         public ICollection<DeviceInstrumentThresholdEntity>? DeviceInstrumentOnOffs { get; set; }
     }

@@ -16,9 +16,6 @@ namespace Entities
         public string? Address { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
-
-        public string? AvatarUrl { get; set; }
         public ICollection<FarmEntity>? Farms { get; set; }
-
     }
 }
