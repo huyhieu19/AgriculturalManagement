@@ -37,22 +37,10 @@ namespace AgriculturalManagement.Controllers
 
             return Ok(new { profile, tokenModel });
         }
+        [HttpGet("roles")]
+        public async Task<List<IdentityRole>> GetRoles() => await _service.AuthenticationService.GetRoles();
+        [HttpPost("addusertorole")]
+        public async Task<bool> AddRoleToUser(string roleName, string email) => await _service.AuthenticationService.AddRoleToUser(roleName, email);
 
-
-        //"firstName": "Hieu",
-        //"lastName": "Nguyen Huy",
-        //"userName": "HuyHieu",
-        //"password": "String123",
-        //"email": "Hieu@gmail.com",
-        //"phoneNumber": "string",
-        //"roles": null
-
-        //"firstName": "Hieu",
-        //"lastName": "Nguyen Huy",
-        //"userName": "huyhieu",
-        //"password": "String123",
-        //"email": "Hieu@gmail.com",
-        //"phoneNumber": "string",
-        //"roles": null
     }
 }
