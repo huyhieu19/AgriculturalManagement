@@ -26,7 +26,7 @@ namespace Service
             IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration, DapperContext dapperContext, FactDbContext factDbContext)
         {
             this.farmService = new Lazy<IFarmService>(() => new FarmService(repositoryManager, logger, mapper, dapperContext));
-            this.zoneService = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper));
+            this.zoneService = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper, dapperContext));
             this.imageService = new Lazy<IImageService>(() => new ImageService(repositoryManager, mapper));
             this.instrumentationService = new Lazy<IInstrumentationService>(() => new InstrumentationService(repositoryManager, mapper));
             this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper, dapperContext, logger));
