@@ -62,6 +62,9 @@ namespace Database
             // InstrumentSetThreshold
 
             builder.ApplyConfiguration(new DeviceInstrumentThresholdConfiguration());
+
+            //ESP
+            builder.ApplyConfiguration(new EspConfigurarion());
         }
         // DeviceDriver Dataset
         public DbSet<DeviceDriverEntity> DeviceDriverEntities { get; set; } = null!;
@@ -92,5 +95,10 @@ namespace Database
         // InstrumentSetThreshold
 
         public DbSet<DeviceInstrumentThresholdEntity> DeviceInstrumentThresholdEntities { get; set; } = null!;
+
+        // ESP
+
+        public DbSet<Esp8266Entity> Esp8266Entities { get; set; } = null!;
+
     }
 }

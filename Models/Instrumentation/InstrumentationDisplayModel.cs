@@ -11,6 +11,9 @@
         public int? ZoneId { get; set; }
         public int? InstrumentationTypeId { get; set; }
 
+        public Guid? EspId { get; set; }
+        public string? Gpio { get; set; }
+
         // adding
         ///Farm
         public string? FarmName { get; set; }
@@ -23,6 +26,5 @@
         public string? InstrumentationTypeName { get; set; }
         public string? InstrumentationTypeUnit { get; set; }
         public string? InstrumentationTypeManufacturer { get; set; }
-        public string? InstrumentationTypeImageUrl { get; set; }
     }
 }

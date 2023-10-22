@@ -9,6 +9,9 @@
         public int? ZoneId { get; set; }
         public int? DeviceDriverTypeId { get; set; }
 
+        public Guid? EspId { get; set; }
+        public string? Gpio { get; set; }
+
         // Add
         public string? FarmName { get; set; }
 

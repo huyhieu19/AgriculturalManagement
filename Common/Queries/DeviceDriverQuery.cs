@@ -12,7 +12,6 @@
 
                     DDT.Name AS DeviceDriverTypeName,
                     DDT.Manufacturer AS DeviceDriverTypeManufacturer,
-                    DDT.ImageUrl AS DeviceDriverTypeImageUrl
 
                 FROM
                     DeviceDriver DD

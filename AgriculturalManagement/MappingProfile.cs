@@ -54,8 +54,11 @@ namespace AgriculturalManagement
             CreateMap<InstrumentSetThresholdCreateModel, DeviceInstrumentThresholdEntity>();
 
             // User
-
             CreateMap<UserEntity, ProfileUser>();
+
+            // ESP
+            CreateMap<Esp8266Entity, EspDisplayModel>();
+            CreateMap<EspCreateModel, Esp8266Entity>();
         }
     }
 }

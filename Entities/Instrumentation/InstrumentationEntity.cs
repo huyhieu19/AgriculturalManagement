@@ -20,6 +20,11 @@ namespace Entities
         [ForeignKey("InstrumentationType")]
         public int? InstrumentationTypeId { get; set; }
 
+        public Guid? EspId { get; set; }
+        public Esp8266Entity? Esp8266 { get; set; }
+
+        public string? Gpio { get; set; }
+
         public InstrumentationTypeEntity? InstrumentationType { get; set; }
         public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
         public ICollection<DeviceInstrumentThresholdEntity>? DeviceInstrumentOnOffs { get; set; }
