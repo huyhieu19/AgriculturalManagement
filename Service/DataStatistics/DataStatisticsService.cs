@@ -20,11 +20,36 @@ namespace Service
             this.logger = logger;
         }
 
+        public Task GetData()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task PushDataToDB(InstrumentValueByFiveSecondEntity addModel)
         {
             logger.LogInfomation("Push start");
             await instrumentValue.InsertOneAsync(addModel);
             logger.LogInfomation("Push end");
+        }
+
+        public Task StatisticsDay()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task StatisticsHour()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task StatisticsMonth()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task StatisticsWeek()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Entities
     {
         [Key]
         public int Id { get; set; }
+        public string? Name { get; set; }
         public DateTime? DateStartedUsing { get; set; }
         public bool IsAction { get; set; } = false;
         public bool IsProblem { get; set; } = false;
@@ -19,7 +20,13 @@ namespace Entities
         [ForeignKey("Zone")]
         public int? ZoneId { get; set; }
         public ZoneEntity? Zone { get; set; }
-        public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
+
+        public Guid? EspId { get; set; }
+        public Esp8266Entity? Esp8266 { get; set; }
+        public string? Gpio { get; set; }
+
+        public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates
+        { get; set; }
         public ICollection<TimerDeviceDriverEntity>? TimerDevices { get; set; }
         public ICollection<DeviceInstrumentThresholdEntity>? DeviceInstrumentOnOffs { get; set; }
     }

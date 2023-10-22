@@ -17,6 +17,7 @@ namespace Repository
         private readonly Lazy<IInstrumentationTypeRepository> instrumentationTypeRepository;
         private readonly Lazy<ITypeTreeRepository> typeTreeRepository;
         private readonly Lazy<IInstrumentSetThresholdRepository> instrumentSetThresholdRepository;
+        private readonly Lazy<IEspRepository> espRepository;
         private readonly FactDbContext factDbContext;
 
         public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext, IMapper mapper)
@@ -32,6 +33,7 @@ namespace Repository
             instrumentationTypeRepository = new Lazy<IInstrumentationTypeRepository>(() => new InstrumentationTypeRepository(factDbContext, dapperContext));
             typeTreeRepository = new Lazy<ITypeTreeRepository>(() => new TypeTreeRepository(factDbContext, dapperContext));
             instrumentSetThresholdRepository = new Lazy<IInstrumentSetThresholdRepository>(() => new InstrumentSetThresholdRepository(factDbContext));
+            espRepository = new Lazy<IEspRepository>(() => new EspRepository(factDbContext));
         }
 
         public IFarmRepository Farm => farmRepository.Value;
@@ -54,6 +56,7 @@ namespace Repository
 
         public IInstrumentSetThresholdRepository InstrumentSetThreshold => instrumentSetThresholdRepository.Value;
 
+        public IEspRepository EspRepository => espRepository.Value;
 
         public async Task SaveAsync() => await factDbContext.SaveChangesAsync();
     }

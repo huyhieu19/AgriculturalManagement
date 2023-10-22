@@ -12,5 +12,10 @@
         public string? Function { get; set; }
         public int? TypeTreeId { get; set; }
         public int? FarmId { get; set; }
+
+        // adding
+
+        public int? CountDeviceDriver { get; set; }
+        public int? CountInstrumentation { get; set; }
     }
 }

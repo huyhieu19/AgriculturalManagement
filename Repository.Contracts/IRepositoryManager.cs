@@ -17,6 +17,8 @@
         IInstrumentationTypeRepository InstrumentationType { get; }
         ITypeTreeRepository TypeTree { get; }
         #endregion
+
+        IEspRepository EspRepository { get; }
         Task SaveAsync();
     }
 }

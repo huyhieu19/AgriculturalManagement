@@ -8,7 +8,7 @@
                                             Where Id = @Id";
         // Cập nhật thông tin của thiết bị đo (only infomation)
         public const string UpdateInfoSQL = @"Update Instrumentation
-                        Set Name = @Name, Note = @Note, Description = @Description,  IsActive = @IsActive, DateStartedUsing = @dateStartedUsing, ZoneId = @ZoneId, InstrumentationTypeId = @InstrumentationTypeId
+                        Set Name = @Name, Note = @Note, Description = @Description,  IsActive = @IsActive, DateStartedUsing = @dateStartedUsing, ZoneId = @ZoneId, InstrumentationTypeId = @InstrumentationTypeId, EspId = @EspId, Gpio = @Gpio
                         Where Id = @Id";
 
         // Lấy ra bảng liên quan tới zone đã được gán vào zone cụ thể
@@ -16,7 +16,6 @@
                         Ins.*,
 
                         InsT.Name AS InstrumentationTypeName,
-                        InsT.ImageUrl AS InstrumentationTypeImageUrl,
                         InsT.Manufacturer AS InstrumentationTypeManufacturer,
                         InsT.Unit AS InstrumentationTypeUnit,
                         Z.ZoneName,
