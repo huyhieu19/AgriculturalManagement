@@ -1,4 +1,5 @@
-﻿namespace Service.Contracts
+﻿
+namespace Service.Contracts
 {
     public interface IServiceManager
     {
@@ -14,5 +15,7 @@
         IInstrumentSetThresholdService InstrumentSetThreshold { get; }
 
         IUserService User { get; }
+
+        IEspService EspService { get; }
     }
 }

@@ -8,5 +8,7 @@
         public bool? IsProblem { get; set; } = false;
         public int? ZoneId { get; set; }
         public int? DeviceDriverTypeId { get; set; }
+        public Guid? EspId { get; set; }
+        public string? Gpio { get; set; }
     }
 }

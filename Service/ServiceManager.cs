@@ -20,6 +20,7 @@ namespace Service
         private readonly Lazy<IValueTypeService> valueTypeService;
         private readonly Lazy<IInstrumentSetThresholdService> instrumentSetThresholdService;
         private readonly Lazy<IUserService> userService;
+        private readonly Lazy<IEspService> espService;
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
@@ -35,6 +36,7 @@ namespace Service
             this.valueTypeService = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));
             this.instrumentSetThresholdService = new Lazy<IInstrumentSetThresholdService>(() => new InstrumentSetThresholdService(repositoryManager, mapper));
             this.userService = new Lazy<IUserService>(() => new UserService(repositoryManager, mapper, userManager));
+            this.espService = new Lazy<IEspService>(() => new EspService(repositoryManager, mapper));
         }
 
 
@@ -57,5 +59,7 @@ namespace Service
         public IInstrumentSetThresholdService InstrumentSetThreshold => instrumentSetThresholdService.Value;
 
         public IUserService User => userService.Value;
+
+        public IEspService EspService => espService.Value;
     }
 }
