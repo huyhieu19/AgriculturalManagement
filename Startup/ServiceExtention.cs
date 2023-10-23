@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Models;
+using MQTTProcess;
 using Quartz;
 using Repository;
 using Repository.Contracts;
 using Service;
-using Service.BackgroundJob;
 using Service.Contracts;
 using Service.Extention;
 
@@ -43,8 +44,8 @@ namespace Startup
             ///builder.Services.AddHostedService<JobSchedulerHostedService>();
 
             //// job chay background
-            builder.Services.AddHostedService<JobForDeviceDriverService>();
-            builder.Services.AddHostedService<JobThresholdService>();
+            //builder.Services.AddHostedService<JobForDeviceDriverService>();
+            //builder.Services.AddHostedService<JobThresholdService>();
 
             builder.Services.AddControllers(
             ////    config =>
@@ -78,9 +79,10 @@ namespace Startup
 
 
             ////// 5s up dữ liệu lên mongo db 1 lần
-            ////builder.Services.AddHostedService<UploadInstrumentValueToMongoDbService>();
+            //builder.Services.AddHostedService<UploadInstrumentValueToMongoDbService>();
+            builder.Services.AddHostedService<UploadToMongoDb>();
             ////// add config mongodb
-            ////builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection("MongoDbConfig"));
+            builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection("MongoDbConfig"));
 
             // add caching
             ///builder.Services.ConfigureResponseCaching();
