@@ -3,6 +3,7 @@ using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Packets;
 using MQTTnet.Protocol;
+using System.Text;
 
 namespace MQTTProcess
 {
@@ -149,7 +150,7 @@ namespace MQTTProcess
 
             using (var mqttClient = mqttFactory.CreateMqttClient())
             {
-                var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer("broker.hivemq.com").Build();
+                var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer("broker.emqx.io", 1883).Build();
 
                 await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
@@ -157,7 +158,7 @@ namespace MQTTProcess
                     .WithTopicFilter(
                         f =>
                         {
-                            f.WithTopic("mqttnet/samples/topic/1");
+                            f.WithTopic("d6rjcudf7yfrokfyd6w84or994kffef/thisisdeviceid1/R/temperature");
                         })
                     .Build();
 
@@ -165,8 +166,24 @@ namespace MQTTProcess
 
                 Console.WriteLine("MQTT client subscribed to topic.");
 
+                mqttClient.ApplicationMessageReceivedAsync += e =>
+                {
+                    Console.WriteLine("Received application message.");
+
+                    e.DumpToConsole();
+
+                    // Trích xuất và xử lý dữ liệu từ thông điệp MQTT
+                    string receivedData = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+
+                    // Hiển thị dữ liệu đã nhận được từ MQTT
+                    Console.WriteLine($"Received data: {receivedData}");
+                    Console.WriteLine($"Received message on topic {e.ApplicationMessage.Topic}: {e.ApplicationMessage.ConvertPayloadToString()}");
+                    // Thực hiện xử lý dữ liệu trong ứng dụng của bạn
+                    return Task.CompletedTask;
+                };
+
                 // The response contains additional data sent by the server after subscribing.
-                response.DumpToConsole();
+                Console.WriteLine(response.DumpToConsole());
             }
         }
     }

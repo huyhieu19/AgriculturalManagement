@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
+using MQTTProcess;
 using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers.ESP
@@ -24,5 +25,7 @@ namespace AgriculturalManagement.Controllers.ESP
             await _serviceManager.EspService.CreateEsp(model);
             return Ok(true);
         }
+        [HttpGet("test")]
+        public async Task Subscribe_Topic() => await ClientSubscribe.Subscribe_Topic();
     }
 }
