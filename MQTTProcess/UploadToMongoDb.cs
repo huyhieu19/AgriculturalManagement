@@ -11,6 +11,9 @@ namespace MQTTProcess
     {
         private readonly IDataStatisticsService dataStatisticsService;
         private readonly IEspBackgroundProcessService espBackgroundProcessService;
+        private List<InstrumentValueByFiveSecondEntity> messageList = new List<InstrumentValueByFiveSecondEntity>();
+        private int messageCount = 0;
+        private const int maxMessageCount = 50;
 
         public UploadToMongoDb(IDataStatisticsService dataStatisticsService, IEspBackgroundProcessService espBackgroundProcessService)
         {
@@ -50,24 +53,66 @@ namespace MQTTProcess
             }
         }
 
+        //private void Subscribe(MqttClient client, string[] topics, byte[] msgBases)
+        //{
+        //    client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
+        //    client.Subscribe(topics, msgBases);
+        //}
+        //private async void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
+        //{
+        //    string payload = System.Text.Encoding.Default.GetString(e.Message);
+        //    await Task.Factory.StartNew(async () =>
+        //    {
+        //        await dataStatisticsService.PushDataToDB(new InstrumentValueByFiveSecondEntity()
+        //        {
+        //            PayLoad = $"{payload}",
+        //            Topic = $"{e.Topic}",
+        //            ValueDate = DateTime.Now,
+        //        });
+        //    });
+        //    Console.WriteLine("Received `{0}` from `{1}` topic", payload, e.Topic);
+        //}
         private void Subscribe(MqttClient client, string[] topics, byte[] msgBases)
         {
             client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
             client.Subscribe(topics, msgBases);
         }
+
         private async void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
             string payload = System.Text.Encoding.Default.GetString(e.Message);
-            await Task.Factory.StartNew(async () =>
+
+            // Create an InstrumentValueByFiveSecondEntity object for the incoming data
+            var entity = new InstrumentValueByFiveSecondEntity()
             {
-                await dataStatisticsService.PushDataToDB(new InstrumentValueByFiveSecondEntity()
-                {
-                    PayLoad = $"{payload}",
-                    Topic = $"{e.Topic}",
-                    ValueDate = DateTime.Now,
-                });
-            });
-            Console.WriteLine("Received `{0}` from `{1}` topic", payload, e.Topic);
+                PayLoad = payload,
+                Topic = e.Topic,
+                ValueDate = DateTime.Now
+            };
+
+            // Add the entity to the list
+            messageList.Add(entity);
+
+            // Increment the message count
+            messageCount++;
+
+            Console.WriteLine($"Received `{payload}` from `{e.Topic}` topic");
+
+            if (messageCount >= maxMessageCount)
+            {
+                // If the message count reaches the maximum, process and save the data
+                await ProcessAndSaveDataAsync(messageList);
+
+                // Clear the list and reset the message count
+                messageList.Clear();
+                messageCount = 0;
+            }
+        }
+
+        private async Task ProcessAndSaveDataAsync(List<InstrumentValueByFiveSecondEntity> data)
+        {
+            // Process and save the list of data, for example, you can save it to a database
+            await dataStatisticsService.PushDatasToDB(data);
         }
     }
 }
