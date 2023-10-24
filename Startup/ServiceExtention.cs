@@ -11,6 +11,8 @@ using Repository;
 using Repository.Contracts;
 using Service;
 using Service.Contracts;
+using Service.Contracts.ESP;
+using Service.ESP;
 using Service.Extention;
 
 namespace Startup
@@ -29,6 +31,10 @@ namespace Startup
 
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
             builder.Services.AddSingleton<IDeviceAutoService, DeviceAutoService>();
+
+
+            builder.Services.AddSingleton<IEspBackgroundProcessService, EspBackgroundProcessService>();
+
 
 
             builder.Services.AddSingleton<DapperContext>();
