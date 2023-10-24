@@ -27,7 +27,7 @@ namespace Service
 
         public async Task PushDataToDB(InstrumentValueByFiveSecondEntity addModel)
         {
-            logger.LogInfomation("Push start");
+            logger.LogInfomation($"Push start payload: {addModel.PayLoad}, topic: {addModel.Topic}");
             await instrumentValue.InsertOneAsync(addModel);
             logger.LogInfomation("Push end");
         }

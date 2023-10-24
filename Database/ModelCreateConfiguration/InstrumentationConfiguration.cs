@@ -12,6 +12,8 @@ namespace Database.ModelCreateConfiguration
 
             builder.HasKey(p => p.Id);
 
+            builder.Property(p => p.Topic).HasDefaultValue("I");
+
             builder.HasOne(p => p.Zone)
                 .WithMany(p => p.Instrumentations)
                 .HasForeignKey(p => p.ZoneId)

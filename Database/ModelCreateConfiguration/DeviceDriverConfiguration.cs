@@ -11,12 +11,12 @@ namespace Database.ModelCreateConfiguration
             builder.ToTable("DeviceDriver");
 
             builder.HasKey(p => p.Id);
-             
+
             builder.Property(p => p.IsAction).HasDefaultValue(false);
             builder.Property(p => p.IsProblem).HasDefaultValue(false);
             builder.Property(p => p.IsAuto).HasDefaultValue(false);
 
-
+            builder.Property(p => p.Topic).HasDefaultValue("D");
 
 
             builder.HasOne(p => p.DeviceDriverType)

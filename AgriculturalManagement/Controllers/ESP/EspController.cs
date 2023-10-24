@@ -27,5 +27,7 @@ namespace AgriculturalManagement.Controllers.ESP
         }
         [HttpGet("test")]
         public async Task Subscribe_Topic() => await ClientSubscribe.Subscribe_Topic();
+
+
     }
 }
