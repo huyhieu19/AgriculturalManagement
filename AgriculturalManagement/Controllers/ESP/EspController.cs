@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
 using MQTTProcess;
+using Service;
 using Service.Contracts;
+using Service.Contracts.ESP;
 
 namespace AgriculturalManagement.Controllers.ESP
 {
@@ -10,10 +12,18 @@ namespace AgriculturalManagement.Controllers.ESP
     public class EspController : ControllerBase
     {
         private readonly IServiceManager _serviceManager;
-
-        public EspController(IServiceManager serviceManager)
+        private readonly IDataStatisticsService dataStatisticsService;
+        private readonly IEspBackgroundProcessService espBackgroundProcessService;
+        private readonly ICustomServiceStopper customServiceStopper;
+        public EspController(IServiceManager serviceManager
+            , IDataStatisticsService dataStatisticsService
+            , IEspBackgroundProcessService espBackgroundProcessService,
+            ICustomServiceStopper customServiceStopper)
         {
             _serviceManager = serviceManager;
+            this.dataStatisticsService = dataStatisticsService;
+            this.espBackgroundProcessService = espBackgroundProcessService;
+            this.customServiceStopper = customServiceStopper;
         }
 
         [HttpGet("esps")]
@@ -25,9 +35,11 @@ namespace AgriculturalManagement.Controllers.ESP
             await _serviceManager.EspService.CreateEsp(model);
             return Ok(true);
         }
-        [HttpGet("test")]
-        public async Task Subscribe_Topic() => await ClientSubscribe.Subscribe_Topic();
 
-
+        [HttpGet("Restart")]
+        public async Task Restart()
+        {
+            await customServiceStopper.RestartJobBackground();
+        }
     }
 }

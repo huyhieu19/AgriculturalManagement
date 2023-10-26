@@ -1,4 +1,5 @@
 ﻿using Database;
+using JobBackground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,16 +29,23 @@ namespace Startup
             builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
-
+            builder.Services.AddSingleton<DapperContext>();
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
             builder.Services.AddSingleton<IDeviceAutoService, DeviceAutoService>();
 
 
+
             builder.Services.AddSingleton<IEspBackgroundProcessService, EspBackgroundProcessService>();
 
+            builder.Services.AddSingleton<ICustomServiceStopper, UploadToMongoDb>();
+            builder.Services.AddSingleton<UPload>();
 
 
-            builder.Services.AddSingleton<DapperContext>();
+            //builder.Services.AddHostedService<JobSchedulerDeviceDriver>();
+            //builder.Services.AddSingleton<IScheduler>(_ => new StdSchedulerFactory().GetScheduler().Result);
+
+
+
 
 
             ////builder.Services.AddSingleton<IScheduler>(provider =>
@@ -86,7 +94,9 @@ namespace Startup
 
             ////// 5s up dữ liệu lên mongo db 1 lần
             //builder.Services.AddHostedService<UploadInstrumentValueToMongoDbService>();
+
             builder.Services.AddHostedService<UploadToMongoDb>();
+
             ////// add config mongodb
             builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection("MongoDbConfig"));
 

@@ -2,7 +2,7 @@
 {
     public static class EspQuery
     {
-        public const string GetAll = @"SELECT TOP (1000)
+        public const string GetAll = @"SELECT
             E.[Id],
             E.[Name],
             E.[Note],

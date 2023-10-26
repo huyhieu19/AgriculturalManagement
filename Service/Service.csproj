@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Database\Database.csproj" />
-    <ProjectReference Include="..\JobBackground\JobBackground.csproj" />
     <ProjectReference Include="..\Repository.Contracts\Repository.Contracts.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
     <ProjectReference Include="..\Service.Contracts\Service.Contracts.csproj" />
