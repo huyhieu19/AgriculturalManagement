@@ -1,5 +1,4 @@
-﻿using JobBackground;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models;
 using MQTTProcess;
 using Service;
@@ -15,16 +14,16 @@ namespace AgriculturalManagement.Controllers.ESP
         private readonly IServiceManager _serviceManager;
         private readonly IDataStatisticsService dataStatisticsService;
         private readonly IEspBackgroundProcessService espBackgroundProcessService;
-        ICustomServiceStopper _stopper;
+        private readonly ICustomServiceStopper customServiceStopper;
         public EspController(IServiceManager serviceManager
             , IDataStatisticsService dataStatisticsService
             , IEspBackgroundProcessService espBackgroundProcessService,
-            ICustomServiceStopper stopper)
+            ICustomServiceStopper customServiceStopper)
         {
             _serviceManager = serviceManager;
             this.dataStatisticsService = dataStatisticsService;
             this.espBackgroundProcessService = espBackgroundProcessService;
-            _stopper = stopper;
+            this.customServiceStopper = customServiceStopper;
         }
 
         [HttpGet("esps")]
@@ -36,23 +35,11 @@ namespace AgriculturalManagement.Controllers.ESP
             await _serviceManager.EspService.CreateEsp(model);
             return Ok(true);
         }
-        [HttpGet("Start")]
-        public void Start()
-        {
-            new JobSchedulerDeviceDriver().ScheduleJobs1();
-        }
-        [HttpGet("Stop")]
-        public void Stop()
-        {
-            new JobSchedulerDeviceDriver().DeleteScheduleJobs1();
-        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Stop()
-        //{
-        //    await _stopper.StopAsync();
-        //    return Ok();
-        //}
-
+        [HttpGet("Restart")]
+        public async Task Restart()
+        {
+            await customServiceStopper.RestartJobBackground();
+        }
     }
 }

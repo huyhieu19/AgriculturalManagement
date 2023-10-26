@@ -8,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using Models;
 using MQTTProcess;
 using Quartz;
-using Quartz.Impl;
 using Repository;
 using Repository.Contracts;
 using Service;
@@ -42,8 +41,8 @@ namespace Startup
             builder.Services.AddSingleton<UPload>();
 
 
-            builder.Services.AddHostedService<JobSchedulerDeviceDriver>();
-            builder.Services.AddSingleton<IScheduler>(_ => new StdSchedulerFactory().GetScheduler().Result);
+            //builder.Services.AddHostedService<JobSchedulerDeviceDriver>();
+            //builder.Services.AddSingleton<IScheduler>(_ => new StdSchedulerFactory().GetScheduler().Result);
 
 
 
