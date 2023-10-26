@@ -12,5 +12,7 @@ namespace Models
         public DateTime? DateStartedUsing { get; set; }
         public int? ZoneId { get; set; }
         public int? InstrumentationTypeId { get; set; }
+        public Guid? EspId { get; set; }
+        public string? Gpio { get; set; }
     }
 }
