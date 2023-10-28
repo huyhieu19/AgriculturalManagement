@@ -30,7 +30,7 @@ namespace Startup
             app.UseAuthorization();
             app.MapControllers();
 
-            ///startupTask.StartAsync(CancellationToken.None).Wait();
+
             ///app.UseResponseCaching();
             ///app.UseHttpCacheHeaders();
 

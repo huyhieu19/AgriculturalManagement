@@ -25,6 +25,8 @@ namespace Entities
 
         public string? Gpio { get; set; }
 
+        public string Topic { get; set; } = null!;
+
         public InstrumentationTypeEntity? InstrumentationType { get; set; }
         public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
         public ICollection<DeviceInstrumentThresholdEntity>? DeviceInstrumentOnOffs { get; set; }

@@ -1,6 +1,5 @@
 ﻿using Entities;
 using Microsoft.Extensions.Hosting;
-using Service.Contracts;
 
 namespace Service
 {
@@ -28,5 +27,8 @@ namespace Service
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }
         }
+
+
+
     }
 }

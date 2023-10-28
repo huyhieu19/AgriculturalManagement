@@ -27,7 +27,7 @@ namespace Service
         // Hàm này dùng để set cho trạng thái của IsRemve = true và IsSuccess = true
         public async Task DeleteTimer(int id)
         {
-            logger.LogInfomation($"DeviceDriver: Set status to complete --> DeviceDriverId: {id}");
+            logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {id}");
             var query = TimerDeviceDriverQuery.RemoveTimerSQL;
             var connection = dapperContext.CreateConnection();
             connection.Open();
@@ -44,7 +44,7 @@ namespace Service
         // Hàm này dùng để mở device driver ---> IsAcction = true
         public async Task DeviceDriverTurnOn(int DeviceDriverId)
         {
-            logger.LogInfomation($"DeviceDriver: Turn on --> DeviceDriverId:  {DeviceDriverId}");
+            logger.LogInformation($"DeviceDriver: Turn on --> DeviceDriverId:  {DeviceDriverId}");
             var connection = dapperContext.CreateConnection();
             connection.Open();
             using (var trans = connection.BeginTransaction())
@@ -58,7 +58,7 @@ namespace Service
         // Hàm này dùng để tắt device driver ---> IsAcction = false
         public async Task DeviceDriverTurnOff(int DeviceDriverId)
         {
-            logger.LogInfomation($"DeviceDriver: Turn off --> DeviceDriverId: {DeviceDriverId}");
+            logger.LogInformation($"DeviceDriver: Turn off --> DeviceDriverId: {DeviceDriverId}");
             var connection = dapperContext.CreateConnection();
             connection.Open();
             using (var trans = connection.BeginTransaction())
@@ -72,14 +72,14 @@ namespace Service
         // Lấy giá trị list giá trị ngày giờ đóng mở và các giá trị ngưỡng
         public async Task<IEnumerable<DeviceDriverTurnOnTurnOffModel>> GetDeviceDriverTurnOnTurnOffModels()
         {
-            logger.LogInfomation("Job background device driver --> start");
+            logger.LogInformation("Job background device driver --> start");
             var query = TimerDeviceDriverQuery.GetAllTimerSQL;
             IEnumerable<DeviceDriverTurnOnTurnOffModel> listTime;
             using (var connection = dapperContext.CreateConnection())
             {
                 listTime = await connection.QueryAsync<DeviceDriverTurnOnTurnOffModel>(query);
             }
-            logger.LogInfomation("Job background device driver --> end");
+            logger.LogInformation("Job background device driver --> end");
             return listTime;
         }
 

@@ -19,6 +19,6 @@
         #endregion
 
         IEspRepository EspRepository { get; }
-        Task SaveAsync();
+        Task<int> SaveAsync();
     }
 }

@@ -23,16 +23,16 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"ValueTypeService - CreateTypeDeviceDrivers - Start");
+                logger.LogInformation($"ValueTypeService - CreateTypeDeviceDrivers - Start");
                 var entity = mapper.Map<DeviceDriverTypeEntity>(model);
                 repository.DeviceDriverType.CreateTypeDeviceDrivers(entity);
                 await repository.SaveAsync();
-                logger.LogInfomation($"ValueTypeService - CreateTypeDeviceDrivers - End");
+                logger.LogInformation($"ValueTypeService - CreateTypeDeviceDrivers - End");
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - CreateTypeDeviceDrivers - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - CreateTypeDeviceDrivers - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -41,16 +41,16 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - Create Type Instrumentations - Start");
+                logger.LogInformation($"Value Type Service - Create Type Instrumentations - Start");
                 var entity = mapper.Map<InstrumentationTypeEntity>(model);
                 repository.InstrumentationType.CreateTypeInstrumentations(entity);
                 await repository.SaveAsync();
-                logger.LogInfomation($"Value Type Service - Create Type Instrumentations - End");
+                logger.LogInformation($"Value Type Service - Create Type Instrumentations - End");
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - CreateTypeInstrumentations - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - CreateTypeInstrumentations - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -59,16 +59,16 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - CreateTypeTrees - Start");
+                logger.LogInformation($"Value Type Service - CreateTypeTrees - Start");
                 var entity = mapper.Map<TypeTreeEntity>(model);
                 repository.TypeTree.CreateTypeTrees(entity);
                 await repository.SaveAsync();
-                logger.LogInfomation($"Value Type Service - CreateTypeTrees - End");
+                logger.LogInformation($"Value Type Service - CreateTypeTrees - End");
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - CreateTypeTrees - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - CreateTypeTrees - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -77,16 +77,16 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - DeleteTypeDeviceDrivers - Start");
+                logger.LogInformation($"Value Type Service - DeleteTypeDeviceDrivers - Start");
                 var entity = mapper.Map<DeviceDriverTypeEntity>(model);
                 repository.DeviceDriverType.DeleteTypeDeviceDrivers(entity);
                 await repository.SaveAsync();
-                logger.LogInfomation($"Value Type Service - DeleteTypeDeviceDrivers - End");
+                logger.LogInformation($"Value Type Service - DeleteTypeDeviceDrivers - End");
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - DeleteTypeDeviceDrivers - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - DeleteTypeDeviceDrivers - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -95,16 +95,16 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - DeleteTypeInstrumentations - Start");
+                logger.LogInformation($"Value Type Service - DeleteTypeInstrumentations - Start");
                 var entity = mapper.Map<InstrumentationTypeEntity>(model);
                 repository.InstrumentationType.DeleteTypeInstrumentations(entity);
                 await repository.SaveAsync();
-                logger.LogInfomation($"Value Type Service - DeleteTypeInstrumentations - End");
+                logger.LogInformation($"Value Type Service - DeleteTypeInstrumentations - End");
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - DeleteTypeInstrumentations - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - DeleteTypeInstrumentations - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -113,16 +113,16 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - DeleteTypeInstrumentations - Start");
+                logger.LogInformation($"Value Type Service - DeleteTypeInstrumentations - Start");
                 var typeTree = mapper.Map<TypeTreeEntity>(model);
                 repository.TypeTree.DeleteTypeTrees(typeTree);
-                logger.LogInfomation($"Value Type Service - DeleteTypeInstrumentations - End");
+                logger.LogInformation($"Value Type Service - DeleteTypeInstrumentations - End");
                 await repository.SaveAsync();
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - DeleteTypeTrees - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - DeleteTypeTrees - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -131,14 +131,14 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - GetTypeDeviceDrivers - Start");
+                logger.LogInformation($"Value Type Service - GetTypeDeviceDrivers - Start");
                 var result = mapper.Map<List<DeviceDriversTypeDisplayModel>>(await repository.DeviceDriverType.GetTypeDeviceDrivers());
-                logger.LogInfomation($"Value Type Service - GetTypeDeviceDrivers - End");
+                logger.LogInformation($"Value Type Service - GetTypeDeviceDrivers - End");
                 return result;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - GetTypeDeviceDrivers - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - GetTypeDeviceDrivers - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -147,14 +147,14 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - GetTypeInstrumentation - Start");
+                logger.LogInformation($"Value Type Service - GetTypeInstrumentation - Start");
                 var result = mapper.Map<List<InstrumentationTypeDisplayModel>>(await repository.InstrumentationType.GetTypeInstrumentation());
-                logger.LogInfomation($"Value Type Service - GetTypeInstrumentation - End");
+                logger.LogInformation($"Value Type Service - GetTypeInstrumentation - End");
                 return result;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - GetTypeInstrumentation - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - GetTypeInstrumentation - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -163,15 +163,15 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - GetTypeTrees - Start");
+                logger.LogInformation($"Value Type Service - GetTypeTrees - Start");
                 var typeTrees = await repository.TypeTree.GetTypeTree();
                 var result = mapper.Map<List<TypeTreeDisplayModel>>(typeTrees);
-                logger.LogInfomation($"Value Type Service - GetTypeTrees - End");
+                logger.LogInformation($"Value Type Service - GetTypeTrees - End");
                 return result;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - GetTypeTrees - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - GetTypeTrees - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -180,16 +180,16 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - UpdateTypeDeviceDriver - Start");
+                logger.LogInformation($"Value Type Service - UpdateTypeDeviceDriver - Start");
                 var entity = mapper.Map<DeviceDriverTypeEntity>(model);
                 repository.DeviceDriverType.UpdateTypeDeviceDriver(entity);
                 await repository.SaveAsync();
-                logger.LogInfomation($"Value Type Service - UpdateTypeDeviceDriver - End");
+                logger.LogInformation($"Value Type Service - UpdateTypeDeviceDriver - End");
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - UpdateTypeDeviceDriver - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - UpdateTypeDeviceDriver - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -198,16 +198,16 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - UpdateTypeInstrumentation - Start");
+                logger.LogInformation($"Value Type Service - UpdateTypeInstrumentation - Start");
                 var entity = mapper.Map<InstrumentationTypeEntity>(model);
                 repository.InstrumentationType.UpdateTypeInstrumentation(entity);
                 await repository.SaveAsync();
-                logger.LogInfomation($"Value Type Service - UpdateTypeInstrumentation - End");
+                logger.LogInformation($"Value Type Service - UpdateTypeInstrumentation - End");
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - UpdateTypeDeviceDriver - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - UpdateTypeDeviceDriver - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }
@@ -216,16 +216,16 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Value Type Service - UpdateTypeTree - Start");
+                logger.LogInformation($"Value Type Service - UpdateTypeTree - Start");
                 var entity = mapper.Map<TypeTreeEntity>(model);
                 repository.TypeTree.UpdateTypeTree(entity);
                 await repository.SaveAsync();
-                logger.LogInfomation($"Value Type Service - UpdateTypeTree - End");
+                logger.LogInformation($"Value Type Service - UpdateTypeTree - End");
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogInfomation($"Value Type Service - UpdateTypeTree - Exeption: {ex.Message}");
+                logger.LogInformation($"Value Type Service - UpdateTypeTree - Exeption: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }

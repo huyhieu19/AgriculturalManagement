@@ -2,7 +2,7 @@
 using Models;
 using Service.Contracts;
 
-namespace AgriculturalManagement.Controllers
+namespace AgriculturalManagement.Controllers.Authentication
 {
     [Route("api/Token")]
     [ApiController]

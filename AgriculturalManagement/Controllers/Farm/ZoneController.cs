@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service.Contracts;
 
-namespace AgriculturalManagement.Controllers
+namespace AgriculturalManagement.Controllers.Farm
 {
     [Route("api/Zone")]
     [ApiController]

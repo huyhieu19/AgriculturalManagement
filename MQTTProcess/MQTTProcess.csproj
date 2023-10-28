@@ -6,14 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="MQTTnet" Version="4.3.1.873" />
-		<PackageReference Include="MQTTnet.AspNetCore" Version="4.3.1.873" />
-		<PackageReference Include="MQTTnet.AspNetCoreEx" Version="3.1.2" />
-		<PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="4.3.1.873" />
-		<PackageReference Include="MQTTnet.Extensions.Rpc" Version="4.3.1.873" />
-		<PackageReference Include="MQTTnet.Extensions.WebSocket4Net" Version="4.3.1.873" />
+		<PackageReference Include="M2MqttDotnetCore" Version="1.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Common\Common.csproj" />
+	  <ProjectReference Include="..\Service.Contracts\Service.Contracts.csproj" />
 	</ItemGroup>
 </Project>

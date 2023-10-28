@@ -1,6 +1,6 @@
-﻿namespace Models
+﻿namespace Models.ESP
 {
-    public class EspDisplayModel
+    public class EspAndTopicModel
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
@@ -10,7 +10,7 @@
         public string ClientId { get; set; } = null!;
         public string UserName { get; set; } = null!;
         public string Password { get; set; } = null!;
-        public List<DeviceDriverDisplayModel>? DeviceDrivers { get; set; }
-        public List<InstrumentationDisplayModel>? Instrumentations { get; set; }
+        public string TopicDevice { get; set; } = null!;
+        public string InstrumentationId { get; set; } = null!;
     }
 }

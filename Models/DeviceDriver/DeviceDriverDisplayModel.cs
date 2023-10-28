@@ -12,6 +12,14 @@
         public Guid? EspId { get; set; }
         public string? Gpio { get; set; }
 
+        public string? Topic
+        {
+            get
+            {
+                return $"{EspId}/D/{Id}";
+            }
+        }
+
         // Add
         public string? FarmName { get; set; }
 

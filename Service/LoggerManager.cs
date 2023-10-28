@@ -15,7 +15,7 @@ namespace Service
 
         public void LogError(string message) => logger.Error(message);
 
-        public void LogInfomation(string message) => logger.Info(message);
+        public void LogInformation(string message) => logger.Info(message);
 
         public void LogWarning(string message) => logger.Warn(message);
     }

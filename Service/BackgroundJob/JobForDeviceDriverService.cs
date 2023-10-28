@@ -21,9 +21,9 @@ namespace Service.BackgroundJob
             // Run every 5 seconds
             while (!stoppingToken.IsCancellationRequested)
             {
-                logger.LogInfomation("Start job device driver on off according to timer");
+                logger.LogInformation("Start job device driver on off according to timer");
                 await ToDoAsyncIsAuto();
-                logger.LogInfomation("End job device driver on off according to timer");
+                logger.LogInformation("End job device driver on off according to timer");
                 await Task.Delay(TimeSpan.FromSeconds(50), stoppingToken);
             }
         }
