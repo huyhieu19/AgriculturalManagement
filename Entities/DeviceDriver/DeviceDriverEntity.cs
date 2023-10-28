@@ -25,7 +25,7 @@ namespace Entities
         public Esp8266Entity? Esp8266 { get; set; }
         public string? Gpio { get; set; }
 
-        public string Topic { get; set; } = null!;
+        public string? Topic { get; set; }
 
         public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates
         { get; set; }

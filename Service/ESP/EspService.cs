@@ -17,11 +17,12 @@ namespace Service
             _mapper = mapper;
         }
 
-        public async Task CreateEsp(EspCreateModel model)
+        public async Task<bool> CreateEsp(EspCreateModel model)
         {
             var entity = _mapper.Map<Esp8266Entity>(model);
             _repositoryManager.EspRepository.CreateEsp(entity);
-            await _repositoryManager.SaveAsync();
+            int isChange = await _repositoryManager.SaveAsync();
+            return isChange == 1;
         }
 
         public async Task<List<EspDisplayModel>> GetAll()

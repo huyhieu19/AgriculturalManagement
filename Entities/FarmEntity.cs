@@ -16,7 +16,7 @@ namespace Entities
 
 
         [ForeignKey("User")]
-        public string? UserId { get; set; }
+        public string UserId { get; set; } = null!;
 
 
         public UserEntity? User { get; set; }
