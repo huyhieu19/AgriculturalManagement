@@ -6,10 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Models;
 using MQTTProcess;
-using Quartz;
 using Repository;
 using Repository.Contracts;
 using Service;
+using Service.BackgroundJob;
 using Service.Contracts;
 using Service.Contracts.ESP;
 using Service.ESP;
@@ -19,55 +19,27 @@ namespace Startup
 {
     public static class ServiceExtention
     {
-
         public static WebApplicationBuilder AddServicesBase(this WebApplicationBuilder builder)
         {
-
-
             // Add services to the container.
-            builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+            builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
             builder.Services.AddSingleton<DapperContext>();
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
             builder.Services.AddSingleton<IDeviceAutoService, DeviceAutoService>();
-
-
-
+            builder.Services.AddSingleton<ICustomServiceStopper, UploadToMongoDb>();
             builder.Services.AddSingleton<IEspBackgroundProcessService, EspBackgroundProcessService>();
 
-            builder.Services.AddSingleton<ICustomServiceStopper, UploadToMongoDb>();
-
-
-            //builder.Services.AddHostedService<JobSchedulerDeviceDriver>();
-            //builder.Services.AddSingleton<IScheduler>(_ => new StdSchedulerFactory().GetScheduler().Result);
 
 
 
+            // Inject background service
+            builder.Services.AddHostedService<UploadToMongoDb>();
+            builder.Services.AddHostedService<JobForDeviceDriverService>();
+            builder.Services.AddHostedService<JobThresholdService>();
 
-
-            ////builder.Services.AddSingleton<IScheduler>(provider =>
-            ////{
-            ////    var schedulerFactory = new StdSchedulerFactory();
-            ////    return schedulerFactory.GetScheduler().Result;
-            ////});
-
-            // config xong thì bỏ comment -> deploy
-            ///builder.Services.AddHostedService<JobSchedulerHostedService>();
-
-            //// job chay background
-            //builder.Services.AddHostedService<JobForDeviceDriverService>();
-            //builder.Services.AddHostedService<JobThresholdService>();
-
-            builder.Services.AddControllers(
-            ////    config =>
-            ////{
-            ////    config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
-            ////    {
-            ////        Duration = 120
-            ////    });
-            ////}
-            );
+            builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -88,13 +60,6 @@ namespace Startup
                     });
             });
 
-
-
-            ////// 5s up dữ liệu lên mongo db 1 lần
-            //builder.Services.AddHostedService<UploadInstrumentValueToMongoDbService>();
-
-            builder.Services.AddHostedService<UploadToMongoDb>();
-
             ////// add config mongodb
             builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection("MongoDbConfig"));
 
@@ -113,7 +78,7 @@ namespace Startup
 
             builder.Services.AddSwaggerGen(opt =>
             {
-                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Agricultural Management", Version = "v1" });
+                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Agricultural Management API", Version = "v1" });
 
                 opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

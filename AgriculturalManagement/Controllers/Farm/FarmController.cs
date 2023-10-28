@@ -49,6 +49,8 @@ namespace AgriculturalManagement.Controllers.Farm
         [Authorize(Roles = "Administrator")]
         public async Task<bool> UpdateFarm([FromBody] FarmUpdateModel model)
         {
+            var UserId = httpContextAccessor.HttpContext?.User.FindFirstValue("Id");
+            model.UserId = UserId;
             return await serviceManager.Farm.UpdateFarm(model);
         }
         [HttpGet, Route("names")]

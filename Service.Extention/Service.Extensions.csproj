@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Marvin.Cache.Headers" Version="6.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>

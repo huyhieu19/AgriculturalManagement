@@ -23,8 +23,8 @@ namespace Repository
         public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext, IMapper mapper)
         {
             this.factDbContext = factDbContext;
-            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext, logger, dapperContext));
-            zoneRepository = new Lazy<IZoneRepository>(() => new ZoneRepository(factDbContext, dapperContext));
+            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext, logger));
+            zoneRepository = new Lazy<IZoneRepository>(() => new ZoneRepository(factDbContext));
             imageRepository = new Lazy<IImageRepository>(() => new ImageRepository(factDbContext, dapperContext));
             instrumentationRepository = new Lazy<IInstrumentationRepository>(() => new InstrumentationRepository(factDbContext, dapperContext));
             deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext, mapper));
@@ -58,6 +58,6 @@ namespace Repository
 
         public IEspRepository EspRepository => espRepository.Value;
 
-        public async Task SaveAsync() => await factDbContext.SaveChangesAsync();
+        public async Task<int> SaveAsync() => await factDbContext.SaveChangesAsync();
     }
 }

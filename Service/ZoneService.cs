@@ -32,13 +32,11 @@ namespace Service
 
         public async Task<IEnumerable<ZoneDisplayModel>> GetZones(int farmId, bool trackChanges)
         {
-            ////var ZonesModel = await repositoryManager.Zone.GetZones(farmId, trackChanges);
-            ////var result = mapper.Map<IEnumerable<ZoneDisplayModel>>(ZonesModel);
             string query = ZoneQuery.GetZoneSQL;
             IEnumerable<ZoneDisplayModel> result;
             using (var connection = dapperContext.CreateConnection())
             {
-                result = connection.Query<ZoneDisplayModel>(query, new { FarmId = farmId });
+                result = await connection.QueryAsync<ZoneDisplayModel>(query, new { FarmId = farmId });
             }
             return result;
         }
@@ -46,16 +44,18 @@ namespace Service
         public async Task<bool> RemoveZone(int id)
         {
             repositoryManager.Zone.DeleteZone(id);
-            await repositoryManager.SaveAsync();
-            return true;
+            var isChange = await repositoryManager.SaveAsync();
+            return isChange > 0;
         }
 
         public async Task<bool> UpdateZone(ZoneUpdateModel updateModel)
         {
             try
             {
-                repositoryManager.Zone.UpdateZone(updateModel);
-                return await Task.FromResult(true);
+                var entity = mapper.Map<ZoneEntity>(updateModel);
+                repositoryManager.Zone.UpdateZone(entity);
+                int isChange = await repositoryManager.SaveAsync();
+                return isChange > 0;
             }
             catch (Exception ex)
             {

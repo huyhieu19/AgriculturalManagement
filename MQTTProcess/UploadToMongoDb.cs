@@ -177,7 +177,7 @@ namespace MQTTProcess
         private async Task ProcessAndSaveDataAsync(List<InstrumentValueByFiveSecondEntity> data)
         {
             // Process and save the list of data, for example, you can save it to a database
-            await dataStatisticsService.PushDatasToDB(data);
+            await dataStatisticsService.PushMultipleDataToDB(data);
         }
 
         private void StartAsync()

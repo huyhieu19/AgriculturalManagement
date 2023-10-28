@@ -25,12 +25,12 @@ namespace Service
             throw new NotImplementedException();
         }
 
-        public async Task PushDatasToDB(List<InstrumentValueByFiveSecondEntity> addModel)
+        public async Task PushMultipleDataToDB(List<InstrumentValueByFiveSecondEntity> addModels)
         {
             try
             {
                 logger.LogInformation($"Push multiple start payload");
-                await instrumentValue.InsertManyAsync(addModel);
+                await instrumentValue.InsertManyAsync(addModels);
                 logger.LogInformation("Push end");
             }
             catch

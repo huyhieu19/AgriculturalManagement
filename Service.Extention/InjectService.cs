@@ -5,14 +5,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Service.Contracts;
 using System.Text;
 
 namespace Service.Extention
 {
     public static class InjectService
     {
-        public static void ConfigureLoggerService(this IServiceCollection service) => service.AddSingleton<ILoggerManager, LoggerManager>();
         public static void ConfigureIdentity(this IServiceCollection services)
         {
             services.AddIdentity<UserEntity, IdentityRole>(o =>
@@ -53,23 +51,5 @@ namespace Service.Extention
                 };
             });
         }
-
-        //// không phù hợp vì kết quả sai
-        ////public static void ConfigureResponseCaching(this IServiceCollection service)
-        ////{
-        ////    service.AddResponseCaching();
-        ////}
-        ////// Add config http cache of Marvin.Cache.Headers
-        ////public static void ConfigureHttpCacheHeaders(this IServiceCollection services) => services.AddHttpCacheHeaders(
-        ////(expirationOpt) =>
-        ////{
-        ////    expirationOpt.MaxAge = 60;
-        ////    expirationOpt.CacheLocation = CacheLocation.Private;
-        ////},
-        ////(validationOpt) =>
-        ////{
-        ////    validationOpt.MustRevalidate = true;
-        ////}
-        ////);
     }
 }
