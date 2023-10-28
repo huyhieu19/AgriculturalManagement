@@ -27,7 +27,7 @@ namespace Service
         {
             try
             {
-                _logger.LogInfomation("Create farm in Farm service layer");
+                _logger.LogInformation("Create farm in Farm service layer");
                 var companyEntity = _mapper.Map<FarmEntity>(createModel);
                 repositoryManager.Farm.CreateFarm(companyEntity);
                 await repositoryManager.SaveAsync();
@@ -43,7 +43,7 @@ namespace Service
         {
             try
             {
-                _logger.LogInfomation("Get all farms in Service layer");
+                _logger.LogInformation("Get all farms in Service layer");
                 var farms = await repositoryManager.Farm.GetAllFarm(trackChanges);
                 var farmsDisplayModel = _mapper.Map<IEnumerable<FarmDisplayModel>>(farms);
                 return farmsDisplayModel;
@@ -58,14 +58,14 @@ namespace Service
         {
             try
             {
-                _logger.LogInfomation($"Farm Service| Get farm by user | start ");
+                _logger.LogInformation($"Farm Service| Get farm by user | start ");
                 string query = FarmQuery.GetFarmSQL;
                 IEnumerable<FarmDisplayModel> response;
                 using (var connection = dapperContext.CreateConnection())
                 {
                     response = await connection.QueryAsync<FarmDisplayModel>(query, new { UserID = userId });
                 }
-                _logger.LogInfomation($"Farm Service | Get farm by user | end ");
+                _logger.LogInformation($"Farm Service | Get farm by user | end ");
                 return response;
             }
             catch (Exception ex)
@@ -93,7 +93,7 @@ namespace Service
         {
             try
             {
-                _logger.LogInfomation($"Farm Service | Remove Farm: {id}");
+                _logger.LogInformation($"Farm Service | Remove Farm: {id}");
                 repositoryManager.Farm.DeleteFarm(id, userId);
                 await repositoryManager.SaveAsync();
                 return true;
@@ -108,7 +108,7 @@ namespace Service
         {
             try
             {
-                _logger.LogInfomation($"Farm Service | Udpate Farm: {updateModel}");
+                _logger.LogInformation($"Farm Service | Udpate Farm: {updateModel}");
                 repositoryManager.Farm.UpdateFarm(updateModel);
                 return await Task.FromResult(true);
             }

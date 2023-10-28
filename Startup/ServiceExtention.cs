@@ -1,5 +1,4 @@
 ﻿using Database;
-using JobBackground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,7 +37,6 @@ namespace Startup
             builder.Services.AddSingleton<IEspBackgroundProcessService, EspBackgroundProcessService>();
 
             builder.Services.AddSingleton<ICustomServiceStopper, UploadToMongoDb>();
-            builder.Services.AddSingleton<UPload>();
 
 
             //builder.Services.AddHostedService<JobSchedulerDeviceDriver>();

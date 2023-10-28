@@ -23,9 +23,9 @@ namespace Repository
         {
             try
             {
-                logger.LogInfomation($"FarmRepository | Create | start ");
+                logger.LogInformation($"FarmRepository | Create | start ");
                 Create(entity);
-                logger.LogInfomation($"FarmRepository | Create | end ");
+                logger.LogInformation($"FarmRepository | Create | end ");
             }
             catch (Exception ex)
             {
@@ -38,10 +38,10 @@ namespace Repository
         {
             try
             {
-                logger.LogInfomation($"FarmRepository | Delete: {id} | start ");
+                logger.LogInformation($"FarmRepository | Delete: {id} | start ");
                 var entity = FindByCondition(p => p.Id == id && p.UserId == UserId, false).First();
                 Delete(entity);
-                logger.LogInfomation($"FarmRepository | Delete | end ");
+                logger.LogInformation($"FarmRepository | Delete | end ");
             }
             catch (Exception ex)
             {
@@ -58,7 +58,7 @@ namespace Repository
         {
             try
             {
-                logger.LogInfomation($"FarmRepository | Update: Id = {model.Id}| start ");
+                logger.LogInformation($"FarmRepository | Update: Id = {model.Id}| start ");
                 var param = new DynamicParameters(model);
 
                 using (var connection = dapperContext.CreateConnection())
@@ -72,7 +72,7 @@ namespace Repository
                     connection.Close();
                 }
 
-                logger.LogInfomation($"FarmRepository | Update | end ");
+                logger.LogInformation($"FarmRepository | Update | end ");
 
             }
             catch (Exception ex)

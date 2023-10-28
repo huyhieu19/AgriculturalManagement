@@ -29,22 +29,22 @@ namespace Service
         {
             try
             {
-                logger.LogInfomation($"Push multiple start payload");
+                logger.LogInformation($"Push multiple start payload");
                 await instrumentValue.InsertManyAsync(addModel);
-                logger.LogInfomation("Push end");
+                logger.LogInformation("Push end");
             }
             catch
             {
-                logger.LogInfomation("Exception PushDatasToDB");
+                logger.LogInformation("Exception PushDatasToDB");
                 throw;
             }
         }
 
         public async Task PushDataToDB(InstrumentValueByFiveSecondEntity addModel)
         {
-            logger.LogInfomation($"Push start payload: {addModel.PayLoad}, topic: {addModel.Topic}");
+            logger.LogInformation($"Push start payload: {addModel.PayLoad}, topic: {addModel.Topic}");
             await instrumentValue.InsertOneAsync(addModel);
-            logger.LogInfomation("Push end");
+            logger.LogInformation("Push end");
         }
 
         public Task StatisticsDay()

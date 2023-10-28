@@ -72,7 +72,7 @@ namespace Service
         {
             try
             {
-                _logger.LogInfomation("AuthenticationService - CreateToken");
+                _logger.LogInformation("AuthenticationService - CreateToken");
 
                 var signingCredentials = GetSigningCredentials(); // Tạo chữ kí số
                 var claims = await GetClaims(); // Lấy ra những vai trò của user
@@ -100,7 +100,7 @@ namespace Service
 
             try
             {
-                _logger.LogInfomation("AuthenticationService - RegisterUser");
+                _logger.LogInformation("AuthenticationService - RegisterUser");
                 var user = mapper.Map<UserEntity>(userRegisterationModel);
                 var result = await userManager.CreateAsync(user,
                 userRegisterationModel.Password!);
@@ -143,6 +143,8 @@ namespace Service
                     new Claim("Email", _user.Email!),
                     new Claim("PhoneNumber", _user.PhoneNumber ?? ""),
                     new Claim("Address", _user.Address ?? ""),
+                    new Claim(ClaimTypes.Name, _user.UserName ?? ""),
+                    new Claim(ClaimTypes.NameIdentifier, _user.Id ?? ""),
                 };
             var roles = await userManager.GetRolesAsync(_user);
             foreach (var role in roles)
@@ -173,7 +175,7 @@ namespace Service
 
         private string GenerateRefreshToken()
         {
-            _logger.LogInfomation("AuthenticationService - GenerateRefreshToken");
+            _logger.LogInformation("AuthenticationService - GenerateRefreshToken");
             var ramdomNumber = new byte[32];
 
             using (var rng = RandomNumberGenerator.Create())
@@ -220,7 +222,16 @@ namespace Service
         {
             var principal = GetPrincipalFromExpiredToken(tokenModel.AccessToken);
 
-            var user = await userManager.FindByNameAsync(principal.Identity!.Name!);
+            var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                throw new SecurityTokenException("User Id not found in the token.");
+            }
+            var user = await userManager.FindByIdAsync(userId);
+
+            /// var user = await userManager.FindByNameAsync(principal.Identity!.Name!); // you can use this line if you used claim Type Name in method get name
+
             if (user == null || user.RefreshToken != tokenModel.RefreshToken)
             {
                 throw new AggregateException("Invalid client request. The tokenDto has some invalid values.");

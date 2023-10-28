@@ -8,14 +8,6 @@ namespace MQTTProcess
         {
             MqttClient client = new MqttClient(broker, port, false, MqttSslProtocols.None, null, null);
             client.Connect(clientId, username, password);
-            //if (client.IsConnected)
-            //{
-            //    logger.LogInfomation("Connected to MQTT Broker");
-            //}
-            //else
-            //{
-            //    logger.LogInfomation("Failed to connect");
-            //}
             return client;
         }
     }

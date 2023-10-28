@@ -4,7 +4,7 @@ using Models;
 using Service.Contracts;
 using System.Security.Claims;
 
-namespace AgriculturalManagement.Controllers
+namespace AgriculturalManagement.Controllers.Farm
 {
     [Route("api/Farm")]
     [ApiController]

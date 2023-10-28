@@ -126,7 +126,7 @@ namespace Service
         // Hàm này dùng để set cho trạng thái của IsRemve = true và IsSuccess = true
         public async Task DeleteTimer(int id)
         {
-            logger.LogInfomation($"DeviceDriver: Set status to complete --> DeviceDriverId: {id}");
+            logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {id}");
             var query = TimerDeviceDriverQuery.RemoveTimerSQL;
             var connection = dapperContext.CreateConnection();
             connection.Open();

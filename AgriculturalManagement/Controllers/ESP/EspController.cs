@@ -36,10 +36,10 @@ namespace AgriculturalManagement.Controllers.ESP
             return Ok(true);
         }
 
-        [HttpGet("Restart")]
-        public async Task Restart()
-        {
-            await customServiceStopper.RestartJobBackground();
-        }
+        // [HttpGet("Restart")]
+        // public async Task<bool> Restart()
+        // {
+        //     return await customServiceStopper.RestartJobBackground();
+        // }
     }
 }
