@@ -32,14 +32,13 @@ namespace AgriculturalManagement.Controllers.ESP
         [HttpPost("esp")]
         public async Task<ActionResult<bool>> Create(EspCreateModel model)
         {
-            await _serviceManager.EspService.CreateEsp(model);
-            return Ok(true);
+            return await _serviceManager.EspService.CreateEsp(model);
         }
 
-        // [HttpGet("Restart")]
-        // public async Task<bool> Restart()
-        // {
-        //     return await customServiceStopper.RestartJobBackground();
-        // }
+        //[HttpGet("Restart")]
+        //public async Task<bool> Restart()
+        //{
+        //    return await customServiceStopper.RestartJobBackground();
+        //}
     }
 }

@@ -36,7 +36,7 @@ namespace Startup
 
             // Inject background service
             builder.Services.AddHostedService<UploadToMongoDb>();
-            builder.Services.AddHostedService<JobForDeviceDriverService>();
+            //builder.Services.AddHostedService<JobForDeviceDriverService>();
             builder.Services.AddHostedService<JobThresholdService>();
 
             builder.Services.AddControllers();
