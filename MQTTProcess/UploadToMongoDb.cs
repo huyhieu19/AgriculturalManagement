@@ -10,7 +10,7 @@ namespace MQTTProcess
 {
     public interface ICustomServiceStopper
     {
-        Task RestartJobBackground();
+        Task<bool> RestartJobBackground();
     }
     public class UploadToMongoDb : BackgroundService, ICustomServiceStopper
     {
@@ -20,8 +20,10 @@ namespace MQTTProcess
         private static List<InstrumentValueByFiveSecondEntity> messageList = new List<InstrumentValueByFiveSecondEntity>();
         private static int messageCount = 0;
         private const int maxMessageCount = 50;
-        private static bool isBreak = false;
-        private MqttClient? client;
+        private static bool isBreakLoop = false;
+        private static bool isContinue = false;
+        private static MqttClient? mqttClient;
+        private static int countBreak = 0;
 
 
         public UploadToMongoDb(IDataStatisticsService dataStatisticsService,
@@ -37,64 +39,90 @@ namespace MQTTProcess
         {
             try
             {
-                logger.LogInfomation("Call background service");
 
+                logger.LogInformation("Call background service");
 
                 var Esps = await espBackgroundProcessService.GetAll();
-                if (client != null && client.IsConnected)
+
+                if (mqttClient != null && mqttClient.IsConnected)
                 {
                     // Ngắt kết nối MQTT cũ
-                    client.Disconnect();
+                    mqttClient.Disconnect();
                 }
-
+                SetCountBreakToZero();
                 while (!stoppingToken.IsCancellationRequested)
                 {
-                    logger.LogInfomation("Check connection MQTT");
-                    if (client == null || !client.IsConnected)
+                    if (countBreak >= 500 || countBreak == 0)
                     {
-                        List<string> mqttTopics = new List<string>();
-                        List<byte> msgBases = new List<byte>();
-                        client = Mqtt.ConnectMQTT("broker.emqx.io", 1883, "abc", "abc", "abc");
-                        logger.LogInfomation("Connected to MQTT Broker");
-                        foreach (var Esp in Esps)
+                        logger.LogInformation("Check connection MQTT");
+                        if (mqttClient == null || !mqttClient.IsConnected)
                         {
-                            // client = Mqtt.ConnectMQTT(Esp.MqttServer, Esp.MqttPort, Esp.ClientId, Esp.UserName, Esp.Password);
-
-                            string mqttTopic = $"{Esp.Id}/{Esp.TopicDevice}/{Esp.InstrumentationId}";
-                            mqttTopics.Add(mqttTopic);
-
-                            msgBases.Add(MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE);
-
-                            logger.LogInfomation("Sub " + mqttTopic);
+                            mqttClient = Mqtt.ConnectMQTT("broker.emqx.io", 1883, "abc", "abc", "abc");
+                            List<string> mqttTopics = new List<string>();
+                            List<byte> msgBases = new List<byte>();
+                            logger.LogInformation("Connected to MQTT Broker");
+                            foreach (var Esp in Esps)
+                            {
+                                string mqttTopic = $"{Esp.Id}/{Esp.TopicDevice}/{Esp.InstrumentationId}";
+                                mqttTopics.Add(mqttTopic);
+                                msgBases.Add(MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE);
+                                logger.LogInformation("Sub -> " + mqttTopic);
+                            }
+                            Subscribe(mqttClient!, mqttTopics.ToArray(), msgBases.ToArray());
                         }
-                        Subscribe(client!, mqttTopics.ToArray(), msgBases.ToArray());
+                        SetCountBreakToOne();
                     }
-                    if (UploadToMongoDb.isBreak)
+                    if (UploadToMongoDb.isBreakLoop)
                     {
-                        logger.LogInfomation("Break + DisConnect mqtt");
-                        client?.Disconnect();
+                        logger.LogInformation("Break + DisConnect mqtt");
+                        mqttClient?.Disconnect();
+                        SetIsBreakLoopToFalse();
+                        SetContinueToTrue();
                         break;
                     }
-                    await Task.Delay(TimeSpan.FromSeconds(5)); // Đợi một khoảng thời gian trước khi kiểm tra lại kết nối.
+                    await Task.Delay(TimeSpan.FromSeconds(0.01));
+                    SetCountBreakPlusOne();
                 }
-                client?.Disconnect();
-                logger.LogInfomation("Break + DisConnect mqtt");
-                await Task.CompletedTask;
+
             }
             catch
             {
-                NotBreak();
+                SetIsBreakLoopToFalse();
+                logger.LogWarning("MQTT Subscribe topic or push data have an exception");
                 throw;
             }
         }
-
-        private static void NotBreak()
+        private static void SetIsBreakLoopToFalse()
         {
-            UploadToMongoDb.isBreak = false;
+            UploadToMongoDb.isBreakLoop = false;
         }
-        private static void MustBreak()
+        private static void SetIsBreakLoopToTrue()
         {
-            UploadToMongoDb.isBreak = true;
+            UploadToMongoDb.isBreakLoop = true;
+        }
+        private static void SetContinueToTrue()
+        {
+            UploadToMongoDb.isContinue = true;
+        }
+        private static void SetCountBreakToZero()
+        {
+            UploadToMongoDb.countBreak = 0;
+        }
+        private static void SetCountBreakToOne()
+        {
+            UploadToMongoDb.countBreak = 1;
+        }
+        private static void SetCountBreakPlusOne()
+        {
+            UploadToMongoDb.countBreak += 1;
+        }
+        private static void SetMessageCountPlusOne()
+        {
+            UploadToMongoDb.messageCount++;
+        }
+        private static void SetMessageCountToZero()
+        {
+            UploadToMongoDb.messageCount = 0;
         }
 
         private void Subscribe(MqttClient client1, string[] topics, byte[] msgBases)
@@ -121,25 +149,27 @@ namespace MQTTProcess
                 messageList.Add(entity);
 
                 // Increment the message count
-                messageCount++;
+                SetMessageCountPlusOne();
 
-                logger.LogInfomation($"Received `{payload}` from `{e.Topic}` topic");
+                logger.LogInformation($"Received `{payload}` from `{e.Topic}` topic");
 
                 if (messageCount >= maxMessageCount)
                 {
                     // If the message count reaches the maximum, process and save the data
-                    await ProcessAndSaveDataAsync(messageList);
-
+                    await Task.Run(async () =>
+                    {
+                        await ProcessAndSaveDataAsync(messageList);
+                    });
                     // Clear the list and reset the message count
                     messageList.Clear();
-                    messageCount = 0;
+                    SetMessageCountToZero();
                 }
             }
             catch
             {
                 await ProcessAndSaveDataAsync(messageList);
                 messageList.Clear();
-                messageCount = 0;
+                SetMessageCountToZero();
                 throw;
             }
         }
@@ -147,28 +177,31 @@ namespace MQTTProcess
         private async Task ProcessAndSaveDataAsync(List<InstrumentValueByFiveSecondEntity> data)
         {
             // Process and save the list of data, for example, you can save it to a database
-            await dataStatisticsService.PushDatasToDB(data);
+            await dataStatisticsService.PushMultipleDataToDB(data);
         }
 
-        private async Task StopAsync()
+        private void StartAsync()
         {
-            MustBreak();
-            await Task.Delay(5010);
-            await Task.CompletedTask;
-        }
-
-        private async Task StartAsync()
-        {
-            NotBreak();
+            Mutex mutex = new Mutex();
+            mutex.WaitOne();
             CancellationToken cancellationToken = CancellationToken.None;
-            ExecuteAsync(cancellationToken);
-            await Task.CompletedTask;
+            while (true)
+            {
+                if (UploadToMongoDb.isContinue)
+                {
+                    ExecuteAsync(cancellationToken);
+                    break;
+                }
+            }
+            mutex.ReleaseMutex();
         }
 
-        public async Task RestartJobBackground()
+        public async Task<bool> RestartJobBackground()
         {
-            await StopAsync();
-            await StartAsync();
+            SetIsBreakLoopToTrue();
+            await Task.Delay(TimeSpan.FromSeconds(0.5));
+            StartAsync();
+            return true;
         }
     }
 }

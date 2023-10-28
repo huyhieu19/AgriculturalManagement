@@ -22,10 +22,10 @@ namespace Service.BackgroundJob
             // Run every 5 seconds
             while (!stoppingToken.IsCancellationRequested)
             {
-                logger.LogInfomation("Start JobThresholdService");
+                logger.LogInformation("Start JobThresholdService");
                 await AutoOnOffAccordingToThreshold(); // Simulate work.
 
-                logger.LogInfomation("End JobThresholdService");
+                logger.LogInformation("End JobThresholdService");
                 await Task.Delay(TimeSpan.FromMinutes(2), stoppingToken);
             }
         }

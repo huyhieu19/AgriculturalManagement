@@ -2,7 +2,7 @@
 using Models;
 using Service.Contracts;
 
-namespace AgriculturalManagement.Controllers
+namespace AgriculturalManagement.Controllers.Device
 {
     [Route("api/Instrumentation")]
     [ApiController]

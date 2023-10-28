@@ -25,26 +25,26 @@ namespace Service
             throw new NotImplementedException();
         }
 
-        public async Task PushDatasToDB(List<InstrumentValueByFiveSecondEntity> addModel)
+        public async Task PushMultipleDataToDB(List<InstrumentValueByFiveSecondEntity> addModels)
         {
             try
             {
-                logger.LogInfomation($"Push multiple start payload");
-                await instrumentValue.InsertManyAsync(addModel);
-                logger.LogInfomation("Push end");
+                logger.LogInformation($"Push multiple start payload");
+                await instrumentValue.InsertManyAsync(addModels);
+                logger.LogInformation("Push end");
             }
             catch
             {
-                logger.LogInfomation("Exception PushDatasToDB");
+                logger.LogInformation("Exception PushDatasToDB");
                 throw;
             }
         }
 
         public async Task PushDataToDB(InstrumentValueByFiveSecondEntity addModel)
         {
-            logger.LogInfomation($"Push start payload: {addModel.PayLoad}, topic: {addModel.Topic}");
+            logger.LogInformation($"Push start payload: {addModel.PayLoad}, topic: {addModel.Topic}");
             await instrumentValue.InsertOneAsync(addModel);
-            logger.LogInfomation("Push end");
+            logger.LogInformation("Push end");
         }
 
         public Task StatisticsDay()
