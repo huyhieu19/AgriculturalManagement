@@ -14,11 +14,11 @@ namespace AgriculturalManagement.Controllers.ESP
         private readonly IServiceManager _serviceManager;
         private readonly IDataStatisticsService dataStatisticsService;
         private readonly IEspBackgroundProcessService espBackgroundProcessService;
-        private readonly ICustomServiceStopper customServiceStopper;
+        private readonly IRestartAsyncMQTTService customServiceStopper;
         public EspController(IServiceManager serviceManager
             , IDataStatisticsService dataStatisticsService
             , IEspBackgroundProcessService espBackgroundProcessService,
-            ICustomServiceStopper customServiceStopper)
+            IRestartAsyncMQTTService customServiceStopper)
         {
             _serviceManager = serviceManager;
             this.dataStatisticsService = dataStatisticsService;

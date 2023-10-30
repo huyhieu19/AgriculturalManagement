@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgriculturalManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class Addcolumn20231019 : Migration
+    public partial class Adddatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,12 +17,10 @@ namespace AgriculturalManagement.Migrations
                 name: "DeviceDriverType",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -30,16 +28,32 @@ namespace AgriculturalManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Esp",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MqttServer = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "ff45c897-e383-44a7-ad38-10d27785f315"),
+                    MqttPort = table.Column<int>(type: "int", nullable: false, defaultValue: 1883),
+                    ClientId = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "ClientId"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "emqx"),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "public"),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Esp", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "InstrumentationType",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -102,7 +116,6 @@ namespace AgriculturalManagement.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -153,9 +166,10 @@ namespace AgriculturalManagement.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Area = table.Column<double>(type: "float", nullable: true),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -260,6 +274,7 @@ namespace AgriculturalManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ZoneName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Area = table.Column<double>(type: "float", nullable: true),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TimeToStartPlanting = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Function = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -288,12 +303,15 @@ namespace AgriculturalManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateStartedUsing = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsAction = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    IsProblem = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     IsAuto = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeviceDriverTypeId = table.Column<int>(type: "int", nullable: true),
-                    ZoneId = table.Column<int>(type: "int", nullable: true)
+                    DeviceDriverTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ZoneId = table.Column<int>(type: "int", nullable: true),
+                    EspId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Gpio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Topic = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "D")
                 },
                 constraints: table =>
                 {
@@ -302,6 +320,11 @@ namespace AgriculturalManagement.Migrations
                         name: "FK_DeviceDriver_DeviceDriverType_DeviceDriverTypeId",
                         column: x => x.DeviceDriverTypeId,
                         principalTable: "DeviceDriverType",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DeviceDriver_Esp_EspId",
+                        column: x => x.EspId,
+                        principalTable: "Esp",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_DeviceDriver_Zone_ZoneId",
@@ -322,11 +345,19 @@ namespace AgriculturalManagement.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: true),
                     DateStartedUsing = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ZoneId = table.Column<int>(type: "int", nullable: true),
-                    InstrumentationTypeId = table.Column<int>(type: "int", nullable: true)
+                    InstrumentationTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EspId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Gpio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Topic = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "I")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Instrumentation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Instrumentation_Esp_EspId",
+                        column: x => x.EspId,
+                        principalTable: "Esp",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Instrumentation_InstrumentationType_InstrumentationTypeId",
                         column: x => x.InstrumentationTypeId,
@@ -514,25 +545,27 @@ namespace AgriculturalManagement.Migrations
 
             migrationBuilder.InsertData(
                 table: "DeviceDriverType",
-                columns: new[] { "Id", "Description", "ImageUrl", "Manufacturer", "Name" },
+                columns: new[] { "Id", "Description", "Manufacturer", "Name" },
                 values: new object[,]
                 {
-                    { 1, null, null, null, "Máy bơm" },
-                    { 2, null, null, null, "Quạt gió" },
-                    { 3, null, null, null, "Rèm cửa" }
+                    { new Guid("032d4594-88fd-43af-bb83-9ea4351ed488"), null, null, "Quạt gió" },
+                    { new Guid("0f0ae0bc-0454-42db-8c21-338a69448925"), null, null, "Quạt gió" },
+                    { new Guid("134d6c68-d44c-4bad-b1e5-8e30aadf2c53"), null, null, "Rèm cửa" },
+                    { new Guid("448baf97-9401-4aaa-a636-9d8512d7c5a4"), null, null, "Máy bơm" },
+                    { new Guid("add310fe-34e9-4b07-8d66-38a16bc2b177"), null, null, "Máy bơm" }
                 });
 
             migrationBuilder.InsertData(
                 table: "InstrumentationType",
-                columns: new[] { "Id", "Description", "ImageUrl", "Manufacturer", "Name", "Unit" },
+                columns: new[] { "Id", "Description", "Manufacturer", "Name", "Unit" },
                 values: new object[,]
                 {
-                    { 1, null, null, null, "Cảm biến đo nhiệt độ", "*C" },
-                    { 2, null, null, null, "Cảm biến đo độ ẩm không khí", "%" },
-                    { 3, null, null, null, "Cảm biến nước mưa", null },
-                    { 4, null, null, null, "Cảm biên gió", "Km/h" },
-                    { 5, null, null, null, "Độ ẩm đất", "%" },
-                    { 6, null, null, null, "Cảm biên đo độ PH của đất", "PH" }
+                    { new Guid("1c44a06c-e539-4ead-8c62-fc7d56ec9e34"), null, null, "Độ ẩm đất", "%" },
+                    { new Guid("3057e9c9-b039-489b-be7b-581a751ca4cb"), null, null, "Cảm biên đo độ PH của đất", "PH" },
+                    { new Guid("743b3068-bb94-41f4-bd10-7f4ed802a36c"), null, null, "Cảm biến đo nhiệt độ, độ ẩm không khí", "*C/%" },
+                    { new Guid("97f47bef-17cc-45c3-9fbf-69ef9364e12f"), null, null, "Cảm biên gió", "Km/h" },
+                    { new Guid("b6976895-e254-487e-a59c-c22621b2c54a"), null, null, "Cảm biến nước mưa", "true/false" },
+                    { new Guid("d67fb159-c95d-4c67-8f2e-065f14fc5e58"), null, null, "Cảm biến đo nhiệt độ, độ ẩm không khí", "*C/%" }
                 });
 
             migrationBuilder.InsertData(
@@ -540,8 +573,8 @@ namespace AgriculturalManagement.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "13015d4d-63db-4a46-98e3-6f5f89fea024", null, "Administrator", "ADMINISTRATOR" },
-                    { "5282e09c-ef56-4323-b52b-f5f00562f356", null, "Manager", "MANAGER" }
+                    { "27cff7a9-5dd2-4300-9185-d7be99c4da16", null, "Manager", "MANAGER" },
+                    { "efd37bbc-5fa6-45ba-a749-bf93cdadbf60", null, "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
@@ -575,6 +608,11 @@ namespace AgriculturalManagement.Migrations
                 name: "IX_DeviceDriver_DeviceDriverTypeId",
                 table: "DeviceDriver",
                 column: "DeviceDriverTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeviceDriver_EspId",
+                table: "DeviceDriver",
+                column: "EspId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceDriver_ZoneId",
@@ -615,6 +653,11 @@ namespace AgriculturalManagement.Migrations
                 name: "IX_Image_ZoneId",
                 table: "Image",
                 column: "ZoneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Instrumentation_EspId",
+                table: "Instrumentation",
+                column: "EspId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Instrumentation_InstrumentationTypeId",
@@ -754,6 +797,9 @@ namespace AgriculturalManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "DeviceDriverType");
+
+            migrationBuilder.DropTable(
+                name: "Esp");
 
             migrationBuilder.DropTable(
                 name: "Zone");

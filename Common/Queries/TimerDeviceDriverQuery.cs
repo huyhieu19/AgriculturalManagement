@@ -2,12 +2,11 @@
 {
     public static class TimerDeviceDriverQuery
     {
-        public const string GetAllTimerSQL = 
+        public const string GetAllTimerSQL =
             @"SELECT 
                 TDD.*,
 		        DD.IsAuto,
-		        DD.IsAction,
-		        DD.IsProblem
+		        DD.IsAction
 		
             FROM 
                 TimerDeviceDriver TDD
@@ -16,12 +15,11 @@
             ON 
                 DD.ID = TDD.DeviceDriverId";
 
-        public const string GetAllTimerByDeviceDriverSQL = 
+        public const string GetAllTimerByDeviceDriverSQL =
             @"SELECT 
                 TDD.*,
 		        DD.IsAuto,
-		        DD.IsAction,
-		        DD.IsProblem
+		        DD.IsAction
 		
             FROM 
                 TimerDeviceDriver TDD
