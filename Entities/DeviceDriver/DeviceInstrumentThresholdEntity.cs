@@ -3,7 +3,6 @@
     public class DeviceInstrumentThresholdEntity
     {
         public int Id { get; set; }
-
         public int DeviceDriverId { get; set; }
         public DeviceDriverEntity? DeviceDriver { get; set; }
         public int InstrumentationId { get; set; }

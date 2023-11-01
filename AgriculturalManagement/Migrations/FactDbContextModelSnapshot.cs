@@ -17,7 +17,7 @@ namespace AgriculturalManagement.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -33,8 +33,8 @@ namespace AgriculturalManagement.Migrations
                     b.Property<DateTime?>("DateStartedUsing")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DeviceDriverTypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("DeviceDriverTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("EspId")
                         .HasColumnType("uniqueidentifier");
@@ -52,16 +52,10 @@ namespace AgriculturalManagement.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsProblem")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Topic")
-                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValue("D");
@@ -82,11 +76,9 @@ namespace AgriculturalManagement.Migrations
 
             modelBuilder.Entity("Entities.DeviceDriverTypeEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -105,17 +97,27 @@ namespace AgriculturalManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("448baf97-9401-4aaa-a636-9d8512d7c5a4"),
                             Name = "Máy bơm"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("add310fe-34e9-4b07-8d66-38a16bc2b177"),
+                            Name = "Máy bơm"
+                        },
+                        new
+                        {
+                            Id = new Guid("0f0ae0bc-0454-42db-8c21-338a69448925"),
                             Name = "Quạt gió"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = new Guid("032d4594-88fd-43af-bb83-9ea4351ed488"),
+                            Name = "Quạt gió"
+                        },
+                        new
+                        {
+                            Id = new Guid("134d6c68-d44c-4bad-b1e5-8e30aadf2c53"),
                             Name = "Rèm cửa"
                         });
                 });
@@ -175,7 +177,7 @@ namespace AgriculturalManagement.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("1bae7e9a-6bb6-455b-b84c-ea3bd4b51937");
+                        .HasDefaultValue("ff45c897-e383-44a7-ad38-10d27785f315");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -229,6 +231,7 @@ namespace AgriculturalManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -306,8 +309,8 @@ namespace AgriculturalManagement.Migrations
                     b.Property<string>("Gpio")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("InstrumentationTypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("InstrumentationTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
@@ -341,11 +344,9 @@ namespace AgriculturalManagement.Migrations
 
             modelBuilder.Entity("Entities.InstrumentationTypeEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -367,36 +368,37 @@ namespace AgriculturalManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Name = "Cảm biến đo nhiệt độ",
-                            Unit = "*C"
+                            Id = new Guid("743b3068-bb94-41f4-bd10-7f4ed802a36c"),
+                            Name = "Cảm biến đo nhiệt độ, độ ẩm không khí",
+                            Unit = "*C/%"
                         },
                         new
                         {
-                            Id = 2,
-                            Name = "Cảm biến đo độ ẩm không khí",
-                            Unit = "%"
+                            Id = new Guid("d67fb159-c95d-4c67-8f2e-065f14fc5e58"),
+                            Name = "Cảm biến đo nhiệt độ, độ ẩm không khí",
+                            Unit = "*C/%"
                         },
                         new
                         {
-                            Id = 3,
-                            Name = "Cảm biến nước mưa"
+                            Id = new Guid("b6976895-e254-487e-a59c-c22621b2c54a"),
+                            Name = "Cảm biến nước mưa",
+                            Unit = "true/false"
                         },
                         new
                         {
-                            Id = 4,
-                            Name = "Cảm biên gió",
-                            Unit = "Km/h"
-                        },
-                        new
-                        {
-                            Id = 5,
+                            Id = new Guid("1c44a06c-e539-4ead-8c62-fc7d56ec9e34"),
                             Name = "Độ ẩm đất",
                             Unit = "%"
                         },
                         new
                         {
-                            Id = 6,
+                            Id = new Guid("97f47bef-17cc-45c3-9fbf-69ef9364e12f"),
+                            Name = "Cảm biên gió",
+                            Unit = "Km/h"
+                        },
+                        new
+                        {
+                            Id = new Guid("3057e9c9-b039-489b-be7b-581a751ca4cb"),
                             Name = "Cảm biên đo độ PH của đất",
                             Unit = "PH"
                         });
@@ -863,13 +865,13 @@ namespace AgriculturalManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ef61575c-391c-48fc-824e-c55b822701e9",
+                            Id = "27cff7a9-5dd2-4300-9185-d7be99c4da16",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "7005dc2b-3ce5-4f8d-9447-528909adc686",
+                            Id = "efd37bbc-5fa6-45ba-a749-bf93cdadbf60",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -1023,7 +1025,8 @@ namespace AgriculturalManagement.Migrations
                 {
                     b.HasOne("Entities.UserEntity", "User")
                         .WithMany("Farms")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

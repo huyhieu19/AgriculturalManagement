@@ -10,11 +10,10 @@ namespace Entities
         public string? Name { get; set; }
         public DateTime? DateStartedUsing { get; set; }
         public bool IsAction { get; set; } = false;
-        public bool IsProblem { get; set; } = false;
         public bool IsAuto { get; set; } = false;
 
         [ForeignKey("DeviceDriverType")]
-        public int? DeviceDriverTypeId { get; set; }
+        public Guid? DeviceDriverTypeId { get; set; }
         public DeviceDriverTypeEntity? DeviceDriverType { get; set; }
 
         [ForeignKey("Zone")]
@@ -25,7 +24,7 @@ namespace Entities
         public Esp8266Entity? Esp8266 { get; set; }
         public string? Gpio { get; set; }
 
-        public string Topic { get; set; } = null!;
+        public string? Topic { get; set; }
 
         public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates
         { get; set; }
