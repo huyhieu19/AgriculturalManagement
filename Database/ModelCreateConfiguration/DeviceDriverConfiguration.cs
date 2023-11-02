@@ -17,12 +17,6 @@ namespace Database.ModelCreateConfiguration
 
             builder.Property(p => p.Topic).HasDefaultValue("D");
 
-
-            builder.HasOne(p => p.DeviceDriverType)
-                .WithMany(p => p.DeviceDrivers)
-                .HasForeignKey(p => p.DeviceDriverTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
             builder.HasOne(p => p.Zone)
                 .WithMany(p => p.ZoneDeviceDrivers)
                 .HasForeignKey(p => p.ZoneId)

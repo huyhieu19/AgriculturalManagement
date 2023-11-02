@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Entities.ESP;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
@@ -12,6 +13,9 @@ namespace Entities
         public bool? IsActive { get; set; } = false;
         public DateTime? DateStartedUsing { get; set; }
 
+        public Guid DeviceTypeId { get; set; }
+        public DeviceTypeOnEspEntity DeviceType { get; set; }
+
         [ForeignKey("Zone")]
         public int? ZoneId { get; set; }
 
@@ -20,7 +24,7 @@ namespace Entities
         public Guid? InstrumentationTypeId { get; set; }
 
         public Guid? EspId { get; set; }
-        public Esp8266Entity? Esp8266 { get; set; }
+        public EspEntity? Esp8266 { get; set; }
 
         public string? Gpio { get; set; }
 
@@ -31,7 +35,6 @@ namespace Entities
         }
 
         public InstrumentationTypeEntity? InstrumentationType { get; set; }
-        public ICollection<MachineWarranlyDateEntity>? MachineWarranlyDates { get; set; }
         public ICollection<DeviceInstrumentThresholdEntity>? DeviceInstrumentOnOffs { get; set; }
     }
 }

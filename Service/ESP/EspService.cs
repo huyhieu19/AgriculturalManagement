@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Entities;
+using Entities.ESP;
 using Models;
 using Repository.Contracts;
 using Service.Contracts;
@@ -19,7 +19,7 @@ namespace Service
 
         public async Task<bool> CreateEsp(EspCreateModel model)
         {
-            var entity = _mapper.Map<Esp8266Entity>(model);
+            var entity = _mapper.Map<EspEntity>(model);
             _repositoryManager.EspRepository.CreateEsp(entity);
             int isChange = await _repositoryManager.SaveAsync();
             return isChange == 1;

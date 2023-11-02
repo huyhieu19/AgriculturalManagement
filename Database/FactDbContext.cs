@@ -1,6 +1,7 @@
 ﻿using Database.ModelCreateConfiguration;
 using Database.ModelCreateConfiguration.Role;
 using Entities;
+using Entities.ESP;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace Database
@@ -37,14 +38,11 @@ namespace Database
             // Image configuration
             builder.ApplyConfiguration(new ImageConfiguration());
 
-            //Farm configuration
+            //Farms configuration
             builder.ApplyConfiguration(new FarmConfiguration());
 
             builder.ApplyConfiguration(new InstrumentationConfiguration());
             builder.ApplyConfiguration(new InstrumentationTypeConfiguration());
-
-
-            builder.ApplyConfiguration(new MachineWarranlyDateConfiguration());
 
             // Zone Configuration
             builder.ApplyConfiguration(new ZoneConfiguration());
@@ -57,21 +55,20 @@ namespace Database
             builder.ApplyConfiguration(new TimerDeviceDriverConfiguration());
 
             builder.ApplyConfiguration(new TypeTreeConfiguration());
-            builder.ApplyConfiguration(new MachineConfiguration());
-
             // InstrumentSetThreshold
 
             builder.ApplyConfiguration(new DeviceInstrumentThresholdConfiguration());
 
             //ESP
             builder.ApplyConfiguration(new EspConfigurarion());
+            builder.ApplyConfiguration(new DeviceTypeOnEspConfiguration());
         }
-        // DeviceDriver Dataset
+        // DeviceDriver DataSet
         public DbSet<DeviceDriverEntity> DeviceDriverEntities { get; set; } = null!;
         public DbSet<TimerDeviceDriverEntity> TimerDeviceDriverEntities { get; set; } = null!;
         public DbSet<DeviceDriverTypeEntity> DeviceDriversTypeEntities { get; set; } = null!;
 
-        // Farm
+        // Farms
         public DbSet<FarmEntity> FarmEntities { get; set; } = null!;
 
         // Image
@@ -79,9 +76,6 @@ namespace Database
 
         // Instrumentation
         public DbSet<InstrumentationEntity> InstrumentationEntities { get; set; } = null!;
-        // Machine
-        public DbSet<MachineEntity> MachineEntities { get; set; } = null!;
-        public DbSet<MachineWarranlyDateEntity> MachineWarranlyDateEntities { get; set; } = null!;
 
         // Type
         public DbSet<TypeTreeEntity> TypeTreeEntities { get; set; } = null!;
@@ -98,7 +92,7 @@ namespace Database
 
         // ESP
 
-        public DbSet<Esp8266Entity> Esp8266Entities { get; set; } = null!;
-
+        public DbSet<EspEntity> Esp8266Entities { get; set; } = null!;
+        public DbSet<DeviceTypeOnEspEntity> DeviceTypeOnEspEntities { get; set; } = null!;
     }
 }

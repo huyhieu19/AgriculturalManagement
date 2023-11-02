@@ -1,10 +1,10 @@
-﻿using Entities;
+﻿using Entities.ESP;
 
 namespace Repository.Contracts
 {
     public interface IEspRepository
     {
-        Task<List<Esp8266Entity>> GetAll();
-        void CreateEsp(Esp8266Entity entity);
+        Task<List<EspEntity>> GetAll();
+        void CreateEsp(EspEntity entity);
     }
 }

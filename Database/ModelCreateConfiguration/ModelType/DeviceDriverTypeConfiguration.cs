@@ -16,7 +16,7 @@ namespace Database.ModelCreateConfiguration
                 new DeviceDriverTypeEntity() { Id = new Guid("0f0ae0bc-0454-42db-8c21-338a69448925"), Name = "Quạt gió" },
                 new DeviceDriverTypeEntity() { Id = new Guid("032d4594-88fd-43af-bb83-9ea4351ed488"), Name = "Quạt gió" },
                 new DeviceDriverTypeEntity() { Id = new Guid("134d6c68-d44c-4bad-b1e5-8e30aadf2c53"), Name = "Rèm cửa" }
-                );
+            );
         }
     }
 }

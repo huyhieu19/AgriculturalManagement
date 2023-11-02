@@ -17,13 +17,13 @@ namespace MQTTProcess
         private readonly ILoggerManager logger;
         private readonly IDataStatisticsService dataStatisticsService;
         private readonly IEspBackgroundProcessService espBackgroundProcessService;
-        private static List<InstrumentValueByFiveSecondEntity> messageList = new List<InstrumentValueByFiveSecondEntity>();
-        private static int messageCount = 0;
-        private const int maxMessageCount = 50;
-        private static bool isBreakLoop = false;
-        private static bool isContinue = false;
+        private static List<InstrumentValueByFiveSecondEntity> _messageList = new List<InstrumentValueByFiveSecondEntity>();
+        private static int _messageCount = 0;
+        private const int MaxMessageCount = 50;
+        private static bool _isBreakLoop = false;
+        private static bool _isContinue = false;
         private MqttClient? mqttClient;
-        private static int countBreak = 0;
+        private static int _countBreak = 0;
 
 
         public ProcessDataReceivedFromMQTT(IDataStatisticsService dataStatisticsService,
@@ -63,7 +63,7 @@ namespace MQTTProcess
                     SetCountBreakToZero();
                     while (!stoppingToken.IsCancellationRequested)
                     {
-                        if (countBreak >= 50)
+                        if (_countBreak >= 50)
                         {
                             logger.LogInformation("Check connection MQTT");
                             if (mqttClient == null || !mqttClient.IsConnected)
@@ -72,9 +72,9 @@ namespace MQTTProcess
                                 List<string> mqttTopics = new List<string>();
                                 List<byte> msgBases = new List<byte>();
                                 logger.LogInformation("Connected to MQTT Broker");
-                                foreach (var Esp in Esps)
+                                foreach (var esp in Esps)
                                 {
-                                    string mqttTopic = $"{Esp.Id}/{Esp.TopicDevice}/{Esp.InstrumentationId}";
+                                    string mqttTopic = $"{esp.Id}/{esp.TopicDevice}/{esp.InstrumentationId}";
                                     mqttTopics.Add(mqttTopic);
                                     msgBases.Add(MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE);
                                     logger.LogInformation("Sub -> " + mqttTopic);
@@ -83,7 +83,7 @@ namespace MQTTProcess
                             }
                             SetCountBreakToOne();
                         }
-                        if (ProcessDataReceivedFromMQTT.isBreakLoop)
+                        if (ProcessDataReceivedFromMQTT._isBreakLoop)
                         {
                             logger.LogInformation("Break + DisConnect mqtt");
                             mqttClient?.Disconnect();
@@ -140,17 +140,17 @@ namespace MQTTProcess
         private async Task ProcessAndSaveDataAsync(InstrumentValueByFiveSecondEntity entity)
         {
             // Add the entity to the list
-            messageList.Add(entity);
+            _messageList.Add(entity);
 
             // Increment the message count
             SetMessageCountPlusOne();
 
-            if (messageCount >= maxMessageCount)
+            if (_messageCount >= MaxMessageCount)
             {
                 // If the message count reaches the maximum, process and save the data
-                await dataStatisticsService.PushMultipleDataToDB(messageList);
+                await dataStatisticsService.PushMultipleDataToDB(_messageList);
                 // Clear the list and reset the message count
-                messageList.Clear();
+                _messageList.Clear();
                 SetMessageCountToZero();
             }
             await Task.CompletedTask;
@@ -168,7 +168,7 @@ namespace MQTTProcess
             CancellationToken cancellationToken = CancellationToken.None;
             while (true)
             {
-                if (ProcessDataReceivedFromMQTT.isContinue)
+                if (ProcessDataReceivedFromMQTT._isContinue)
                 {
                     ExecuteAsync(cancellationToken);
                     break;
@@ -182,42 +182,42 @@ namespace MQTTProcess
 
         private static void SetIsBreakLoopToFalse()
         {
-            ProcessDataReceivedFromMQTT.isBreakLoop = false;
+            ProcessDataReceivedFromMQTT._isBreakLoop = false;
         }
         private static void SetIsBreakLoopToTrue()
         {
-            ProcessDataReceivedFromMQTT.isBreakLoop = true;
+            ProcessDataReceivedFromMQTT._isBreakLoop = true;
         }
 
         private static void SetContinueToTrue()
         {
-            ProcessDataReceivedFromMQTT.isContinue = true;
+            ProcessDataReceivedFromMQTT._isContinue = true;
         }
         private static void SetContinueToFalse()
         {
-            ProcessDataReceivedFromMQTT.isContinue = false;
+            ProcessDataReceivedFromMQTT._isContinue = false;
         }
 
         private static void SetCountBreakToZero()
         {
-            ProcessDataReceivedFromMQTT.countBreak = 0;
+            ProcessDataReceivedFromMQTT._countBreak = 0;
         }
         private static void SetCountBreakToOne()
         {
-            ProcessDataReceivedFromMQTT.countBreak = 1;
+            ProcessDataReceivedFromMQTT._countBreak = 1;
         }
         private static void SetCountBreakPlusOne()
         {
-            ProcessDataReceivedFromMQTT.countBreak += 1;
+            ProcessDataReceivedFromMQTT._countBreak += 1;
         }
 
         private static void SetMessageCountPlusOne()
         {
-            ProcessDataReceivedFromMQTT.messageCount++;
+            ProcessDataReceivedFromMQTT._messageCount++;
         }
         private static void SetMessageCountToZero()
         {
-            ProcessDataReceivedFromMQTT.messageCount = 0;
+            ProcessDataReceivedFromMQTT._messageCount = 0;
         }
         #endregion
     }

@@ -31,7 +31,7 @@ namespace Database.ModelCreateConfiguration
                 new TypeTreeEntity { Id = 18, NameType = "Sapoche", Description = "Sapoche là loại cây ăn quả có vị ngọt và mùi thơm đặc trưng." },
                 new TypeTreeEntity { Id = 19, NameType = "Cherry", Description = "Cherry là loại cây ăn quả có hạt nhỏ màu đỏ." },
                 new TypeTreeEntity { Id = 20, NameType = "Lựu", Description = "Lựu là cây ăn quả có hình dáng đặc trưng." }
-                );
+            );
         }
     }
 }

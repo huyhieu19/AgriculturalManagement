@@ -18,7 +18,7 @@ namespace Entities
 
 
 
-        [ForeignKey("Farm")]
+        [ForeignKey("Farms")]
         public int? FarmId { get; set; }
         [ForeignKey("TypeTree")]
         public int? TypeTreeId { get; set; }
