@@ -12,7 +12,7 @@ namespace Entities
         public string? Name { get; set; }
 
 
-        [ForeignKey("Farm")]
+        [ForeignKey("Farms")]
         public int? FarmId { get; set; }
         [ForeignKey("Zone")]
         public int? ZoneId { get; set; }

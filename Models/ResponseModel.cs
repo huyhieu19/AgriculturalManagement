@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class ApiResponseModel<T>
+    public class ResponseModel<T>
     {
         public bool Success { get; set; }
         public string? ErrorMessage { get; set; }

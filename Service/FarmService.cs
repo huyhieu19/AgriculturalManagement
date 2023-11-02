@@ -27,7 +27,7 @@ namespace Service
         {
             try
             {
-                logger.LogInformation("Create farm in Farm service layer");
+                logger.LogInformation("Create farm in Farms service layer");
                 var companyEntity = mapper.Map<FarmEntity>(createModel);
                 repositoryManager.Farm.CreateFarm(companyEntity);
                 int isChange = await repositoryManager.SaveAsync();
@@ -58,19 +58,19 @@ namespace Service
         {
             try
             {
-                logger.LogInformation($"Farm Service| Get farm by user | start ");
+                logger.LogInformation($"Farms Service| Get farm by user | start ");
                 string query = FarmQuery.GetFarmSQL;
                 IEnumerable<FarmDisplayModel> response;
                 using (var connection = dapperContext.CreateConnection())
                 {
                     response = await connection.QueryAsync<FarmDisplayModel>(query, new { UserID = userId });
                 }
-                logger.LogInformation($"Farm Service | Get farm by user | end ");
+                logger.LogInformation($"Farms Service | Get farm by user | end ");
                 return response;
             }
             catch (Exception ex)
             {
-                logger.LogError($"Farm Service | Delete | Exeption: {ex}");
+                logger.LogError($"Farms Service | Delete | Exeption: {ex}");
                 throw;
             }
         }
@@ -93,14 +93,14 @@ namespace Service
         {
             try
             {
-                logger.LogInformation($"Farm Service | Remove Farm: {id}");
+                logger.LogInformation($"Farms Service | Remove Farms: {id}");
                 repositoryManager.Farm.DeleteFarm(id, userId);
                 int isChange = await repositoryManager.SaveAsync();
                 return isChange > 0;
             }
             catch (Exception ex)
             {
-                logger.LogError($"Farm Service | Exception: {ex}");
+                logger.LogError($"Farms Service | Exception: {ex}");
                 return false;
             }
         }
@@ -108,7 +108,7 @@ namespace Service
         {
             try
             {
-                logger.LogInformation($"Farm Service | Udpate Farm: {updateModel}");
+                logger.LogInformation($"Farms Service | Udpate Farms: {updateModel}");
                 var entity = mapper.Map<FarmEntity>(updateModel);
                 repositoryManager.Farm.UpdateFarm(entity);
                 int isChange = await repositoryManager.SaveAsync();
@@ -116,7 +116,7 @@ namespace Service
             }
             catch (Exception ex)
             {
-                logger.LogError($"Farm Service | Exception: {ex}");
+                logger.LogError($"Farms Service | Exception: {ex}");
                 return false;
             }
         }

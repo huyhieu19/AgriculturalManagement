@@ -7,7 +7,6 @@
         IImageRepository Image { get; }
         IInstrumentationRepository Instrumentation { get; }
         IDeviceDriverRepository DeviceDriver { get; }
-        IMachineRepository Machine { get; }
 
         IInstrumentSetThresholdRepository InstrumentSetThreshold { get; }
 

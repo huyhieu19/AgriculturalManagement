@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entities;
+using Entities.ESP;
 using Models;
 
 namespace AgriculturalManagement
@@ -11,7 +12,7 @@ namespace AgriculturalManagement
             // Authentication profile
             CreateMap<UserRegisterationModel, UserEntity>();
 
-            // Farm mapper profile
+            // Farms mapper profile
             CreateMap<FarmEntity, FarmDisplayModel>();
             CreateMap<FarmCreateModel, FarmEntity>();
             CreateMap<FarmUpdateModel, FarmEntity>();
@@ -57,8 +58,8 @@ namespace AgriculturalManagement
             CreateMap<UserEntity, ProfileUser>();
 
             // ESP
-            CreateMap<Esp8266Entity, EspDisplayModel>();
-            CreateMap<EspCreateModel, Esp8266Entity>();
+            CreateMap<EspEntity, EspDisplayModel>();
+            CreateMap<EspCreateModel, EspEntity>();
         }
     }
 }

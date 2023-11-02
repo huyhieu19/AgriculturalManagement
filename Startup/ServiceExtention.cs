@@ -13,7 +13,7 @@ using Service.BackgroundJob;
 using Service.Contracts;
 using Service.Contracts.ESP;
 using Service.ESP;
-using Service.Extention;
+using Service.Extensions;
 
 namespace Startup
 {
@@ -55,8 +55,8 @@ namespace Startup
                     builder =>
                     {
                         builder.AllowAnyOrigin()
-                               .AllowAnyHeader()
-                               .AllowAnyMethod();
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
                     });
             });
 
@@ -73,7 +73,7 @@ namespace Startup
         {
             // SQL Server dependency Injection
             builder.Services.AddDbContext<FactDbContext>(options =>
-                  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("AgriculturalManagement")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("AgriculturalManagement")));
 
 
             builder.Services.AddSwaggerGen(opt =>

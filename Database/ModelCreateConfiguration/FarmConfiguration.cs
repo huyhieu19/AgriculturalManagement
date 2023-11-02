@@ -2,20 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Database.ModelCreateConfiguration;
-
-public class FarmConfiguration : IEntityTypeConfiguration<FarmEntity>
+namespace Database.ModelCreateConfiguration
 {
-    public void Configure(EntityTypeBuilder<FarmEntity> builder)
+    public class FarmConfiguration : IEntityTypeConfiguration<FarmEntity>
     {
-        builder.ToTable("Farm");
+        public void Configure(EntityTypeBuilder<FarmEntity> builder)
+        {
+            builder.ToTable("Farms");
 
-        builder.HasKey(p => p.Id);
+            builder.HasKey(p => p.Id);
 
-        builder.HasOne(p => p.User)
-            .WithMany(p => p.Farms)
-            .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            builder.HasOne(p => p.User)
+                .WithMany(p => p.Farms)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
+        }
     }
 }

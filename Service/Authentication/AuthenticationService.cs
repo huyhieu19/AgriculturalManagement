@@ -103,7 +103,7 @@ namespace Service
                 _logger.LogInformation("AuthenticationService - RegisterUser");
                 var user = mapper.Map<UserEntity>(userRegisterationModel);
                 var result = await userManager.CreateAsync(user,
-                userRegisterationModel.Password!);
+                    userRegisterationModel.Password!);
                 if (result.Succeeded && userRegisterationModel.Roles != null && userRegisterationModel.Roles.Any())
                     await userManager.AddToRolesAsync(user, userRegisterationModel.Roles);
                 return result;
@@ -117,7 +117,7 @@ namespace Service
         {
             _user = await userManager.FindByEmailAsync(userForAuth.Email!);
             var result = (_user != null && await userManager.CheckPasswordAsync(_user,
-            userForAuth.Password!));
+                userForAuth.Password!));
             if (!result)
                 _logger.LogWarning($"{nameof(ValidateUser)}: Authentication failed. Wrong user name or password.");
             return result;
@@ -137,15 +137,15 @@ namespace Service
         private async Task<List<Claim>> GetClaims()
         {
             var claims = new List<Claim>
-                {
-                    new Claim("Id", _user!.Id),
-                    new Claim("UserName", _user.UserName ?? ""),
-                    new Claim("Email", _user.Email!),
-                    new Claim("PhoneNumber", _user.PhoneNumber ?? ""),
-                    new Claim("Address", _user.Address ?? ""),
-                    new Claim(ClaimTypes.Name, _user.UserName ?? ""),
-                    new Claim(ClaimTypes.NameIdentifier, _user.Id ?? ""),
-                };
+            {
+                new Claim("Id", _user!.Id),
+                new Claim("UserName", _user.UserName ?? ""),
+                new Claim("Email", _user.Email!),
+                new Claim("PhoneNumber", _user.PhoneNumber ?? ""),
+                new Claim("Address", _user.Address ?? ""),
+                new Claim(ClaimTypes.Name, _user.UserName ?? ""),
+                new Claim(ClaimTypes.NameIdentifier, _user.Id ?? ""),
+            };
             var roles = await userManager.GetRolesAsync(_user);
             foreach (var role in roles)
             {

@@ -12,7 +12,6 @@ namespace Repository
         private readonly Lazy<IImageRepository> imageRepository;
         private readonly Lazy<IInstrumentationRepository> instrumentationRepository;
         private readonly Lazy<IDeviceDriverRepository> deviceDriverRepository;
-        private readonly Lazy<IMachineRepository> machineRepository;
         private readonly Lazy<IDeviceDriverTypeRepository> deviceDriverTypeRepository;
         private readonly Lazy<IInstrumentationTypeRepository> instrumentationTypeRepository;
         private readonly Lazy<ITypeTreeRepository> typeTreeRepository;
@@ -28,7 +27,6 @@ namespace Repository
             imageRepository = new Lazy<IImageRepository>(() => new ImageRepository(factDbContext, dapperContext));
             instrumentationRepository = new Lazy<IInstrumentationRepository>(() => new InstrumentationRepository(factDbContext, dapperContext));
             deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext, mapper));
-            machineRepository = new Lazy<IMachineRepository>(() => new MachineRepository(factDbContext, dapperContext));
             deviceDriverTypeRepository = new Lazy<IDeviceDriverTypeRepository>(() => new DeviceDriverTypeRepository(factDbContext, dapperContext));
             instrumentationTypeRepository = new Lazy<IInstrumentationTypeRepository>(() => new InstrumentationTypeRepository(factDbContext, dapperContext));
             typeTreeRepository = new Lazy<ITypeTreeRepository>(() => new TypeTreeRepository(factDbContext, dapperContext));
@@ -45,8 +43,6 @@ namespace Repository
         public IInstrumentationRepository Instrumentation => instrumentationRepository.Value;
 
         public IDeviceDriverRepository DeviceDriver => deviceDriverRepository.Value;
-
-        public IMachineRepository Machine => machineRepository.Value;
 
         public IDeviceDriverTypeRepository DeviceDriverType => deviceDriverTypeRepository.Value;
 
