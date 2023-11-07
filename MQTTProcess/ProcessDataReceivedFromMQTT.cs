@@ -69,8 +69,8 @@ namespace MQTTProcess
                             if (mqttClient == null || !mqttClient.IsConnected)
                             {
                                 mqttClient = Mqtt.ConnectMQTT("broker.emqx.io", 1883, "abc", "abc", "abc");
-                                List<string> mqttTopics = new List<string>();
-                                List<byte> msgBases = new List<byte>();
+                                List<string> mqttTopics = new();
+                                List<byte> msgBases = new();
                                 logger.LogInformation("Connected to MQTT Broker");
                                 foreach (var esp in Esps)
                                 {
