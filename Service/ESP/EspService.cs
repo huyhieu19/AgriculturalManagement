@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entities.ESP;
 using Models;
+using Models.ESP;
 using Repository.Contracts;
 using Service.Contracts;
 
@@ -25,9 +26,50 @@ namespace Service
             return isChange == 1;
         }
 
-        public async Task<List<EspDisplayModel>> GetAll()
+        public async Task<bool> DeleteESP(Guid id)
         {
-            var entity = await _repositoryManager.EspRepository.GetAll();
+            _repositoryManager.EspRepository.DeleteEsp(id);
+            int isChange = await _repositoryManager.SaveAsync();
+            return isChange == 1;
+        }
+
+        public async Task<bool> AddEspToUser(Guid espId, string userId)
+        {
+            return await _repositoryManager.EspRepository.AddEspToUser(espId, userId);
+            //int isChange = await _repositoryManager.SaveAsync();
+            //return isChange == 1;
+        }
+
+        public async Task<List<DeviceESPDisplayModel>> DeviceESPDisplay(Guid id)
+        {
+            var entity = await _repositoryManager.DeviceEspRepository.DeviceESPDisplay(id);
+            return _mapper.Map<List<DeviceESPDisplayModel>>(entity);
+        }
+
+        public async Task<bool> DeviceESPCreate(DeviceESPCreateModel model)
+        {
+            var entity = _mapper.Map<DeviceTypeOnEspEntity>(model);
+            _repositoryManager.DeviceEspRepository.DeviceESPCreate(entity);
+            int change = await _repositoryManager.SaveAsync();
+            return change == 1;
+        }
+
+        public async Task<bool> DeviceESPRemove(Guid id)
+        {
+            _repositoryManager.DeviceEspRepository.DeviceESPRemove(id);
+            int change = await _repositoryManager.SaveAsync();
+            return change == 1;
+        }
+
+        public async Task<List<EspDisplayModel>> GetEspsAll()
+        {
+            var entity = await _repositoryManager.EspRepository.GetEspsAll();
+            return _mapper.Map<List<EspDisplayModel>>(entity);
+        }
+
+        public async Task<List<EspDisplayModel>> GetEsps(string id)
+        {
+            var entity = await _repositoryManager.EspRepository.GetEsps(id);
             return _mapper.Map<List<EspDisplayModel>>(entity);
         }
 

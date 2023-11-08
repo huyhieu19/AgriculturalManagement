@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.ESP;
 using MQTTProcess;
 using Service;
 using Service.Contracts;
@@ -12,22 +13,34 @@ namespace AgriculturalManagement.Controllers.ESP
     public class EspController : ControllerBase
     {
         private readonly IServiceManager _serviceManager;
+        private readonly IHttpContextAccessor _contextAccessor;
         private readonly IDataStatisticsService dataStatisticsService;
         private readonly IEspBackgroundProcessService espBackgroundProcessService;
         private readonly IRestartAsyncMQTTService customServiceStopper;
         public EspController(IServiceManager serviceManager
             , IDataStatisticsService dataStatisticsService
             , IEspBackgroundProcessService espBackgroundProcessService,
-            IRestartAsyncMQTTService customServiceStopper)
+            IRestartAsyncMQTTService customServiceStopper,
+            IHttpContextAccessor contextAccessor)
         {
             _serviceManager = serviceManager;
             this.dataStatisticsService = dataStatisticsService;
             this.espBackgroundProcessService = espBackgroundProcessService;
             this.customServiceStopper = customServiceStopper;
+            _contextAccessor = contextAccessor;
+        }
+        [HttpGet("esps-all")]
+        public async Task<List<EspDisplayModel>> GetEspsAll()
+        {
+            return await _serviceManager.EspService.GetEspsAll();
         }
 
         [HttpGet("esps")]
-        public async Task<List<EspDisplayModel>> GetAll() => await _serviceManager.EspService.GetAll();
+        public async Task<List<EspDisplayModel>> GetAll()
+        {
+            var id = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
+            return await _serviceManager.EspService.GetEsps(id);
+        }
 
         [HttpPost("esp")]
         public async Task<ActionResult<bool>> Create(EspCreateModel model)
@@ -35,10 +48,34 @@ namespace AgriculturalManagement.Controllers.ESP
             return await _serviceManager.EspService.CreateEsp(model);
         }
 
-        //[HttpGet("Restart")]
-        //public async Task<bool> Restart()
-        //{
-        //    return await customServiceStopper.RestartJobBackground();
-        //}
+        [HttpPost("user-esp")]
+        public async Task<bool> AddEspToUser(Guid espId)
+        {
+            var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
+            return await _serviceManager.EspService.AddEspToUser(espId, userId);
+        }
+
+        [HttpDelete("esp")]
+        public async Task<bool> Delete(Guid id) => await _serviceManager.EspService.DeleteESP(id);
+
+
+        [HttpPost("devices-Esp")]
+        public async Task<List<DeviceESPDisplayModel>> DeviceESPDisplay(Guid id)
+        {
+            return await _serviceManager.EspService.DeviceESPDisplay(id);
+        }
+
+        [HttpPost("device-Esp-create")]
+        public async Task<bool> DeviceESPCreate(DeviceESPCreateModel model)
+        {
+            return await _serviceManager.EspService.DeviceESPCreate(model);
+        }
+
+        [HttpPost("device-Esp-delete")]
+        public async Task<bool> DeviceESPRemove(Guid id)
+        {
+            return await _serviceManager.EspService.DeviceESPRemove(id);
+        }
+
     }
 }

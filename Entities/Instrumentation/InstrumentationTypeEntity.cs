@@ -8,6 +8,5 @@
         public string? Unit { get; set; }
         public string? Manufacturer { get; set; }
         public ICollection<InstrumentationEntity>? Instrumentations { get; set; }
-
     }
 }

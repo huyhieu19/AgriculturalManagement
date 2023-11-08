@@ -1,6 +1,7 @@
 ﻿using Database;
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Repository.Contracts;
 using Service.Contracts;
 
@@ -24,7 +25,7 @@ namespace Repository
             }
             catch (Exception ex)
             {
-                logger.LogError($"FarmRepository | Create | Exeption: {ex}");
+                logger.LogError($"FarmRepository | Create | Exception: {ex}");
                 throw;
             }
         }
@@ -40,14 +41,35 @@ namespace Repository
             }
             catch (Exception ex)
             {
-                logger.LogError($"FarmRepository | Delete | Exeption: {ex}");
+                logger.LogError($"FarmRepository | Delete | Exception: {ex}");
                 throw;
             }
         }
 
         public async Task<IEnumerable<FarmEntity>> GetAllFarm(bool trackChanges) => await FindAll(trackChanges).OrderBy(c => c.Name).ToListAsync();
 
-        public async Task<IEnumerable<FarmEntity>> GetFarms(string userId, bool trackchanges) => await FindByCondition(p => p.UserId == userId, trackchanges).OrderBy(p => p.Name).ToListAsync();
+        public async Task<IEnumerable<FarmDisplayModel>> GetFarms(string userId, bool trackchanges)
+        {
+            var query = await FactDbContext.FarmEntities
+                .Where(f => f.UserId == userId)
+                .GroupJoin(FactDbContext.ZoneEntityEntities,
+                    f => f.Id,
+                    z => z.FarmId,
+                    (farm, zones) => new FarmDisplayModel
+                    {
+                        Id = farm.Id,
+                        Name = farm.Name,
+                        Description = farm.Description,
+                        Address = farm.Address,
+                        Note = farm.Note,
+                        CreatedDate = farm.CreatedDate,
+                        Area = farm.Area,
+                        CountZone = zones.Count()
+                    })
+                .ToListAsync();
+            return query;
+        }
+
 
         public void UpdateFarm(FarmEntity entity)
         {

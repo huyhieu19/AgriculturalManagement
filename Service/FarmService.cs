@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Common.Queries;
-using Dapper;
 using Database;
 using Entities;
 using Models;
@@ -59,18 +57,21 @@ namespace Service
             try
             {
                 logger.LogInformation($"Farms Service| Get farm by user | start ");
-                string query = FarmQuery.GetFarmSQL;
-                IEnumerable<FarmDisplayModel> response;
-                using (var connection = dapperContext.CreateConnection())
-                {
-                    response = await connection.QueryAsync<FarmDisplayModel>(query, new { UserID = userId });
-                }
+
+                var farms = await repositoryManager.Farm.GetFarms(userId, trackChanges);
+
+                //string query = FarmQuery.GetFarmSQL;
+                //IEnumerable<FarmDisplayModel> response;
+                //using (var connection = dapperContext.CreateConnection())
+                //{
+                //    response = await connection.QueryAsync<FarmDisplayModel>(query, new { UserID = userId });
+                //}
                 logger.LogInformation($"Farms Service | Get farm by user | end ");
-                return response;
+                return farms;
             }
             catch (Exception ex)
             {
-                logger.LogError($"Farms Service | Delete | Exeption: {ex}");
+                logger.LogError($"Farms Service | Delete | Exception: {ex}");
                 throw;
             }
         }
@@ -108,7 +109,7 @@ namespace Service
         {
             try
             {
-                logger.LogInformation($"Farms Service | Udpate Farms: {updateModel}");
+                logger.LogInformation($"Farms Service | Update Farms: {updateModel}");
                 var entity = mapper.Map<FarmEntity>(updateModel);
                 repositoryManager.Farm.UpdateFarm(entity);
                 int isChange = await repositoryManager.SaveAsync();
