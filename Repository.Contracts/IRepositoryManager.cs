@@ -18,6 +18,7 @@
         #endregion
 
         IEspRepository EspRepository { get; }
+        IDeviceEspRepository DeviceEspRepository { get; }
         Task<int> SaveAsync();
     }
 }

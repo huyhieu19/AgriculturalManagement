@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Models;
 
 namespace Repository.Contracts
 {
@@ -8,7 +9,7 @@ namespace Repository.Contracts
         void CreateFarm(FarmEntity entity);
         void DeleteFarm(int id, string UserId);
         void UpdateFarm(FarmEntity entity);
-        Task<IEnumerable<FarmEntity>> GetFarms(string userId, bool trackchanges);
+        Task<IEnumerable<FarmDisplayModel>> GetFarms(string userId, bool trackchanges);
 
     }
 }

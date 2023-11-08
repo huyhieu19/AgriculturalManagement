@@ -46,8 +46,6 @@ namespace Database
 
             // Zone Configuration
             builder.ApplyConfiguration(new ZoneConfiguration());
-            builder.ApplyConfiguration(new ZoneHarvestConfiguration());
-            builder.ApplyConfiguration(new JobInZoneConfiguration());
 
             // Device Driver Configuration
             builder.ApplyConfiguration(new DeviceDriverConfiguration());
@@ -83,15 +81,11 @@ namespace Database
 
         // Zone 
         public DbSet<ZoneEntity> ZoneEntityEntities { get; set; } = null!;
-        public DbSet<ZoneHarvestEntity> ZoneHarvestEntities { get; set; } = null!;
-        public DbSet<JobInZoneEntity> JobInZoneEntities { get; set; } = null!;
 
         // InstrumentSetThreshold
-
         public DbSet<DeviceInstrumentThresholdEntity> DeviceInstrumentThresholdEntities { get; set; } = null!;
 
         // ESP
-
         public DbSet<EspEntity> Esp8266Entities { get; set; } = null!;
         public DbSet<DeviceTypeOnEspEntity> DeviceTypeOnEspEntities { get; set; } = null!;
     }

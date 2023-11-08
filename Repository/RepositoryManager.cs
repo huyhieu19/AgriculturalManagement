@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Database;
 using Repository.Contracts;
+using Repository.ESP;
 using Service.Contracts;
 
 namespace Repository
@@ -17,6 +18,7 @@ namespace Repository
         private readonly Lazy<ITypeTreeRepository> typeTreeRepository;
         private readonly Lazy<IInstrumentSetThresholdRepository> instrumentSetThresholdRepository;
         private readonly Lazy<IEspRepository> espRepository;
+        private readonly Lazy<IDeviceEspRepository> deviceEspRepository;
         private readonly FactDbContext factDbContext;
 
         public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext, IMapper mapper)
@@ -32,6 +34,7 @@ namespace Repository
             typeTreeRepository = new Lazy<ITypeTreeRepository>(() => new TypeTreeRepository(factDbContext, dapperContext));
             instrumentSetThresholdRepository = new Lazy<IInstrumentSetThresholdRepository>(() => new InstrumentSetThresholdRepository(factDbContext));
             espRepository = new Lazy<IEspRepository>(() => new EspRepository(factDbContext));
+            deviceEspRepository = new Lazy<IDeviceEspRepository>(() => new DeviceEspRepository(factDbContext));
         }
 
         public IFarmRepository Farm => farmRepository.Value;
@@ -53,6 +56,7 @@ namespace Repository
         public IInstrumentSetThresholdRepository InstrumentSetThreshold => instrumentSetThresholdRepository.Value;
 
         public IEspRepository EspRepository => espRepository.Value;
+        public IDeviceEspRepository DeviceEspRepository => deviceEspRepository.Value;
 
         public async Task<int> SaveAsync() => await factDbContext.SaveChangesAsync();
     }

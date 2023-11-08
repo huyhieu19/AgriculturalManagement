@@ -15,7 +15,6 @@ namespace Service
         private readonly Lazy<IImageService> imageService;
         private readonly Lazy<IInstrumentationService> instrumentationService;
         private readonly Lazy<IDeviceDriverService> deviceDriverService;
-        private readonly Lazy<IMachineService> machineService;
         private readonly Lazy<IAuthenticationService> authenticationService;
         private readonly Lazy<IValueTypeService> valueTypeService;
         private readonly Lazy<IInstrumentSetThresholdService> instrumentSetThresholdService;
@@ -31,7 +30,6 @@ namespace Service
             this.imageService = new Lazy<IImageService>(() => new ImageService(repositoryManager, mapper));
             this.instrumentationService = new Lazy<IInstrumentationService>(() => new InstrumentationService(repositoryManager, mapper));
             this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper, dapperContext, logger));
-            this.machineService = new Lazy<IMachineService>(() => new MachineService(repositoryManager, mapper));
             this.authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, factDbContext, userManager, logger, configuration));
             this.valueTypeService = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));
             this.instrumentSetThresholdService = new Lazy<IInstrumentSetThresholdService>(() => new InstrumentSetThresholdService(repositoryManager, mapper));
@@ -49,8 +47,6 @@ namespace Service
         public IInstrumentationService Instrumentation => instrumentationService.Value;
 
         public IDeviceDriverService DeviceDriver => deviceDriverService.Value;
-
-        public IMachineService Machine => machineService.Value;
 
         public IAuthenticationService AuthenticationService => authenticationService.Value;
 

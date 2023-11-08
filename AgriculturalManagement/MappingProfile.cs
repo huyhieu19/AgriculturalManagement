@@ -2,6 +2,7 @@
 using Entities;
 using Entities.ESP;
 using Models;
+using Models.ESP;
 
 namespace AgriculturalManagement
 {
@@ -60,6 +61,9 @@ namespace AgriculturalManagement
             // ESP
             CreateMap<EspEntity, EspDisplayModel>();
             CreateMap<EspCreateModel, EspEntity>();
+            CreateMap<DeviceTypeOnEspEntity, DeviceESPDisplayModel>();
+            CreateMap<DeviceDriverCreateModel, DeviceTypeOnEspEntity>();
+
         }
     }
 }

@@ -14,27 +14,23 @@ namespace Entities
         public DateTime? DateStartedUsing { get; set; }
 
         public Guid DeviceTypeId { get; set; }
-        public DeviceTypeOnEspEntity DeviceType { get; set; }
+        public DeviceTypeOnEspEntity? DeviceType { get; set; }
 
         [ForeignKey("Zone")]
         public int? ZoneId { get; set; }
 
         public ZoneEntity? Zone { get; set; }
-        [ForeignKey("InstrumentationType")]
-        public Guid? InstrumentationTypeId { get; set; }
 
         public Guid? EspId { get; set; }
         public EspEntity? Esp8266 { get; set; }
 
         public string? Gpio { get; set; }
 
-        public string Topic
-        {
-            get;
-            set;
-        }
+        public string? Topic { get; set; }
 
-        public InstrumentationTypeEntity? InstrumentationType { get; set; }
+        //[ForeignKey("InstrumentationType")]
+        //public Guid? InstrumentationTypeId { get; set; }
+        //public InstrumentationTypeEntity? InstrumentationType { get; set; }
         public ICollection<DeviceInstrumentThresholdEntity>? DeviceInstrumentOnOffs { get; set; }
     }
 }
