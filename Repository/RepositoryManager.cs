@@ -28,7 +28,7 @@ namespace Repository
             zoneRepository = new Lazy<IZoneRepository>(() => new ZoneRepository(factDbContext));
             imageRepository = new Lazy<IImageRepository>(() => new ImageRepository(factDbContext, dapperContext));
             instrumentationRepository = new Lazy<IInstrumentationRepository>(() => new InstrumentationRepository(factDbContext, dapperContext));
-            deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext, mapper));
+            deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext));
             deviceDriverTypeRepository = new Lazy<IDeviceDriverTypeRepository>(() => new DeviceDriverTypeRepository(factDbContext, dapperContext));
             instrumentationTypeRepository = new Lazy<IInstrumentationTypeRepository>(() => new InstrumentationTypeRepository(factDbContext, dapperContext));
             typeTreeRepository = new Lazy<ITypeTreeRepository>(() => new TypeTreeRepository(factDbContext, dapperContext));

@@ -10,22 +10,5 @@
 
         public Guid? EspId { get; set; }
         public string? Gpio { get; set; }
-
-        public string? Topic
-        {
-            get
-            {
-                return $"{EspId}/D/{Id}";
-            }
-        }
-
-        // Add
-        public string? FarmName { get; set; }
-        public string? ZoneName { get; set; }
-        public string? ZoneDescription { get; set; }
-
-        public string? DeviceDriverTypeName { get; set; }
-        public string? DeviceDriverTypeManufacturer { get; set; }
-        public string? DeviceDriverTypeImageUrl { get; set; }
     }
 }

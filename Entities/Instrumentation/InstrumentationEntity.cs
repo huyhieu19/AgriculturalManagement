@@ -14,7 +14,7 @@ namespace Entities
         public DateTime? DateStartedUsing { get; set; }
 
         public Guid DeviceTypeId { get; set; }
-        public DeviceTypeOnEspEntity? DeviceType { get; set; }
+        public DeviceTypeEspEntity? DeviceType { get; set; }
 
         [ForeignKey("Zone")]
         public int? ZoneId { get; set; }
@@ -22,7 +22,8 @@ namespace Entities
         public ZoneEntity? Zone { get; set; }
 
         public Guid? EspId { get; set; }
-        public EspEntity? Esp8266 { get; set; }
+
+        //public EspEntity? Esp8266 { get; set; }
 
         public string? Gpio { get; set; }
 

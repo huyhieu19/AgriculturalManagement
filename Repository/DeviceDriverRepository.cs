@@ -13,10 +13,8 @@ namespace Repository
     {
         private readonly DapperContext dapperContext;
         private readonly FactDbContext factDbContext;
-        private readonly IMapper mapper;
-        public DeviceDriverRepository(FactDbContext factDbContext, DapperContext dapperContext, IMapper mapper) : base(factDbContext)
+        public DeviceDriverRepository(FactDbContext factDbContext, DapperContext dapperContext) : base(factDbContext)
         {
-            this.mapper = mapper;
             this.dapperContext = dapperContext;
             this.factDbContext = factDbContext;
         }
@@ -31,16 +29,18 @@ namespace Repository
             Delete(entity);
         }
 
-        public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
+        public async Task<IEnumerable<DeviceDriverEntity>> GetDeviceDriverByZoneAsync(int Id)
         {
 
-            var query = DeviceDriverQuery.GetDeviceDriverByZoneSQL;
-            using (var connection = dapperContext.CreateConnection())
-            {
-                var result = await connection.QueryAsync<DeviceDriverDisplayModel>(query, new { ZoneId = Id });
-                return result;
-            }
+            //var query = DeviceDriverQuery.GetDeviceDriverByZoneSQL;
+            //using (var connection = dapperContext.CreateConnection())
+            //{
+            //    var result = await connection.QueryAsync<DeviceDriverDisplayModel>(query, new { ZoneId = Id });
+            //    return result;
+            //}
 
+            var entity = await FindByCondition(src => src.ZoneId == Id, false).ToListAsync();
+            return entity;
         }
 
         public async Task<IEnumerable<DeviceDriverEntity>> GetDeviceDriverNotInZoneAsync()

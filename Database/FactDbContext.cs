@@ -87,6 +87,6 @@ namespace Database
 
         // ESP
         public DbSet<EspEntity> Esp8266Entities { get; set; } = null!;
-        public DbSet<DeviceTypeOnEspEntity> DeviceTypeOnEspEntities { get; set; } = null!;
+        public DbSet<DeviceTypeEspEntity> DeviceTypeOnEspEntities { get; set; } = null!;
     }
 }

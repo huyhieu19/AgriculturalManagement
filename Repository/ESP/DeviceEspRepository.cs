@@ -5,27 +5,27 @@ using Repository.Contracts;
 
 namespace Repository.ESP
 {
-    public class DeviceEspRepository : RepositoryBase<DeviceTypeOnEspEntity>, IDeviceEspRepository
+    public class DeviceEspRepository : RepositoryBase<DeviceTypeEspEntity>, IDeviceEspRepository
     {
         public DeviceEspRepository(FactDbContext factDbContext) : base(factDbContext)
         {
         }
 
 
-        public async Task<List<DeviceTypeOnEspEntity>> DeviceESPDisplay(Guid id)
+        public async Task<List<DeviceTypeEspEntity>> DeviceESPDisplay(Guid id)
         {
-            return await FindByCondition(p => p.Id == id, false).ToListAsync();
+            return await FindByCondition(p => p.EspId == id, false).Include(src => src.DeviceDriver).Include(src => src.Instrumentation).ToListAsync();
         }
 
 
-        public void DeviceESPCreate(DeviceTypeOnEspEntity entity)
+        public void DeviceESPCreate(DeviceTypeEspEntity entity)
         {
             Create(entity);
         }
 
         public void DeviceESPRemove(Guid id)
         {
-            Delete(new DeviceTypeOnEspEntity()
+            Delete(new DeviceTypeEspEntity()
             {
                 Id = id
             });

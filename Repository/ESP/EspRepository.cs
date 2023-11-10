@@ -28,7 +28,7 @@ namespace Repository
         {
             /*
              * Can use FindAsync or Where
-             *
+             * 
              */
             var entity = await FindByCondition(p => p.Id == espId, true).FirstOrDefaultAsync();
 
@@ -36,27 +36,27 @@ namespace Repository
 
             if (entity == null)
             {
-                throw new Exception("Esp not exist");
+                throw new ArgumentException("Esp not exist");
             }
-
-            if (entity != null && entity.UserId == userId)
+            
+            if (entity.UserId == userId)
             {
-                throw new Exception("The Esp has been assigned to the user");
+                throw new ArgumentException("The Esp has been assigned to the user");
             }
             entity.UserId = userId;
             int change = await FactDbContext.SaveChangesAsync();
             return change == 1;
         }
 
-
         public async Task<List<EspEntity>> GetEsps(string id)
         {
-            return await FindByCondition(p => p.UserId == id, false).ToListAsync();
+            return await FindByCondition(p => p.UserId == id, false).Include(src => src.DeviceTypes).ToListAsync();
         }
 
         public async Task<List<EspEntity>> GetEspsAll()
         {
-            return await FindAll(false).ToListAsync();
+            var entities =  await FindAll(false).Include(src => src.DeviceTypes)!.ThenInclude(src => src.DeviceDriver).ToListAsync();
+            return entities;
         }
     }
 }

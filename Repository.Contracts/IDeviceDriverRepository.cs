@@ -5,7 +5,7 @@ namespace Repository.Contracts
 {
     public interface IDeviceDriverRepository
     {
-        Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id);
+        Task<IEnumerable<DeviceDriverEntity>> GetDeviceDriverByZoneAsync(int Id);
         Task<IEnumerable<DeviceDriverEntity>> GetDeviceDriverNotInZoneAsync();
         void UpdateInforDeviceDriver(DeviceDriverEntity updateModel);
         void CreateDeviceDriver(DeviceDriverEntity createModel);

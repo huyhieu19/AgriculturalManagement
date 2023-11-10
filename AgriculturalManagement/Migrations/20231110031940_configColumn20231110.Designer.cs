@@ -4,6 +4,7 @@ using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriculturalManagement.Migrations
 {
     [DbContext(typeof(FactDbContext))]
-    partial class FactDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231110031940_configColumn20231110")]
+    partial class configColumn20231110
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,6 +61,11 @@ namespace AgriculturalManagement.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Topic")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("D");
+
                     b.Property<int?>("ZoneId")
                         .HasColumnType("int");
 
@@ -68,6 +76,8 @@ namespace AgriculturalManagement.Migrations
                     b.HasIndex("DeviceTypeId")
                         .IsUnique()
                         .HasFilter("[DeviceTypeId] IS NOT NULL");
+
+                    b.HasIndex("EspId");
 
                     b.HasIndex("ZoneId");
 
@@ -171,7 +181,7 @@ namespace AgriculturalManagement.Migrations
                     b.Property<string>("Gpio")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsUsed")
+                    b.Property<bool>("IsAction")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
@@ -349,6 +359,9 @@ namespace AgriculturalManagement.Migrations
                     b.Property<Guid>("DeviceTypeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("Esp8266Id")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("EspId")
                         .HasColumnType("uniqueidentifier");
 
@@ -377,6 +390,8 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("DeviceTypeId")
                         .IsUnique();
+
+                    b.HasIndex("Esp8266Id");
 
                     b.HasIndex("InstrumentationTypeEntityId");
 
@@ -975,11 +990,17 @@ namespace AgriculturalManagement.Migrations
                         .WithOne("DeviceDriver")
                         .HasForeignKey("Entities.DeviceDriverEntity", "DeviceTypeId");
 
+                    b.HasOne("Entities.ESP.EspEntity", "Esp")
+                        .WithMany()
+                        .HasForeignKey("EspId");
+
                     b.HasOne("Entities.ZoneEntity", "Zone")
                         .WithMany("ZoneDeviceDrivers")
                         .HasForeignKey("ZoneId");
 
                     b.Navigation("DeviceType");
+
+                    b.Navigation("Esp");
 
                     b.Navigation("Zone");
                 });
@@ -1072,6 +1093,10 @@ namespace AgriculturalManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entities.ESP.EspEntity", "Esp8266")
+                        .WithMany()
+                        .HasForeignKey("Esp8266Id");
+
                     b.HasOne("Entities.InstrumentationTypeEntity", null)
                         .WithMany("Instrumentations")
                         .HasForeignKey("InstrumentationTypeEntityId");
@@ -1081,6 +1106,8 @@ namespace AgriculturalManagement.Migrations
                         .HasForeignKey("ZoneId");
 
                     b.Navigation("DeviceType");
+
+                    b.Navigation("Esp8266");
 
                     b.Navigation("Zone");
                 });

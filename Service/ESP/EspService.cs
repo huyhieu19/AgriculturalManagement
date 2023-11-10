@@ -36,8 +36,6 @@ namespace Service
         public async Task<bool> AddEspToUser(Guid espId, string userId)
         {
             return await _repositoryManager.EspRepository.AddEspToUser(espId, userId);
-            //int isChange = await _repositoryManager.SaveAsync();
-            //return isChange == 1;
         }
 
         public async Task<List<DeviceESPDisplayModel>> DeviceESPDisplay(Guid id)
@@ -48,7 +46,10 @@ namespace Service
 
         public async Task<bool> DeviceESPCreate(DeviceESPCreateModel model)
         {
-            var entity = _mapper.Map<DeviceTypeOnEspEntity>(model);
+            var entity = _mapper.Map<DeviceTypeEspEntity>(model);
+
+
+
             _repositoryManager.DeviceEspRepository.DeviceESPCreate(entity);
             int change = await _repositoryManager.SaveAsync();
             return change == 1;

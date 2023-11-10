@@ -10,11 +10,17 @@ namespace AgriculturalManagement.Controllers.Device
     {
         private readonly IServiceManager service;
         public DeviceDriversController(IServiceManager service) => this.service = service;
+
+        // Required for UI - Get device driver
         [HttpGet, Route("devicedriverbyzone")]
         public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
         {
             return await service.DeviceDriver.GetDeviceDriverByZoneAsync(Id);
         }
+
+        /// <summary>
+        /// Required for UI - Create device driver
+        /// </summary>
         [HttpPost, Route("devicedriver")]
         public async Task<IActionResult> CreateDeviceDriver(DeviceDriverCreateModel createModel)
         {

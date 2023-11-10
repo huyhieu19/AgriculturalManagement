@@ -6,6 +6,7 @@ using Entities;
 using Models;
 using Repository.Contracts;
 using Service.Contracts;
+using System.Collections.Generic;
 
 namespace Service
 {
@@ -37,7 +38,9 @@ namespace Service
 
         public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id)
         {
-            return await repositoryManager.DeviceDriver.GetDeviceDriverByZoneAsync(Id);
+            var entity = await repositoryManager.DeviceDriver.GetDeviceDriverByZoneAsync(Id);
+            var displayModel = mapper.Map<IEnumerable<DeviceDriverDisplayModel>>(entity);
+            return displayModel;
         }
 
         public async Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync()

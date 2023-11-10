@@ -4,7 +4,7 @@ namespace Repository.Contracts;
 
 public interface IDeviceEspRepository
 {
-    Task<List<DeviceTypeOnEspEntity>> DeviceESPDisplay(Guid id);
-    void DeviceESPCreate(DeviceTypeOnEspEntity model);
+    Task<List<DeviceTypeEspEntity>> DeviceESPDisplay(Guid id);
+    void DeviceESPCreate(DeviceTypeEspEntity entity);
     void DeviceESPRemove(Guid id);
 }

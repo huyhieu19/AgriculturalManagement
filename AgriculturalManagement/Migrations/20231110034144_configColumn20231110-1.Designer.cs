@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriculturalManagement.Migrations
 {
     [DbContext(typeof(FactDbContext))]
-    [Migration("20231102174943_InitialTable")]
-    partial class InitialTable
+    [Migration("20231110034144_configColumn20231110-1")]
+    partial class configColumn202311101
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,8 +76,6 @@ namespace AgriculturalManagement.Migrations
                     b.HasIndex("DeviceTypeId")
                         .IsUnique()
                         .HasFilter("[DeviceTypeId] IS NOT NULL");
-
-                    b.HasIndex("EspId");
 
                     b.HasIndex("ZoneId");
 
@@ -166,7 +164,7 @@ namespace AgriculturalManagement.Migrations
                     b.ToTable("DeviceInstrumentThreshold", (string)null);
                 });
 
-            modelBuilder.Entity("Entities.ESP.DeviceTypeOnEspEntity", b =>
+            modelBuilder.Entity("Entities.ESP.DeviceTypeEspEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -182,7 +180,9 @@ namespace AgriculturalManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAction")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -357,16 +357,13 @@ namespace AgriculturalManagement.Migrations
                     b.Property<Guid>("DeviceTypeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("Esp8266Id")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("EspId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Gpio")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("InstrumentationTypeId")
+                    b.Property<Guid?>("InstrumentationTypeEntityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("IsActive")
@@ -377,7 +374,6 @@ namespace AgriculturalManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Topic")
-                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValue("I");
@@ -390,9 +386,7 @@ namespace AgriculturalManagement.Migrations
                     b.HasIndex("DeviceTypeId")
                         .IsUnique();
 
-                    b.HasIndex("Esp8266Id");
-
-                    b.HasIndex("InstrumentationTypeId");
+                    b.HasIndex("InstrumentationTypeEntityId");
 
                     b.HasIndex("ZoneId");
 
@@ -464,7 +458,10 @@ namespace AgriculturalManagement.Migrations
             modelBuilder.Entity("Entities.JobInZoneEntity", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("DateCreate")
                         .HasColumnType("datetime2");
@@ -487,7 +484,9 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("JobInZone", (string)null);
+                    b.HasIndex("ZoneId");
+
+                    b.ToTable("JobInZoneEntity");
                 });
 
             modelBuilder.Entity("Entities.TimerDeviceDriverEntity", b =>
@@ -824,7 +823,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("ZoneId");
 
-                    b.ToTable("ZoneHarvest", (string)null);
+                    b.ToTable("ZoneHarvestEntity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -980,21 +979,15 @@ namespace AgriculturalManagement.Migrations
                         .WithMany("DeviceDrivers")
                         .HasForeignKey("DeviceDriverTypeEntityId");
 
-                    b.HasOne("Entities.ESP.DeviceTypeOnEspEntity", "DeviceType")
+                    b.HasOne("Entities.ESP.DeviceTypeEspEntity", "DeviceType")
                         .WithOne("DeviceDriver")
                         .HasForeignKey("Entities.DeviceDriverEntity", "DeviceTypeId");
-
-                    b.HasOne("Entities.ESP.EspEntity", "Esp")
-                        .WithMany()
-                        .HasForeignKey("EspId");
 
                     b.HasOne("Entities.ZoneEntity", "Zone")
                         .WithMany("ZoneDeviceDrivers")
                         .HasForeignKey("ZoneId");
 
                     b.Navigation("DeviceType");
-
-                    b.Navigation("Esp");
 
                     b.Navigation("Zone");
                 });
@@ -1016,10 +1009,10 @@ namespace AgriculturalManagement.Migrations
                     b.Navigation("Instrumentation");
                 });
 
-            modelBuilder.Entity("Entities.ESP.DeviceTypeOnEspEntity", b =>
+            modelBuilder.Entity("Entities.ESP.DeviceTypeEspEntity", b =>
                 {
                     b.HasOne("Entities.ESP.EspEntity", "Esp")
-                        .WithMany()
+                        .WithMany("DeviceTypes")
                         .HasForeignKey("EspId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1081,29 +1074,21 @@ namespace AgriculturalManagement.Migrations
 
             modelBuilder.Entity("Entities.InstrumentationEntity", b =>
                 {
-                    b.HasOne("Entities.ESP.DeviceTypeOnEspEntity", "DeviceType")
+                    b.HasOne("Entities.ESP.DeviceTypeEspEntity", "DeviceType")
                         .WithOne("Instrumentation")
                         .HasForeignKey("Entities.InstrumentationEntity", "DeviceTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.ESP.EspEntity", "Esp8266")
-                        .WithMany()
-                        .HasForeignKey("Esp8266Id");
-
-                    b.HasOne("Entities.InstrumentationTypeEntity", "InstrumentationType")
+                    b.HasOne("Entities.InstrumentationTypeEntity", null)
                         .WithMany("Instrumentations")
-                        .HasForeignKey("InstrumentationTypeId");
+                        .HasForeignKey("InstrumentationTypeEntityId");
 
                     b.HasOne("Entities.ZoneEntity", "Zone")
                         .WithMany("Instrumentations")
                         .HasForeignKey("ZoneId");
 
                     b.Navigation("DeviceType");
-
-                    b.Navigation("Esp8266");
-
-                    b.Navigation("InstrumentationType");
 
                     b.Navigation("Zone");
                 });
@@ -1112,9 +1097,7 @@ namespace AgriculturalManagement.Migrations
                 {
                     b.HasOne("Entities.ZoneEntity", "Zone")
                         .WithMany("JobInZones")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ZoneId");
 
                     b.Navigation("Zone");
                 });
@@ -1217,13 +1200,16 @@ namespace AgriculturalManagement.Migrations
                     b.Navigation("DeviceDrivers");
                 });
 
-            modelBuilder.Entity("Entities.ESP.DeviceTypeOnEspEntity", b =>
+            modelBuilder.Entity("Entities.ESP.DeviceTypeEspEntity", b =>
                 {
-                    b.Navigation("DeviceDriver")
-                        .IsRequired();
+                    b.Navigation("DeviceDriver");
 
-                    b.Navigation("Instrumentation")
-                        .IsRequired();
+                    b.Navigation("Instrumentation");
+                });
+
+            modelBuilder.Entity("Entities.ESP.EspEntity", b =>
+                {
+                    b.Navigation("DeviceTypes");
                 });
 
             modelBuilder.Entity("Entities.FarmEntity", b =>

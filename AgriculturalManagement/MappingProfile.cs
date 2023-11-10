@@ -61,8 +61,9 @@ namespace AgriculturalManagement
             // ESP
             CreateMap<EspEntity, EspDisplayModel>();
             CreateMap<EspCreateModel, EspEntity>();
-            CreateMap<DeviceTypeOnEspEntity, DeviceESPDisplayModel>();
-            CreateMap<DeviceDriverCreateModel, DeviceTypeOnEspEntity>();
+            CreateMap<DeviceTypeEspEntity, DeviceESPDisplayModel>();
+
+            CreateMap<DeviceESPCreateModel, DeviceTypeEspEntity>().ForMember(dest => dest.Gpio, opt => opt.MapFrom(src => src.Gpio.ToString()));
 
         }
     }
