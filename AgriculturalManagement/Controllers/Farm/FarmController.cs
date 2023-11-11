@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Farm;
 using Service.Contracts;
 using System.Security.Claims;
 
@@ -17,54 +19,62 @@ namespace AgriculturalManagement.Controllers.Farm
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        //[HttpGet, Route("farms")]
-        //[Authorize(Roles = "Administrator")]
-        //public async Task<IEnumerable<FarmDisplayModel>> GetFarmAsync()
-        //{
-        //    return await serviceManager.Farm.GetAllFarmAsync(false);
-        //}
 
         // Create new farm
         [HttpPost, Route("farm")]
-        //[Authorize(Roles = "Administrator")]
-        public async Task<bool> CreateFarmAsync([FromBody] FarmCreateModel createModel)
+        [Authorize(Roles = "Administrator")]
+        public async Task<FarmModifyResponseModel> CreateFarmAsync([FromBody] FarmCreateModel createModel)
         {
-            createModel.UserId = httpContextAccessor.HttpContext?.User.FindFirstValue("Id");
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                throw new ArgumentNullException("Vui lòng đăng nhập vào hệ thống");
+            }
+            createModel.UserId = userId;
             return await serviceManager.Farm.AddFarm(createModel);
         }
         // Get farms
         [HttpPost, Route("farms")]
-        //[Authorize(Roles = "Administrator")]
-        public async Task<IEnumerable<FarmDisplayModel>> GetFarms()
+        [Authorize(Roles = "Administrator")]
+        public async Task<List<FarmDisplayModel>> GetFarms()
         {
-            string UserId = httpContextAccessor.HttpContext?.User.FindFirstValue("Id")!;
-            return await serviceManager.Farm.GetFarms(UserId, false);
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                throw new ArgumentNullException("Vui lòng đăng nhập vào hệ thống");
+            }
+            return await serviceManager.Farm.GetFarms(userId, false);
         }
 
         // Delete farm
         [HttpDelete, Route("farm")]
-        //[Authorize(Roles = "Administrator")]
-        public async Task<bool> DeleteFarm(int id)
+        [Authorize(Roles = "Administrator")]
+        public async Task<FarmModifyResponseModel> DeleteFarm(int id)
         {
-            var UserId = httpContextAccessor.HttpContext?.User.FindFirstValue("Id");
-            return await serviceManager.Farm.RemoveFarm(id, UserId!);
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                throw new ArgumentNullException("Vui lòng đăng nhập vào hệ thống");
+            }
+            return await serviceManager.Farm.RemoveFarm(id, userId);
         }
         // update farm
         [HttpPost, Route("farm-update")]
-        //[Authorize(Roles = "Administrator")]
-        public async Task<bool> UpdateFarm([FromBody] FarmUpdateModel model)
+        [Authorize(Roles = "Administrator")]
+        public async Task<FarmModifyResponseModel> UpdateFarm([FromBody] FarmUpdateModel model)
         {
-            var UserId = httpContextAccessor.HttpContext?.User.FindFirstValue("Id");
-            model.UserId = UserId;
+            var userId = GetUserId();
+            if (userId == null)
+            {
+                throw new ArgumentNullException("Vui lòng đăng nhập vào hệ thống");
+            }
+            model.UserId = userId;
             return await serviceManager.Farm.UpdateFarm(model);
         }
-        //// Get Name
-        //[HttpGet, Route("names")]
-        //[Authorize(Roles = "Administrator")]
-        //public async Task<IEnumerable<FarmFilterNameModel>> GetNamesFarmAsync()
-        //{
-        //    string UserId = httpContextAccessor.HttpContext?.User.FindFirstValue("Id")!;
-        //    return await serviceManager.Farm.GetNameFarm(UserId);
-        //}
+        private string? GetUserId()
+        {
+            var id = httpContextAccessor.HttpContext?.User.FindFirstValue("Id");
+            return id;
+        }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class DeviceModifyResponseModel
     {
-        public List<DeviceDisplayModel> displayModels { get; set; }
-        public bool? success { get; set; }
+        public List<DeviceDisplayModel>? deviceDisplays { get; set; }
+        public bool? isSuccess { get; set; }
     }
 }

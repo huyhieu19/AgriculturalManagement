@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using Entities.CommonType;
 
 namespace Repository.Contracts
 {

@@ -1,6 +1,7 @@
-﻿using Common;
+﻿using Common.TimeHelper;
 using Microsoft.Extensions.Hosting;
 using Service.Contracts;
+using Service.Contracts.Logger;
 
 namespace Service.BackgroundJob
 {

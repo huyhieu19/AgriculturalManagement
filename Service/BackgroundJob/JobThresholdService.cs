@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Models;
 using Service.Contracts;
-
+using Service.Contracts.Logger;
 
 namespace Service.BackgroundJob
 {

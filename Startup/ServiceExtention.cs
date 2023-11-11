@@ -4,15 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Models;
+using Models.Mongo;
 using MQTTProcess;
 using Repository;
 using Repository.Contracts;
 using Service;
 using Service.Contracts;
 using Service.Contracts.ESP;
+using Service.Contracts.Logger;
 using Service.ESP;
 using Service.Extensions;
+using Service.Logger;
 
 namespace Startup
 {

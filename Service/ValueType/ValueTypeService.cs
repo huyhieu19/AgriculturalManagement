@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Entities;
+using Entities.CommonType;
 using Models;
 using Repository.Contracts;
 using Service.Contracts;
+using Service.Contracts.Logger;
 
 namespace Service
 {

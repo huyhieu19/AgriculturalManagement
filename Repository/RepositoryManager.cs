@@ -2,9 +2,17 @@
 using Database;
 using Repository.Contracts;
 using Repository.Contracts.Device;
+using Repository.Contracts.DeviceThreshold;
+using Repository.Contracts.DeviceTimer;
+using Repository.Contracts.Farm;
+using Repository.Contracts.Image;
 using Repository.Device;
+using Repository.DeviceThreshold;
+using Repository.DeviceTimer;
 using Repository.ESP;
-using Service.Contracts;
+using Repository.FarmZone;
+using Repository.Image;
+using Service.Contracts.Logger;
 
 namespace Repository
 {

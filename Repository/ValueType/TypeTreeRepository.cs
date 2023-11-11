@@ -1,5 +1,5 @@
 ﻿using Database;
-using Entities;
+using Entities.CommonType;
 using Microsoft.EntityFrameworkCore;
 using Repository.Contracts;
 

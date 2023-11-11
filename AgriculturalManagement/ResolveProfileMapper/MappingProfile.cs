@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using Common.ResolveProfileMapper;
 using Entities;
+using Entities.CommonType;
 using Entities.ESP;
+using Entities.Farm;
+using Entities.Image;
 using Models;
 using Models.Device;
+using Models.DeviceTimer;
 
 namespace AgriculturalManagement.ResolveProfileMapper
 {
@@ -18,7 +22,6 @@ namespace AgriculturalManagement.ResolveProfileMapper
             CreateMap<FarmEntity, FarmDisplayModel>();
             CreateMap<FarmCreateModel, FarmEntity>();
             CreateMap<FarmUpdateModel, FarmEntity>();
-            CreateMap<FarmEntity, FarmFilterNameModel>();
 
             // Zone mapper profile 
             CreateMap<ZoneEntity, ZoneDisplayModel>()

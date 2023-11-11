@@ -1,8 +1,8 @@
 ﻿using Entities;
 using Microsoft.Extensions.Options;
-using Models;
+using Models.Mongo;
 using MongoDB.Driver;
-using Service.Contracts;
+using Service.Contracts.Logger;
 
 namespace Service
 {

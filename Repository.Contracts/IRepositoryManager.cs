@@ -1,4 +1,8 @@
 ﻿using Repository.Contracts.Device;
+using Repository.Contracts.DeviceThreshold;
+using Repository.Contracts.DeviceTimer;
+using Repository.Contracts.Farm;
+using Repository.Contracts.Image;
 
 namespace Repository.Contracts
 {

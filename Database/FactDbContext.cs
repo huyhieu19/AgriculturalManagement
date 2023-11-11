@@ -1,7 +1,10 @@
 ﻿using Database.ModelCreateConfiguration;
 using Database.ModelCreateConfiguration.Role;
 using Entities;
+using Entities.CommonType;
 using Entities.ESP;
+using Entities.Farm;
+using Entities.Image;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace Database

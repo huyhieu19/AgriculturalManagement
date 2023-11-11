@@ -14,22 +14,28 @@ namespace Service.Device
             this.repository = repository;
             this.mapper = mapper;
         }
+        private async Task<DeviceModifyResponseModel> ResponseModel(int change, int zoneId)
+        {
+            var response = new DeviceModifyResponseModel()
+            {
+                deviceDisplays = await DevicesDisplay(zoneId)
+            };
+            if (change > 0)
+            {
+                response.isSuccess = true;
+            }
+            else
+            {
+                response.isSuccess = false;
+            }
+            return response;
+        }
 
         public async Task<DeviceModifyResponseModel> DeviceCreate(Guid deviceId, int zoneId)
         {
             await repository.device.DeviceCreate(deviceId, zoneId);
             var change = await repository.SaveAsync();
-            var response = new DeviceModifyResponseModel();
-            if (change > 0)
-            {
-                response.success = true;
-                response.displayModels = await DevicesDisplay(zoneId);
-            }
-            else
-            {
-                response.success = false;
-                response.displayModels = await DevicesDisplay(zoneId);
-            }
+            var response = await ResponseModel(change, zoneId);
             return response;
         }
 
@@ -37,17 +43,7 @@ namespace Service.Device
         {
             await repository.device.DeviceRemove(deviceId, zoneId);
             var change = await repository.SaveAsync();
-            var response = new DeviceModifyResponseModel();
-            if (change > 0)
-            {
-                response.success = true;
-                response.displayModels = await DevicesDisplay(zoneId);
-            }
-            else
-            {
-                response.success = false;
-                response.displayModels = await DevicesDisplay(zoneId);
-            }
+            var response = await ResponseModel(change, zoneId);
             return response;
         }
 

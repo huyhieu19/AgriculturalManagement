@@ -1,5 +1,9 @@
 ﻿
 using Service.Contracts.Device;
+using Service.Contracts.DeviceThreshold;
+using Service.Contracts.DeviceTimer;
+using Service.Contracts.FarmZone;
+using Service.Contracts.Image;
 
 namespace Service.Contracts
 {
@@ -9,7 +13,7 @@ namespace Service.Contracts
         IZoneService Zone { get; }
         IImageService Image { get; }
         IInstrumentationService Instrumentation { get; }
-        IDeviceDriverService DeviceDriver { get; }
+        IDeviceTimerService DeviceDriver { get; }
         IAuthenticationService AuthenticationService { get; }
         IValueTypeService ValueType { get; }
         IInstrumentSetThresholdService InstrumentSetThreshold { get; }

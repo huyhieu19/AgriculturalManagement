@@ -1,4 +1,6 @@
-﻿using Entities.ESP;
+﻿using Entities.CommonType;
+using Entities.ESP;
+using Entities.Farm;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
