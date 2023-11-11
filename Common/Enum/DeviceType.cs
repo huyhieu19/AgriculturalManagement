@@ -1,6 +1,6 @@
 ﻿namespace Common.Enum
 {
-    public enum SensorType
+    public enum DeviceType
     {
         None = 0,
         DeviceDriver = 1,

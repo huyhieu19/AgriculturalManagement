@@ -28,7 +28,7 @@ namespace Startup
 
                     // Continue processing the request
                     await _next(context);
-                    string responseContent = "Hello to farm manager!";
+                    string responseContent = "\n---Hello Farm Manager!---";
                     // Intercept and modify the response
                     if (context.Response.StatusCode == 200)
                     {

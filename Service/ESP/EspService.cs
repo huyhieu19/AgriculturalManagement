@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Entities.ESP;
 using Models;
-using Models.ESP;
+using Models.Device;
 using Repository.Contracts;
 using Service.Contracts;
 
@@ -21,56 +21,56 @@ namespace Service
         public async Task<bool> CreateEsp(EspCreateModel model)
         {
             var entity = _mapper.Map<EspEntity>(model);
-            _repositoryManager.EspRepository.CreateEsp(entity);
+            _repositoryManager.Esp.CreateEsp(entity);
             int isChange = await _repositoryManager.SaveAsync();
             return isChange == 1;
         }
 
         public async Task<bool> DeleteESP(Guid id)
         {
-            _repositoryManager.EspRepository.DeleteEsp(id);
+            _repositoryManager.Esp.DeleteEsp(id);
             int isChange = await _repositoryManager.SaveAsync();
             return isChange == 1;
         }
 
         public async Task<bool> AddEspToUser(Guid espId, string userId)
         {
-            return await _repositoryManager.EspRepository.AddEspToUser(espId, userId);
+            return await _repositoryManager.Esp.AddEspToUser(espId, userId);
         }
 
-        public async Task<List<DeviceESPDisplayModel>> DeviceESPDisplay(Guid id)
+        public async Task<List<DeviceDisplayModel>> DeviceESPDisplay(Guid id)
         {
-            var entity = await _repositoryManager.DeviceEspRepository.DeviceESPDisplay(id);
-            return _mapper.Map<List<DeviceESPDisplayModel>>(entity);
+            var entity = await _repositoryManager.DeviceEsp.DeviceESPDisplay(id);
+            return _mapper.Map<List<DeviceDisplayModel>>(entity);
         }
 
-        public async Task<bool> DeviceESPCreate(DeviceESPCreateModel model)
+        public async Task<bool> DeviceESPCreate(DeviceCreateModel model)
         {
-            var entity = _mapper.Map<DeviceTypeEspEntity>(model);
+            var entity = _mapper.Map<DeviceEntity>(model);
 
 
 
-            _repositoryManager.DeviceEspRepository.DeviceESPCreate(entity);
+            _repositoryManager.DeviceEsp.DeviceESPCreate(entity);
             int change = await _repositoryManager.SaveAsync();
             return change == 1;
         }
 
         public async Task<bool> DeviceESPRemove(Guid id)
         {
-            _repositoryManager.DeviceEspRepository.DeviceESPRemove(id);
+            _repositoryManager.DeviceEsp.DeviceESPRemove(id);
             int change = await _repositoryManager.SaveAsync();
             return change == 1;
         }
 
         public async Task<List<EspDisplayModel>> GetEspsAll()
         {
-            var entity = await _repositoryManager.EspRepository.GetEspsAll();
+            var entity = await _repositoryManager.Esp.GetEspsAll();
             return _mapper.Map<List<EspDisplayModel>>(entity);
         }
 
         public async Task<List<EspDisplayModel>> GetEsps(string id)
         {
-            var entity = await _repositoryManager.EspRepository.GetEsps(id);
+            var entity = await _repositoryManager.Esp.GetEsps(id);
             return _mapper.Map<List<EspDisplayModel>>(entity);
         }
 

@@ -5,12 +5,12 @@ namespace Service.Contracts
     public interface IDeviceDriverService
     {
         #region Device
-        Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id);
-        Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync();
-        Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel);
-        Task CreateDeviceDriver(DeviceDriverCreateModel createModel);
-        Task DeleteDeviceDriver(int Id); //  Xóa hẳn => bị hỏng máy
-        Task RemoveDeviceDriver(int Id); //chuyển Zone Id  = null
+        //Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverByZoneAsync(int Id);
+        //Task<IEnumerable<DeviceDriverDisplayModel>> GetDeviceDriverNotInZoneAsync();
+        //Task UpdateInforDeviceDriver(DeviceDriverUpdateModel updateModel);
+        //Task CreateDeviceDriver(DeviceDriverCreateModel createModel);
+        //Task DeleteDeviceDriver(int Id); //  Xóa hẳn => bị hỏng máy
+        //Task RemoveDeviceDriver(int Id); //chuyển Zone Id  = null
 
 
         #endregion

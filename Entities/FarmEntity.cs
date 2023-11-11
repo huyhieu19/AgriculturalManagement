@@ -12,7 +12,7 @@ namespace Entities
         public string? Address { get; set; }
         public double? Area { get; set; }
         public string? Note { get; set; }
-        public DateTime? CreatedDate { get; set; } = DateTime.Now;
+        public DateTime? DateCreated { get; set; } = DateTime.Now;
 
 
         [ForeignKey("User")]

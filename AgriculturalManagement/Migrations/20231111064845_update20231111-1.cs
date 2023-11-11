@@ -8,40 +8,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgriculturalManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class configColumn20231110 : Migration
+    public partial class update202311111 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "DeviceDriverType",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeviceDriverType", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InstrumentationType",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InstrumentationType", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
@@ -158,7 +129,7 @@ namespace AgriculturalManagement.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Area = table.Column<double>(type: "float", nullable: true),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -257,30 +228,6 @@ namespace AgriculturalManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DeviceType",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EspId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Gpio = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsAction = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeviceType = table.Column<int>(type: "int", nullable: true),
-                    Topic = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ResponseType = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeviceType", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DeviceType_Esp_EspId",
-                        column: x => x.EspId,
-                        principalTable: "Esp",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Zone",
                 columns: table => new
                 {
@@ -312,86 +259,36 @@ namespace AgriculturalManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DeviceDriver",
+                name: "Device",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateStartedUsing = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsAction = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    IsAuto = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeviceTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EspId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ZoneId = table.Column<int>(type: "int", nullable: true),
-                    EspId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NameRef = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsAction = table.Column<bool>(type: "bit", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    IsAuto = table.Column<bool>(type: "bit", nullable: false),
+                    DeviceType = table.Column<int>(type: "int", nullable: true),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gpio = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Topic = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "D"),
-                    DeviceDriverTypeEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Topic = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ResponseType = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DeviceDriver", x => x.Id);
+                    table.PrimaryKey("PK_Device", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DeviceDriver_DeviceDriverType_DeviceDriverTypeEntityId",
-                        column: x => x.DeviceDriverTypeEntityId,
-                        principalTable: "DeviceDriverType",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_DeviceDriver_DeviceType_DeviceTypeId",
-                        column: x => x.DeviceTypeId,
-                        principalTable: "DeviceType",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_DeviceDriver_Esp_EspId",
+                        name: "FK_Device_Esp_EspId",
                         column: x => x.EspId,
                         principalTable: "Esp",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_DeviceDriver_Zone_ZoneId",
-                        column: x => x.ZoneId,
-                        principalTable: "Zone",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Instrumentation",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    DateStartedUsing = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeviceTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ZoneId = table.Column<int>(type: "int", nullable: true),
-                    EspId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Esp8266Id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Gpio = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Topic = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "I"),
-                    InstrumentationTypeEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Instrumentation", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Instrumentation_DeviceType_DeviceTypeId",
-                        column: x => x.DeviceTypeId,
-                        principalTable: "DeviceType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Instrumentation_Esp_Esp8266Id",
-                        column: x => x.Esp8266Id,
-                        principalTable: "Esp",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Instrumentation_InstrumentationType_InstrumentationTypeEntityId",
-                        column: x => x.InstrumentationTypeEntityId,
-                        principalTable: "InstrumentationType",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Instrumentation_Zone_ZoneId",
+                        name: "FK_Device_Zone_ZoneId",
                         column: x => x.ZoneId,
                         principalTable: "Zone",
                         principalColumn: "Id");
@@ -441,55 +338,60 @@ namespace AgriculturalManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DeviceInstrumentThreshold",
+                columns: table => new
+                {
+                    DeviceDriverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    InstrumentationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    OnInUpperThreshold = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
+                    ThresholdValueOn = table.Column<double>(type: "float", nullable: true),
+                    ThresholdValueOff = table.Column<double>(type: "float", nullable: true),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeviceEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeviceInstrumentThreshold", x => new { x.DeviceDriverId, x.InstrumentationId });
+                    table.ForeignKey(
+                        name: "FK_DeviceInstrumentThreshold_Device_DeviceDriverId",
+                        column: x => x.DeviceDriverId,
+                        principalTable: "Device",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DeviceInstrumentThreshold_Device_DeviceEntityId",
+                        column: x => x.DeviceEntityId,
+                        principalTable: "Device",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DeviceInstrumentThreshold_Device_InstrumentationId",
+                        column: x => x.InstrumentationId,
+                        principalTable: "Device",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TimerDeviceDriver",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDaily = table.Column<bool>(type: "bit", nullable: true),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShutDownTimer = table.Column<DateTime>(type: "datetime2", nullable: true),
                     OpenTimer = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsAffected = table.Column<bool>(type: "bit", nullable: true),
                     IsSuccess = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     IsRemove = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeviceDriverId = table.Column<int>(type: "int", nullable: false)
+                    DeviceDriverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TimerDeviceDriver", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TimerDeviceDriver_DeviceDriver_DeviceDriverId",
+                        name: "FK_TimerDeviceDriver_Device_DeviceDriverId",
                         column: x => x.DeviceDriverId,
-                        principalTable: "DeviceDriver",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DeviceInstrumentThreshold",
-                columns: table => new
-                {
-                    DeviceDriverId = table.Column<int>(type: "int", nullable: false),
-                    InstrumentationId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    OnInUpperThreshold = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
-                    ThresholdValueOn = table.Column<double>(type: "float", nullable: true),
-                    ThresholdValueOff = table.Column<double>(type: "float", nullable: true),
-                    IsDelete = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeviceInstrumentThreshold", x => new { x.DeviceDriverId, x.InstrumentationId });
-                    table.ForeignKey(
-                        name: "FK_DeviceInstrumentThreshold_DeviceDriver_DeviceDriverId",
-                        column: x => x.DeviceDriverId,
-                        principalTable: "DeviceDriver",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_DeviceInstrumentThreshold_Instrumentation_InstrumentationId",
-                        column: x => x.InstrumentationId,
-                        principalTable: "Instrumentation",
+                        principalTable: "Device",
                         principalColumn: "Id");
                 });
 
@@ -512,19 +414,9 @@ namespace AgriculturalManagement.Migrations
                 {
                     table.PrimaryKey("PK_Image", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Image_DeviceDriver_DeviceDriverId",
-                        column: x => x.DeviceDriverId,
-                        principalTable: "DeviceDriver",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Image_Farms_FarmId",
                         column: x => x.FarmId,
                         principalTable: "Farms",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Image_Instrumentation_InstrumentationId",
-                        column: x => x.InstrumentationId,
-                        principalTable: "Instrumentation",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Image_ZoneHarvestEntity_ZoneHarvestId",
@@ -536,31 +428,6 @@ namespace AgriculturalManagement.Migrations
                         column: x => x.ZoneId,
                         principalTable: "Zone",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.InsertData(
-                table: "DeviceDriverType",
-                columns: new[] { "Id", "Description", "Manufacturer", "Name" },
-                values: new object[,]
-                {
-                    { new Guid("032d4594-88fd-43af-bb83-9ea4351ed488"), null, null, "Quạt gió" },
-                    { new Guid("0f0ae0bc-0454-42db-8c21-338a69448925"), null, null, "Quạt gió" },
-                    { new Guid("134d6c68-d44c-4bad-b1e5-8e30aadf2c53"), null, null, "Rèm cửa" },
-                    { new Guid("448baf97-9401-4aaa-a636-9d8512d7c5a4"), null, null, "Máy bơm" },
-                    { new Guid("add310fe-34e9-4b07-8d66-38a16bc2b177"), null, null, "Máy bơm" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "InstrumentationType",
-                columns: new[] { "Id", "Description", "Manufacturer", "Name", "Unit" },
-                values: new object[,]
-                {
-                    { new Guid("1c44a06c-e539-4ead-8c62-fc7d56ec9e34"), null, null, "Độ ẩm đất", "%" },
-                    { new Guid("3057e9c9-b039-489b-be7b-581a751ca4cb"), null, null, "Cảm biên đo độ PH của đất", "PH" },
-                    { new Guid("743b3068-bb94-41f4-bd10-7f4ed802a36c"), null, null, "Cảm biến đo nhiệt độ, độ ẩm không khí", "*C/%" },
-                    { new Guid("97f47bef-17cc-45c3-9fbf-69ef9364e12f"), null, null, "Cảm biên gió", "Km/h" },
-                    { new Guid("b6976895-e254-487e-a59c-c22621b2c54a"), null, null, "Cảm biến nước mưa", "true/false" },
-                    { new Guid("d67fb159-c95d-4c67-8f2e-065f14fc5e58"), null, null, "Cảm biến đo nhiệt độ, độ ẩm không khí", "*C/%" }
                 });
 
             migrationBuilder.InsertData(
@@ -600,36 +467,24 @@ namespace AgriculturalManagement.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeviceDriver_DeviceDriverTypeEntityId",
-                table: "DeviceDriver",
-                column: "DeviceDriverTypeEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DeviceDriver_DeviceTypeId",
-                table: "DeviceDriver",
-                column: "DeviceTypeId",
-                unique: true,
-                filter: "[DeviceTypeId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DeviceDriver_EspId",
-                table: "DeviceDriver",
+                name: "IX_Device_EspId",
+                table: "Device",
                 column: "EspId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeviceDriver_ZoneId",
-                table: "DeviceDriver",
+                name: "IX_Device_ZoneId",
+                table: "Device",
                 column: "ZoneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeviceInstrumentThreshold_DeviceEntityId",
+                table: "DeviceInstrumentThreshold",
+                column: "DeviceEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceInstrumentThreshold_InstrumentationId",
                 table: "DeviceInstrumentThreshold",
                 column: "InstrumentationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DeviceType_EspId",
-                table: "DeviceType",
-                column: "EspId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Esp_UserId",
@@ -642,19 +497,9 @@ namespace AgriculturalManagement.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Image_DeviceDriverId",
-                table: "Image",
-                column: "DeviceDriverId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Image_FarmId",
                 table: "Image",
                 column: "FarmId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_InstrumentationId",
-                table: "Image",
-                column: "InstrumentationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Image_ZoneHarvestId",
@@ -664,27 +509,6 @@ namespace AgriculturalManagement.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Image_ZoneId",
                 table: "Image",
-                column: "ZoneId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Instrumentation_DeviceTypeId",
-                table: "Instrumentation",
-                column: "DeviceTypeId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Instrumentation_Esp8266Id",
-                table: "Instrumentation",
-                column: "Esp8266Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Instrumentation_InstrumentationTypeEntityId",
-                table: "Instrumentation",
-                column: "InstrumentationTypeEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Instrumentation_ZoneId",
-                table: "Instrumentation",
                 column: "ZoneId");
 
             migrationBuilder.CreateIndex(
@@ -783,31 +607,19 @@ namespace AgriculturalManagement.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Instrumentation");
-
-            migrationBuilder.DropTable(
                 name: "ZoneHarvestEntity");
 
             migrationBuilder.DropTable(
-                name: "DeviceDriver");
+                name: "Device");
 
             migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "InstrumentationType");
-
-            migrationBuilder.DropTable(
-                name: "DeviceDriverType");
-
-            migrationBuilder.DropTable(
-                name: "DeviceType");
+                name: "Esp");
 
             migrationBuilder.DropTable(
                 name: "Zone");
-
-            migrationBuilder.DropTable(
-                name: "Esp");
 
             migrationBuilder.DropTable(
                 name: "Farms");

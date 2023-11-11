@@ -1,4 +1,6 @@
 ﻿
+using Service.Contracts.Device;
+
 namespace Service.Contracts
 {
     public interface IServiceManager
@@ -10,11 +12,9 @@ namespace Service.Contracts
         IDeviceDriverService DeviceDriver { get; }
         IAuthenticationService AuthenticationService { get; }
         IValueTypeService ValueType { get; }
-
         IInstrumentSetThresholdService InstrumentSetThreshold { get; }
-
         IUserService User { get; }
-
         IEspService EspService { get; }
+        IDeviceService Device { get; }
     }
 }

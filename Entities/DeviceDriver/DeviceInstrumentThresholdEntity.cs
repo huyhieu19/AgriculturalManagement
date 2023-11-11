@@ -1,12 +1,14 @@
-﻿namespace Entities
+﻿using Entities.ESP;
+
+namespace Entities
 {
     public class DeviceInstrumentThresholdEntity
     {
         public int Id { get; set; }
-        public int DeviceDriverId { get; set; }
-        public DeviceDriverEntity? DeviceDriver { get; set; }
-        public int InstrumentationId { get; set; }
-        public InstrumentationEntity? Instrumentation { get; set; }
+        public Guid DeviceDriverId { get; set; }
+        public DeviceEntity? DeviceDriver { get; set; }
+        public Guid InstrumentationId { get; set; }
+        public DeviceEntity? DeviceInstrumentation { get; set; }
         public bool? OnInUpperThreshold { get; set; }
 
         // Case: Device return value

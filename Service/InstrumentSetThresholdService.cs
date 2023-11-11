@@ -23,7 +23,7 @@ namespace Service
             return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);
         }
 
-        public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffByIdDeviceDriver(int Id)
+        public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id)
         {
             var result = await repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffByIdDeviceDriver(Id);
             return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);

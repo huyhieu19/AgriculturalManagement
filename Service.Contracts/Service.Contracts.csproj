@@ -15,4 +15,9 @@
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DeviceTimer\" />
+    <Folder Include="DeviceAutoOnOff\" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,4 @@
-﻿using Models.ESP;
+﻿using Models.Device;
 
 namespace Models
 {
@@ -13,6 +13,6 @@ namespace Models
         public string ClientId { get; set; } = null!;
         public string UserName { get; set; } = null!;
         public string Password { get; set; } = null!;
-        public List<DeviceESPDisplayModel>? DeviceTypes { get; set; }
+        public List<DeviceDisplayModel>? DeviceTypes { get; set; }
     }
 }

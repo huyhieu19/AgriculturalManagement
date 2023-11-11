@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Common.Queries;
-using Dapper;
 using Database;
 using Entities;
 using Models;
@@ -32,13 +30,15 @@ namespace Service
 
         public async Task<IEnumerable<ZoneDisplayModel>> GetZones(int farmId, bool trackChanges)
         {
-            string query = ZoneQuery.GetZoneSQL;
-            IEnumerable<ZoneDisplayModel> result;
-            using (var connection = dapperContext.CreateConnection())
-            {
-                result = await connection.QueryAsync<ZoneDisplayModel>(query, new { FarmId = farmId });
-            }
-            return result;
+            //string query = ZoneQuery.GetZoneSQL;
+            //IEnumerable<ZoneDisplayModel> result;
+            //using (var connection = dapperContext.CreateConnection())
+            //{
+            //    result = await connection.QueryAsync<ZoneDisplayModel>(query, new { FarmId = farmId });
+            //}
+            var entities = await repositoryManager.Zone.GetZones(farmId, trackChanges);
+            var zones = mapper.Map<IEnumerable<ZoneDisplayModel>>(entities);
+            return zones;
         }
 
         public async Task<bool> RemoveZone(int id)

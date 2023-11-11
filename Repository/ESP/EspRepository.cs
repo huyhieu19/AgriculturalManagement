@@ -38,7 +38,7 @@ namespace Repository
             {
                 throw new ArgumentException("Esp not exist");
             }
-            
+
             if (entity.UserId == userId)
             {
                 throw new ArgumentException("The Esp has been assigned to the user");
@@ -55,7 +55,7 @@ namespace Repository
 
         public async Task<List<EspEntity>> GetEspsAll()
         {
-            var entities =  await FindAll(false).Include(src => src.DeviceTypes)!.ThenInclude(src => src.DeviceDriver).ToListAsync();
+            var entities = await FindAll(false).Include(src => src.DeviceTypes).ToListAsync();
             return entities;
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.ESP;
+using Models.Device;
 using MQTTProcess;
 using Service;
 using Service.Contracts;
@@ -60,13 +60,13 @@ namespace AgriculturalManagement.Controllers.ESP
 
 
         [HttpPost("devices-Esp")]
-        public async Task<List<DeviceESPDisplayModel>> DeviceESPDisplay(Guid id)
+        public async Task<List<DeviceDisplayModel>> DeviceESPDisplay(Guid id)
         {
             return await _serviceManager.EspService.DeviceESPDisplay(id);
         }
 
         [HttpPost("device-Esp-create")]
-        public async Task<bool> DeviceESPCreate(DeviceESPCreateModel model)
+        public async Task<bool> DeviceESPCreate(DeviceCreateModel model)
         {
             return await _serviceManager.EspService.DeviceESPCreate(model);
         }

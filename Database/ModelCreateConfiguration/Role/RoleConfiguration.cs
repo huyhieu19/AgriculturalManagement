@@ -14,12 +14,12 @@ namespace Database.ModelCreateConfiguration.Role
                 Name = "Manager",
                 NormalizedName = "MANAGER"
             },
-                new IdentityRole
-                {
-                    Id = "efd37bbc-5fa6-45ba-a749-bf93cdadbf60",
-                    Name = "Administrator",
-                    NormalizedName = "ADMINISTRATOR"
-                });
+            new IdentityRole
+            {
+                Id = "efd37bbc-5fa6-45ba-a749-bf93cdadbf60",
+                Name = "Administrator",
+                NormalizedName = "ADMINISTRATOR"
+            });
         }
     }
 }

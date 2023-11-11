@@ -26,7 +26,5 @@ namespace Entities
         public ZoneEntity? Zone { get; set; }
         public FarmEntity? Farm { get; set; }
         public ZoneHarvestEntity? ZoneHarvest { get; set; }
-        public InstrumentationEntity? Instrumentation { get; set; }
-        public DeviceDriverEntity? DeviceDriver { get; set; }
     }
 }

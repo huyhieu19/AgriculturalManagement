@@ -1,5 +1,5 @@
 ﻿using Models;
-using Models.ESP;
+using Models.Device;
 
 namespace Service.Contracts
 {
@@ -13,8 +13,8 @@ namespace Service.Contracts
 
         Task<bool> AddEspToUser(Guid espId, string userId);
 
-        Task<List<DeviceESPDisplayModel>> DeviceESPDisplay(Guid id);
-        Task<bool> DeviceESPCreate(DeviceESPCreateModel model);
+        Task<List<DeviceDisplayModel>> DeviceESPDisplay(Guid id);
+        Task<bool> DeviceESPCreate(DeviceCreateModel model);
         Task<bool> DeviceESPRemove(Guid id);
 
     }

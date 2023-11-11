@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using Common.ResolveProfileMapper;
 using Entities;
 using Entities.ESP;
 using Models;
-using Models.ESP;
+using Models.Device;
 
-namespace AgriculturalManagement
+namespace AgriculturalManagement.ResolveProfileMapper
 {
     public class MappingProfile : Profile
     {
@@ -20,31 +21,26 @@ namespace AgriculturalManagement
             CreateMap<FarmEntity, FarmFilterNameModel>();
 
             // Zone mapper profile 
-            CreateMap<ZoneEntity, ZoneDisplayModel>();
+            CreateMap<ZoneEntity, ZoneDisplayModel>()
+            .ForMember(dest => dest.CountDeviceDriver, opt => opt.MapFrom<DeviceDriverCountResolver>())
+            .ForMember(dest => dest.CountInstrumentation, opt => opt.MapFrom<InstrumentationCountResolver>());
+
             CreateMap<ZoneUpdateModel, ZoneEntity>();
             CreateMap<ZoneCreateModel, ZoneEntity>();
 
             // Image
             CreateMap<ImageEntity, ImageDisplayModel>().ReverseMap();
 
-            // Instrumentation
-            CreateMap<InstrumentationEntity, InstrumentationDisplayModel>();
-            CreateMap<InstrumentationCreateModel, InstrumentationEntity>();
-
             // Value Type
             CreateMap<InstrumentationTypeEntity, InstrumentationTypeDisplayModel>().ReverseMap();
             CreateMap<InstrumentationTypeCreateModel, InstrumentationTypeEntity>();
 
-            CreateMap<DeviceDriverTypeEntity, DeviceDriversTypeDisplayModel>().ReverseMap();
-            CreateMap<DeviceDriversTypeCreateModel, DeviceDriverTypeEntity>();
 
             CreateMap<TypeTreeEntity, TypeTreeDisplayModel>().ReverseMap();
             CreateMap<TypeTreeCreateModel, TypeTreeEntity>();
 
             // Device Driver profile mapping
-            CreateMap<DeviceDriverEntity, DeviceDriverDisplayModel>();
-            CreateMap<DeviceDriverUpdateModel, DeviceDriverEntity>();
-            CreateMap<DeviceDriverCreateModel, DeviceDriverEntity>();
+
 
             // Timer Device Driver
             CreateMap<TimerDeviceDriverDisplayModel, TimerDeviceDriverEntity>().ReverseMap();
@@ -61,9 +57,9 @@ namespace AgriculturalManagement
             // ESP
             CreateMap<EspEntity, EspDisplayModel>();
             CreateMap<EspCreateModel, EspEntity>();
-            CreateMap<DeviceTypeEspEntity, DeviceESPDisplayModel>();
+            CreateMap<DeviceEntity, DeviceDisplayModel>();
 
-            CreateMap<DeviceESPCreateModel, DeviceTypeEspEntity>().ForMember(dest => dest.Gpio, opt => opt.MapFrom(src => src.Gpio.ToString()));
+            CreateMap<DeviceCreateModel, DeviceEntity>().ForMember(dest => dest.Gpio, opt => opt.MapFrom(src => src.Gpio.ToString()));
 
         }
     }

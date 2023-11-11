@@ -62,7 +62,7 @@ namespace Repository
                         Description = farm.Description,
                         Address = farm.Address,
                         Note = farm.Note,
-                        CreatedDate = farm.CreatedDate,
+                        DateCreated = farm.DateCreated,
                         Area = farm.Area,
                         CountZone = zones.Count()
                     })

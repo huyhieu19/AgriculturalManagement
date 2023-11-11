@@ -31,7 +31,7 @@ namespace AgriculturalManagement.Controllers.Authentication
         public async Task<IActionResult> Authenticate([FromBody] LoginModel user)
         {
             if (!await _service.AuthenticationService.ValidateUser(user))
-                return Unauthorized();
+                return BadRequest("Email or Password incorrect");
 
             var tokenModel = await _service.AuthenticationService.CreateToken(populateExp: true);
             var profile = _service.AuthenticationService.GetProfilebyToken(tokenModel.AccessToken);
