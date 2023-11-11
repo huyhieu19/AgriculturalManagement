@@ -24,4 +24,9 @@
     <ProjectReference Include="..\Service.Contracts\Service.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DeviceControl\" />
+    <Folder Include="DeviceTimer\" />
+  </ItemGroup>
+
 </Project>

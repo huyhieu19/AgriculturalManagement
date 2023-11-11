@@ -5,61 +5,62 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Repository.Contracts;
 using Service.Contracts;
+using Service.Contracts.Device;
+using Service.Device;
 
 namespace Service
 {
     public sealed class ServiceManager : IServiceManager
     {
-        private readonly Lazy<IFarmService> farmService;
-        private readonly Lazy<IZoneService> zoneService;
-        private readonly Lazy<IImageService> imageService;
-        private readonly Lazy<IInstrumentationService> instrumentationService;
-        private readonly Lazy<IDeviceDriverService> deviceDriverService;
-        private readonly Lazy<IMachineService> machineService;
-        private readonly Lazy<IAuthenticationService> authenticationService;
-        private readonly Lazy<IValueTypeService> valueTypeService;
-        private readonly Lazy<IInstrumentSetThresholdService> instrumentSetThresholdService;
-        private readonly Lazy<IUserService> userService;
-        private readonly Lazy<IEspService> espService;
+        private readonly Lazy<IFarmService> farm;
+        private readonly Lazy<IZoneService> zone;
+        private readonly Lazy<IImageService> image;
+        private readonly Lazy<IInstrumentationService> instrumentation;
+        private readonly Lazy<IDeviceDriverService> deviceDriver;
+        private readonly Lazy<IAuthenticationService> authentication;
+        private readonly Lazy<IValueTypeService> valueType;
+        private readonly Lazy<IInstrumentSetThresholdService> instrumentSetThreshold;
+        private readonly Lazy<IUserService> user;
+        private readonly Lazy<IEspService> esp;
+        private readonly Lazy<IDeviceService> device;
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
             IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration, DapperContext dapperContext, FactDbContext factDbContext)
         {
-            this.farmService = new Lazy<IFarmService>(() => new FarmService(repositoryManager, logger, mapper, dapperContext));
-            this.zoneService = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper, dapperContext));
-            this.imageService = new Lazy<IImageService>(() => new ImageService(repositoryManager, mapper));
-            this.instrumentationService = new Lazy<IInstrumentationService>(() => new InstrumentationService(repositoryManager, mapper));
-            this.deviceDriverService = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper, dapperContext, logger));
-            this.machineService = new Lazy<IMachineService>(() => new MachineService(repositoryManager, mapper));
-            this.authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, factDbContext, userManager, logger, configuration));
-            this.valueTypeService = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));
-            this.instrumentSetThresholdService = new Lazy<IInstrumentSetThresholdService>(() => new InstrumentSetThresholdService(repositoryManager, mapper));
-            this.userService = new Lazy<IUserService>(() => new UserService(repositoryManager, mapper, userManager));
-            this.espService = new Lazy<IEspService>(() => new EspService(repositoryManager, mapper));
+            this.farm = new Lazy<IFarmService>(() => new FarmService(repositoryManager, logger, mapper, dapperContext));
+            this.zone = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper, dapperContext));
+            this.image = new Lazy<IImageService>(() => new ImageService(repositoryManager, mapper));
+            this.deviceDriver = new Lazy<IDeviceDriverService>(() => new DeviceDriverService(repositoryManager, mapper, dapperContext, logger));
+            this.authentication = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, factDbContext, userManager, logger, configuration));
+            this.valueType = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));
+            this.instrumentSetThreshold = new Lazy<IInstrumentSetThresholdService>(() => new InstrumentSetThresholdService(repositoryManager, mapper));
+            this.user = new Lazy<IUserService>(() => new UserService(repositoryManager, mapper, userManager));
+            this.esp = new Lazy<IEspService>(() => new EspService(repositoryManager, mapper));
+            this.device = new Lazy<IDeviceService>(() => new DeviceService(repositoryManager, mapper));
         }
 
 
-        public IFarmService Farm => farmService.Value;
+        public IFarmService Farm => farm.Value;
 
-        public IZoneService Zone => zoneService.Value;
+        public IZoneService Zone => zone.Value;
 
-        public IImageService Image => imageService.Value;
+        public IImageService Image => image.Value;
 
-        public IInstrumentationService Instrumentation => instrumentationService.Value;
+        public IInstrumentationService Instrumentation => instrumentation.Value;
 
-        public IDeviceDriverService DeviceDriver => deviceDriverService.Value;
+        public IDeviceDriverService DeviceDriver => deviceDriver.Value;
 
-        public IMachineService Machine => machineService.Value;
+        public IAuthenticationService AuthenticationService => authentication.Value;
 
-        public IAuthenticationService AuthenticationService => authenticationService.Value;
+        public IValueTypeService ValueType => valueType.Value;
 
-        public IValueTypeService ValueType => valueTypeService.Value;
+        public IInstrumentSetThresholdService InstrumentSetThreshold => instrumentSetThreshold.Value;
 
-        public IInstrumentSetThresholdService InstrumentSetThreshold => instrumentSetThresholdService.Value;
+        public IUserService User => user.Value;
 
-        public IUserService User => userService.Value;
+        public IEspService EspService => esp.Value;
 
-        public IEspService EspService => espService.Value;
+        public IDeviceService Device => device.Value;
     }
 }

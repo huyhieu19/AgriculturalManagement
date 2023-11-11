@@ -9,11 +9,10 @@ using MQTTProcess;
 using Repository;
 using Repository.Contracts;
 using Service;
-using Service.BackgroundJob;
 using Service.Contracts;
 using Service.Contracts.ESP;
 using Service.ESP;
-using Service.Extention;
+using Service.Extensions;
 
 namespace Startup
 {
@@ -28,16 +27,16 @@ namespace Startup
             builder.Services.AddSingleton<DapperContext>();
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
             builder.Services.AddSingleton<IDeviceAutoService, DeviceAutoService>();
-            builder.Services.AddSingleton<ICustomServiceStopper, UploadToMongoDb>();
+            builder.Services.AddSingleton<IRestartAsyncMQTTService, ProcessDataReceivedFromMQTT>();
             builder.Services.AddSingleton<IEspBackgroundProcessService, EspBackgroundProcessService>();
 
 
 
 
             // Inject background service
-            builder.Services.AddHostedService<UploadToMongoDb>();
+            //builder.Services.AddHostedService<ProcessDataReceivedFromMQTT>();
             //builder.Services.AddHostedService<JobForDeviceDriverService>();
-            builder.Services.AddHostedService<JobThresholdService>();
+            //builder.Services.AddHostedService<JobThresholdService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -55,8 +54,8 @@ namespace Startup
                     builder =>
                     {
                         builder.AllowAnyOrigin()
-                               .AllowAnyHeader()
-                               .AllowAnyMethod();
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
                     });
             });
 
@@ -73,7 +72,7 @@ namespace Startup
         {
             // SQL Server dependency Injection
             builder.Services.AddDbContext<FactDbContext>(options =>
-                  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("AgriculturalManagement")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("AgriculturalManagement")));
 
 
             builder.Services.AddSwaggerGen(opt =>

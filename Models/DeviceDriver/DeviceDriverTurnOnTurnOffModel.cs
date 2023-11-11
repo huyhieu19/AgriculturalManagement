@@ -20,7 +20,6 @@
 
         #region In device driver
         public bool IsAction { get; set; }
-        public bool IsProblem { get; set; }
         public bool IsAuto { get; set; }
         #endregion
     }

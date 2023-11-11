@@ -12,7 +12,7 @@ namespace Entities
         public string? Name { get; set; }
 
 
-        [ForeignKey("Farm")]
+        [ForeignKey("Farms")]
         public int? FarmId { get; set; }
         [ForeignKey("Zone")]
         public int? ZoneId { get; set; }
@@ -26,7 +26,5 @@ namespace Entities
         public ZoneEntity? Zone { get; set; }
         public FarmEntity? Farm { get; set; }
         public ZoneHarvestEntity? ZoneHarvest { get; set; }
-        public InstrumentationEntity? Instrumentation { get; set; }
-        public DeviceDriverEntity? DeviceDriver { get; set; }
     }
 }

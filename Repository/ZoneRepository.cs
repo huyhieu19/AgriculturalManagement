@@ -19,12 +19,13 @@ namespace Repository
             //var entity = FindByCondition(p => p.Id == id, false).First();
 
             Delete(new ZoneEntity() { Id = id });
-            //if (entity != null)
-            //{
-            //}
         }
 
-        public async Task<IEnumerable<ZoneEntity>> GetZones(int farmId, bool trackchanges) => await FindByCondition(p => p.FarmId == farmId, trackchanges).OrderBy(p => p.ZoneName).ToListAsync();
+        public async Task<IEnumerable<ZoneEntity>> GetZones(int farmId, bool trackchanges)
+        {
+            var zones = await FindByCondition(p => p.FarmId == farmId, trackchanges).Include(src => src.Devices).OrderBy(p => p.ZoneName).ToListAsync();
+            return zones;
+        }
 
 
         public void UpdateZone(ZoneEntity entity) => Update(entity);

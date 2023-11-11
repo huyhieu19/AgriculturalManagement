@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Entities.ESP;
+using Microsoft.AspNetCore.Identity;
 
 
 //IdentityUser
@@ -17,5 +18,6 @@ namespace Entities
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
         public ICollection<FarmEntity>? Farms { get; set; }
+        public ICollection<EspEntity>? Esps { get; set; }
     }
 }

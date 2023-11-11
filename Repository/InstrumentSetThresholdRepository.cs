@@ -21,7 +21,7 @@ namespace Repository
             return await FindAll(false).ToListAsync();
         }
 
-        public async Task<IEnumerable<DeviceInstrumentThresholdEntity>> DeviceInstrumentOnOffByIdDeviceDriver(int Id)
+        public async Task<IEnumerable<DeviceInstrumentThresholdEntity>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id)
         {
             return await FindByCondition(p => p.DeviceDriverId == Id && !p.IsDelete, false).ToListAsync();
         }
