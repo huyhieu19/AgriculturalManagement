@@ -1,4 +1,4 @@
-﻿using Entities.ESP;
+﻿using Entities.Module;
 
 namespace Entities
 {

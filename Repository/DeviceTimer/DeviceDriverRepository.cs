@@ -1,6 +1,6 @@
 ﻿using Database;
 using Entities;
-using Entities.ESP;
+using Entities.Module;
 using Repository.Contracts.DeviceTimer;
 
 namespace Repository.DeviceTimer

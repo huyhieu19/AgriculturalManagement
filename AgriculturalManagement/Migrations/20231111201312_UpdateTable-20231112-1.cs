@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgriculturalManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class update202311111 : Migration
+    public partial class UpdateTable202311121 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -93,32 +93,6 @@ namespace AgriculturalManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Esp",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Topic = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MqttServer = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "broker.emqx.io"),
-                    MqttPort = table.Column<int>(type: "int", nullable: false, defaultValue: 1883),
-                    ClientId = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "ClientId"),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "emqx"),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "public")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Esp", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Esp_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Farms",
                 columns: table => new
                 {
@@ -137,6 +111,32 @@ namespace AgriculturalManagement.Migrations
                     table.PrimaryKey("PK_Farms", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Farms_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Module",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModuleType = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MqttServer = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "broker.emqx.io"),
+                    MqttPort = table.Column<int>(type: "int", nullable: false, defaultValue: 1883),
+                    ClientId = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "ClientId"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "emqx"),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "public")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Module", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Module_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
@@ -263,7 +263,7 @@ namespace AgriculturalManagement.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EspId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ModuleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ZoneId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NameRef = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -272,19 +272,19 @@ namespace AgriculturalManagement.Migrations
                     IsAction = table.Column<bool>(type: "bit", nullable: false),
                     IsUsed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     IsAuto = table.Column<bool>(type: "bit", nullable: false),
-                    DeviceType = table.Column<int>(type: "int", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gpio = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Topic = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DeviceType = table.Column<int>(type: "int", nullable: false),
                     ResponseType = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Device", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Device_Esp_EspId",
-                        column: x => x.EspId,
-                        principalTable: "Esp",
+                        name: "FK_Device_Module_ModuleId",
+                        column: x => x.ModuleId,
+                        principalTable: "Module",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -467,9 +467,9 @@ namespace AgriculturalManagement.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Device_EspId",
+                name: "IX_Device_ModuleId",
                 table: "Device",
-                column: "EspId");
+                column: "ModuleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Device_ZoneId",
@@ -485,11 +485,6 @@ namespace AgriculturalManagement.Migrations
                 name: "IX_DeviceInstrumentThreshold_InstrumentationId",
                 table: "DeviceInstrumentThreshold",
                 column: "InstrumentationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Esp_UserId",
-                table: "Esp",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Farms_UserId",
@@ -515,6 +510,11 @@ namespace AgriculturalManagement.Migrations
                 name: "IX_JobInZoneEntity_ZoneId",
                 table: "JobInZoneEntity",
                 column: "ZoneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Module_UserId",
+                table: "Module",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -616,7 +616,7 @@ namespace AgriculturalManagement.Migrations
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Esp");
+                name: "Module");
 
             migrationBuilder.DropTable(
                 name: "Zone");

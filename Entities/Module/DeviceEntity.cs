@@ -1,14 +1,16 @@
-﻿using Common.Enum;
+﻿// Ignore Spelling: Gpio
+
+using Common.Enum;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Entities.ESP
+namespace Entities.Module
 {
     public class DeviceEntity
     {
         // PK
         public Guid Id { get; set; }
         // FK
-        public Guid EspId { get; set; }
+        public Guid ModuleId { get; set; }
         [ForeignKey("Zone")]
         public int? ZoneId { get; set; }
 
@@ -19,15 +21,14 @@ namespace Entities.ESP
         public bool IsAction { get; set; }
         public bool IsUsed { get; set; }
         public bool IsAuto { get; set; }
-        public DeviceType? DeviceType { get; set; }
         public string? Unit { get; set; }
         public string? Gpio { get; set; }
         public Guid Topic { get; set; }
+        public DeviceType DeviceType { get; set; }
         public ResponseSensorType? ResponseType { get; set; }
 
-
         public ZoneEntity? Zone { get; set; }
-        public EspEntity? Esp { get; set; }
+        public ModuleEntity? Module { get; set; }
         public ICollection<TimerDeviceDriverEntity>? TimerDevices { get; set; }
         public ICollection<DeviceInstrumentThresholdEntity>? DeviceInstrumentOnOffs { get; set; }
     }

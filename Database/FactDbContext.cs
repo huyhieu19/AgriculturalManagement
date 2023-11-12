@@ -2,9 +2,9 @@
 using Database.ModelCreateConfiguration.Role;
 using Entities;
 using Entities.CommonType;
-using Entities.ESP;
 using Entities.Farm;
 using Entities.Image;
+using Entities.Module;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace Database
@@ -58,7 +58,7 @@ namespace Database
             builder.ApplyConfiguration(new DeviceInstrumentThresholdConfiguration());
 
             //ESP
-            builder.ApplyConfiguration(new EspConfigurarion());
+            builder.ApplyConfiguration(new ModuleConfigurarion());
             builder.ApplyConfiguration(new DeviceConfiguration());
         }
         // DeviceDriver DataSet
@@ -82,7 +82,7 @@ namespace Database
         public DbSet<DeviceInstrumentThresholdEntity> DeviceInstrumentThresholdEntities { get; set; } = null!;
 
         // ESP
-        public DbSet<EspEntity> Esp8266Entities { get; set; } = null!;
+        public DbSet<ModuleEntity> ModuleEntities { get; set; } = null!;
         public DbSet<DeviceEntity> DeviceEntities { get; set; } = null!;
     }
 }

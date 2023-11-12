@@ -24,14 +24,14 @@ namespace Service
         private readonly Lazy<IFarmService> farm;
         private readonly Lazy<IZoneService> zone;
         private readonly Lazy<IImageService> image;
-        private readonly Lazy<IInstrumentationService> instrumentation;
         private readonly Lazy<IDeviceTimerService> deviceDriver;
         private readonly Lazy<IAuthenticationService> authentication;
         private readonly Lazy<IValueTypeService> valueType;
         private readonly Lazy<IInstrumentSetThresholdService> instrumentSetThreshold;
         private readonly Lazy<IUserService> user;
-        private readonly Lazy<IEspService> esp;
+        private readonly Lazy<IModuleService> esp;
         private readonly Lazy<IDeviceService> device;
+        private readonly Lazy<IMockDataService> mockData;
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
@@ -45,8 +45,9 @@ namespace Service
             this.valueType = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));
             this.instrumentSetThreshold = new Lazy<IInstrumentSetThresholdService>(() => new InstrumentSetThresholdService(repositoryManager, mapper));
             this.user = new Lazy<IUserService>(() => new UserService(repositoryManager, mapper, userManager));
-            this.esp = new Lazy<IEspService>(() => new EspService(repositoryManager, mapper));
+            this.esp = new Lazy<IModuleService>(() => new ModuleService(repositoryManager, mapper));
             this.device = new Lazy<IDeviceService>(() => new DeviceService(repositoryManager, mapper));
+            this.mockData = new Lazy<IMockDataService>(() => new MockDataService(repositoryManager, mapper));
         }
 
 
@@ -55,8 +56,6 @@ namespace Service
         public IZoneService Zone => zone.Value;
 
         public IImageService Image => image.Value;
-
-        public IInstrumentationService Instrumentation => instrumentation.Value;
 
         public IDeviceTimerService DeviceDriver => deviceDriver.Value;
 
@@ -68,8 +67,10 @@ namespace Service
 
         public IUserService User => user.Value;
 
-        public IEspService EspService => esp.Value;
+        public IModuleService EspService => esp.Value;
 
         public IDeviceService Device => device.Value;
+
+        public IMockDataService MockData => mockData.Value;
     }
 }

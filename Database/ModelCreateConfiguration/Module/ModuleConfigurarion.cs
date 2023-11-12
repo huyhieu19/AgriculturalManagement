@@ -1,14 +1,14 @@
-﻿using Entities.ESP;
+﻿using Entities.Module;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Database.ModelCreateConfiguration
 {
-    internal class EspConfigurarion : IEntityTypeConfiguration<EspEntity>
+    internal class ModuleConfigurarion : IEntityTypeConfiguration<ModuleEntity>
     {
-        public void Configure(EntityTypeBuilder<EspEntity> builder)
+        public void Configure(EntityTypeBuilder<ModuleEntity> builder)
         {
-            builder.ToTable("Esp");
+            builder.ToTable("Module");
             builder.Property<Guid>(p => p.Id).IsRequired();
             // config relationship table
             builder.HasOne(p => p.User).WithMany(p => p.Esps).HasForeignKey(p => p.UserId);

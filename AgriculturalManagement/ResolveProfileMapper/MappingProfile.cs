@@ -2,9 +2,9 @@
 using Common.ResolveProfileMapper;
 using Entities;
 using Entities.CommonType;
-using Entities.ESP;
 using Entities.Farm;
 using Entities.Image;
+using Entities.Module;
 using Models;
 using Models.Device;
 using Models.DeviceTimer;
@@ -57,9 +57,8 @@ namespace AgriculturalManagement.ResolveProfileMapper
             // User
             CreateMap<UserEntity, ProfileUser>();
 
-            // ESP
-            CreateMap<EspEntity, EspDisplayModel>();
-            CreateMap<EspCreateModel, EspEntity>();
+            // Module
+            CreateMap<ModuleEntity, ModuleDisplayModel>();
             CreateMap<DeviceEntity, DeviceDisplayModel>();
 
             CreateMap<DeviceCreateModel, DeviceEntity>().ForMember(dest => dest.Gpio, opt => opt.MapFrom(src => src.Gpio.ToString()));

@@ -1,4 +1,4 @@
-﻿using Entities.ESP;
+﻿using Entities.Module;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,6 +15,6 @@ public class DeviceConfiguration : IEntityTypeConfiguration<DeviceEntity>
 
         builder.HasOne(p => p.Zone).WithMany(p => p.Devices).HasForeignKey(p => p.ZoneId);
 
-        builder.HasOne(p => p.Esp).WithMany(p => p.DeviceTypes).HasForeignKey(p => p.EspId);
+        builder.HasOne(p => p.Module).WithMany(p => p.Devices).HasForeignKey(p => p.ModuleId);
     }
 }

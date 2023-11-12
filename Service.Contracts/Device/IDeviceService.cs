@@ -13,8 +13,9 @@ namespace Service.Contracts.Device
 {
     public interface IDeviceService
     {
-        Task<List<DeviceDisplayModel>> DevicesDisplay(int zoneId);
-        Task<DeviceModifyResponseModel> DeviceCreate(Guid deviceId, int zoneId);
-        Task<DeviceModifyResponseModel> DeviceRemove(Guid deviceId, int zoneId);
+        Task<List<DeviceDisplayModel>> GetDevicesControlOnZone(int zoneId);
+        Task<List<DeviceDisplayModel>> GetDevicesInstrumentationOnZone(int zoneId);
+        Task<bool> AddDeviceToZone(Guid deviceId, int zoneId);
+        Task<bool> RemoveDeviceFromZone(Guid deviceId, int zoneId);
     }
 }

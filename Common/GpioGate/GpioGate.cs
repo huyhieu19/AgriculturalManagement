@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Common.GpioGate
+﻿namespace Common.GpioGate
 {
     public static class GpioGate
     {
@@ -19,12 +13,6 @@ namespace Common.GpioGate
             "D6",// GPIO12
             "D7",// GPIO13
             "D8",// GPIO15
-            "CLK",// GPIO6
-            "SDO",// GPI7
-            "CMD",// GPIO11
-            "SD1",// GPIO8
-            "SD2",// GPIO9
-            "SD3",// GPIO10
         };
     }
 }

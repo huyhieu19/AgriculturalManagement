@@ -3,9 +3,9 @@ using Common.Queries;
 using Dapper;
 using Database;
 using Models.ESP;
-using Service.Contracts.ESP;
+using Service.Contracts.Module;
 
-namespace Service.ESP
+namespace Service.Module
 {
     public class EspBackgroundProcessService : IEspBackgroundProcessService
     {

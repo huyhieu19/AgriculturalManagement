@@ -21,10 +21,9 @@ namespace Repository.Contracts
         ITypeTreeRepository TypeTree { get; }
         #endregion
 
-        IEspRepository Esp { get; }
-        IDeviceEspRepository DeviceEsp { get; }
-
-        IDeviceRepository device { get; }
+        IModuleRepository Module { get; }
+        IDeviceRepository Device { get; }
+        IMockDataRepository mockData { get; }
 
         Task<int> SaveAsync();
     }
