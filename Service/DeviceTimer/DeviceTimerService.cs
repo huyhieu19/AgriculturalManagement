@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.Queries;
+using Common.TimeHelper;
 using Dapper;
 using Database;
 using Entities;
@@ -28,83 +29,102 @@ namespace Service.DeviceTimer
             this.logger = logger;
         }
 
-
-        #region Timer
-        public async Task CreateTimer(TimerDeviceDriverCreateModel model)
+        #region using EF Core
+        public async Task<bool> CreateTimer(TimerDeviceDriverCreateModel model)
         {
-            var entity = mapper.Map<TimerDeviceDriverEntity>(model);
+            var entity = new TimerDeviceDriverEntity()
+            {
+                DateCreated = SetTimeZone.GetDateTimeVN(),
+                DateUpdated = null,
+                DeviceDriverId = model.DeviceDriverId,
+                IsRemove = false,
+                IsSuccess = false,
+                Note = model.Note,
+                IsAffected = false,
+                OpenTimer = model.OpenTimer,
+                ShutDownTimer = model.ShutDownTimer
+            };
+
             repositoryManager.DeviceDriver.CreateTimer(entity);
-            await repositoryManager.SaveAsync();
+            return await repositoryManager.SaveAsync() > 0;
         }
 
-        public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimer()
+        public async Task<bool> UpdateTimer(TimerDeviceDriverUpdateModel model)
         {
-            var query = TimerDeviceDriverQuery.GetAllTimerSQL;
+            return await repositoryManager.DeviceDriver.UpdateTimer(model);
+        }
+
+        public async Task<List<TimerDeviceDriverDisplayModel>> GetAllTimerHistoryByDeviceId(Guid deviceId)
+        {
+            var entities = await repositoryManager.DeviceDriver.GetAllTimerHistoryByDeviceId(deviceId);
+            var models = mapper.Map<List<TimerDeviceDriverDisplayModel>>(entities);
+            return models;
+        }
+
+        public async Task<List<TimerDeviceDriverDisplayModel>> GetAllTimerHistory()
+        {
+            var entities = await repositoryManager.DeviceDriver.GetAllTimerHistory();
+            var models = mapper.Map<List<TimerDeviceDriverDisplayModel>>(entities);
+            return models;
+        }
+        #endregion
+
+        #region using Dapper
+        public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetTimerAvailableOfUser(string userId)
+        {
+            var query = TimerDeviceDriverQuery.GetTimerAvailableOfUserSQL;
             using (var connection = dapperContext.CreateConnection())
             {
                 connection.Open();
-                var result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query);
+                var result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query, new { UserId = userId });
                 connection.Close();
                 return result;
             }
         }
 
-        public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerByDeviceId(int Id)
+        // Hàm này dùng để set cho trạng thái của IsRemve = true
+        public async Task<bool> RemoveTimer(int timerId, Guid deviceId)
         {
-            var query = TimerDeviceDriverQuery.GetAllTimerByDeviceDriverSQL;
-            using (var connection = dapperContext.CreateConnection())
-            {
-                connection.Open();
-                var result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query, new { DeviceDriverId = Id });
-                connection.Close();
-                return result;
-            }
-        }
-
-        public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerHistory()
-        {
-            var query = TimerDeviceDriverQuery.GetAllHistorySQL;
-            using (var connection = dapperContext.CreateConnection())
-            {
-                connection.Open();
-                var result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query);
-                connection.Close();
-                return result;
-            }
-        }
-
-        public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerHistoryByDeviceId(int Id)
-        {
-            var query = TimerDeviceDriverQuery.GetAllHistorySQL;
-            using (var connection = dapperContext.CreateConnection())
-            {
-                connection.Open();
-                var result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query, new { Id });
-                connection.Close();
-                return result;
-            }
-        }
-        // Hàm này dùng để set cho trạng thái của IsRemve = true và IsSuccess = true
-        public async Task DeleteTimer(int id)
-        {
-            logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {id}");
+            logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {timerId}");
             var query = TimerDeviceDriverQuery.RemoveTimerSQL;
             var connection = dapperContext.CreateConnection();
             connection.Open();
+            int execute;
             using (var trans = connection.BeginTransaction())
             {
-                await connection.ExecuteAsync(query, new { Id = id }, transaction: trans);
+                execute = await connection.ExecuteAsync(query, new { Id = timerId, DeviceId = deviceId }, transaction: trans);
                 trans.Commit();
             }
             connection.Close();
+            return execute > 0;
+        }
+        // Hàm này dùng để set cho trạng thái của IsRemve = true và IsSuccess = true
+        public async Task<bool> SuccessJobTimer(int timerId, Guid deviceId)
+        {
+            logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {timerId}");
+            var query = TimerDeviceDriverQuery.SuccessTimerSQL;
+            var connection = dapperContext.CreateConnection();
+            connection.Open();
+            int execute;
+            using (var trans = connection.BeginTransaction())
+            {
+                execute = await connection.ExecuteAsync(query, new { Id = timerId, DeviceId = deviceId }, transaction: trans);
+                trans.Commit();
+            }
+            connection.Close();
+            return execute > 0;
         }
 
-        public async Task UpdateTimer(TimerDeviceDriverDisplayModel model)
+        public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerAvailable()
         {
-            var entity = mapper.Map<TimerDeviceDriverEntity>(model);
-
-            repositoryManager.DeviceDriver.UpdateTimer(entity);
-            await repositoryManager.SaveAsync();
+            var query = TimerDeviceDriverQuery.GetAllTimerAvailable;
+            using (var connection = dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query);
+                connection.Close();
+                return result;
+            }
         }
         #endregion
     }

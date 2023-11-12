@@ -11,7 +11,7 @@ namespace Repository.Contracts
         IFarmRepository Farm { get; }
         IZoneRepository Zone { get; }
         IImageRepository Image { get; }
-        IDeviceDriverRepository DeviceDriver { get; }
+        IDeviceTimerRepository DeviceDriver { get; }
 
         IInstrumentSetThresholdRepository InstrumentSetThreshold { get; }
 

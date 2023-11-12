@@ -11,11 +11,9 @@ namespace AgriculturalManagement.Controllers.Authentication
     public class AuthenticationController : ControllerBase
     {
         private readonly IServiceManager _service;
-        private readonly IHttpContextAccessor _contextAccessor;
-        public AuthenticationController(IServiceManager service, IHttpContextAccessor contextAccessor)
+        public AuthenticationController(IServiceManager service)
         {
             _service = service;
-            _contextAccessor = contextAccessor;
         }
         [HttpPost, Route("register")]
         public async Task<IdentityResult> RegisterUser(UserRegisterationModel userRegisterationModel)

@@ -20,7 +20,7 @@ namespace Repository
         private readonly Lazy<IFarmRepository> farmRepository;
         private readonly Lazy<IZoneRepository> zoneRepository;
         private readonly Lazy<IImageRepository> imageRepository;
-        private readonly Lazy<IDeviceDriverRepository> deviceDriverRepository;
+        private readonly Lazy<IDeviceTimerRepository> deviceDriverRepository;
         private readonly Lazy<IInstrumentationTypeRepository> instrumentationTypeRepository;
         private readonly Lazy<ITypeTreeRepository> typeTreeRepository;
         private readonly Lazy<IInstrumentSetThresholdRepository> instrumentSetThresholdRepository;
@@ -37,7 +37,7 @@ namespace Repository
             farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext, logger));
             zoneRepository = new Lazy<IZoneRepository>(() => new ZoneRepository(factDbContext));
             imageRepository = new Lazy<IImageRepository>(() => new ImageRepository(factDbContext, dapperContext));
-            deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext));
+            deviceDriverRepository = new Lazy<IDeviceTimerRepository>(() => new DeviceTimerRepository(factDbContext));
             instrumentationTypeRepository = new Lazy<IInstrumentationTypeRepository>(() => new InstrumentationTypeRepository(factDbContext, dapperContext));
             typeTreeRepository = new Lazy<ITypeTreeRepository>(() => new TypeTreeRepository(factDbContext, dapperContext));
             instrumentSetThresholdRepository = new Lazy<IInstrumentSetThresholdRepository>(() => new InstrumentSetThresholdRepository(factDbContext));
@@ -52,7 +52,7 @@ namespace Repository
 
         public IImageRepository Image => imageRepository.Value;
 
-        public IDeviceDriverRepository DeviceDriver => deviceDriverRepository.Value;
+        public IDeviceTimerRepository DeviceDriver => deviceDriverRepository.Value;
 
         public IInstrumentationTypeRepository InstrumentationType => instrumentationTypeRepository.Value;
 

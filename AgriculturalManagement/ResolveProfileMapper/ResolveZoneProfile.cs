@@ -10,7 +10,7 @@ public class DeviceDriverCountResolver : IValueResolver<ZoneEntity, ZoneDisplayM
     public int? Resolve(ZoneEntity source, ZoneDisplayModel destination, int? member, ResolutionContext context)
     {
         // Tính toán số lượng Device có DeviceType = 1
-        return source.Devices?.Count(device => device.DeviceType == DeviceType.DeviceDriver);
+        return source.Devices?.Count(device => device.DeviceType == DeviceType.W);
     }
 }
 
@@ -19,6 +19,6 @@ public class InstrumentationCountResolver : IValueResolver<ZoneEntity, ZoneDispl
     public int? Resolve(ZoneEntity source, ZoneDisplayModel destination, int? member, ResolutionContext context)
     {
         // Tính toán số lượng Device có DeviceType = 2
-        return source.Devices?.Count(device => device.DeviceType == DeviceType.Instrumentation);
+        return source.Devices?.Count(device => device.DeviceType == DeviceType.R);
     }
 }

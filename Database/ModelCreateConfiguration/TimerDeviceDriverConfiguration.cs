@@ -12,7 +12,7 @@ namespace Database.ModelCreateConfiguration
 
             builder.HasKey(t => t.Id);
 
-            builder.HasOne(t => t.DeviceDriver).WithMany(p => p.TimerDevices).HasForeignKey(t => t.DeviceDriverId).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(t => t.Devices).WithMany(p => p.TimerDevices).HasForeignKey(t => t.DeviceDriverId).OnDelete(DeleteBehavior.NoAction);
 
             builder.Property(t => t.IsRemove).HasDefaultValue(false);
             builder.Property(t => t.IsSuccess).HasDefaultValue(false);

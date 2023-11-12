@@ -44,20 +44,17 @@ namespace Database
             //Farms configuration
             builder.ApplyConfiguration(new FarmConfiguration());
 
-            //builder.ApplyConfiguration(new InstrumentationTypeConfiguration());
-
             // Zone Configuration
             builder.ApplyConfiguration(new ZoneConfiguration());
 
             // Device Driver Configuration
             builder.ApplyConfiguration(new TimerDeviceDriverConfiguration());
-
             builder.ApplyConfiguration(new TypeTreeConfiguration());
-            // InstrumentSetThreshold
 
+            // InstrumentSetThreshold
             builder.ApplyConfiguration(new DeviceInstrumentThresholdConfiguration());
 
-            //ESP
+            //Module
             builder.ApplyConfiguration(new ModuleConfigurarion());
             builder.ApplyConfiguration(new DeviceConfiguration());
         }
@@ -73,7 +70,6 @@ namespace Database
 
         // Type
         public DbSet<TypeTreeEntity> TypeTreeEntities { get; set; } = null!;
-        // public DbSet<InstrumentationTypeEntity> InstrumentationTypeEntities { get; set; } = null!;
 
         // Zone 
         public DbSet<ZoneEntity> ZoneEntityEntities { get; set; } = null!;

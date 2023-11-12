@@ -50,12 +50,12 @@ namespace Repository
 
         public async Task<List<ModuleEntity>> GetModules(string userId)
         {
-            return await FindByCondition(p => p.UserId == userId, false).Include(src => src.Devices!.OrderBy(prop => prop.Gpio)).ToListAsync();
+            return await FindByCondition(p => p.UserId == userId, false).Include(src => src.Devices!.OrderBy(prop => prop.Gate)).ToListAsync();
         }
 
         public async Task<List<ModuleEntity>> GetModulesAll()
         {
-            var entities = await FindAll(false).Include(src => src.Devices!.OrderBy(prop => prop.Gpio)).ToListAsync();
+            var entities = await FindAll(false).Include(src => src.Devices!.OrderBy(prop => prop.Gate)).ToListAsync();
             return entities;
         }
     }

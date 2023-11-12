@@ -2,8 +2,9 @@
 
 namespace Models.DeviceTimer
 {
-    public class TimerDeviceDriverCreateModel
+    public class TimerDeviceDriverUpdateModel
     {
+        public int Id { get; set; }
         public DateTime? ShutDownTimer { get; set; }
         public DateTime? OpenTimer { get; set; }
         public string? Note { get; set; }

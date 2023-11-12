@@ -15,9 +15,7 @@ namespace Models.Device
         public bool IsUsed { get; set; }
         public bool IsAuto { get; set; }
         public string? Unit { get; set; }
-        public string? Gpio { get; set; }
-        public Guid Topic { get; set; }
+        public string? Gate { get; set; }
         public DeviceType DeviceType { get; set; }
-        public ResponseSensorType? ResponseType { get; set; }
     }
 }

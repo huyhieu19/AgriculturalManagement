@@ -2,39 +2,45 @@
 {
     public static class TimerDeviceDriverQuery
     {
-        public const string GetAllTimerSQL =
+        public const string GetTimerAvailableOfUserSQL =
             @"SELECT 
                 TDD.*,
-		        DD.IsAuto,
-		        DD.IsAction
+		        Ex.IsActionDevice
 		
             FROM 
                 TimerDeviceDriver TDD
             INNER JOIN
-                DeviceDriver DD
+               (Select ModuleId, M.UserId, D.IsAction AS IsActionDevice, D.Id AS DeviceId From Device AS D
+			   INNER JOIN
+			   Module AS M
+			   ON M.Id = D.ModuleId
+			   WHERE UserId = @UserId
+			   ) AS Ex
             ON 
-                DD.ID = TDD.DeviceDriverId";
+                Ex.DeviceId = TDD.DeviceDriverId
 
-        public const string GetAllTimerByDeviceDriverSQL =
+            WHERE TDD.IsSuccess = 0 AND IsRemove = 0";
+        public const string GetAllTimerAvailable =
             @"SELECT 
                 TDD.*,
-		        DD.IsAuto,
-		        DD.IsAction
-		
+		        D.IsAction
+
             FROM 
                 TimerDeviceDriver TDD
             INNER JOIN
-                DeviceDriver DD
+               Device AS D
             ON 
-                DD.ID = TDD.DeviceDriverId
-            WHERE 
-                TDD.DeviceDriverId = @DeviceDriverId";
+                Ex.DeviceId = TDD.DeviceDriverId
+
+            WHERE TDD.IsSuccess = 0 AND IsRemove = 0";
+
 
         public const string GetAllHistorySQL = @"SELECT * FROM TimerDeviceDriver WHERE IsRemove = 0";
 
         public const string GetAllHistoryByDeviceIdSQL = @"SELECT * FROM TimerDeviceDriver WHERE IsRemove = 0 AND DeviceDriverId = @DeviceDriverId";
 
-        public const string RemoveTimerSQL = @"UPDATE TimerDeviceDriver SET IsRemove = 1 WHERE Id = @Id";
+        public const string RemoveTimerSQL = @"UPDATE TimerDeviceDriver SET IsRemove = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
+        public const string SuccessTimerSQL = @"UPDATE TimerDeviceDriver SET IsSuccess = 1, IsRemove = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
 
         public const string UpdateTimerSQL = @"UPDATE TimerDeviceDriver SET IsDaily = @IsDaily,IsAuto = @IsAuto, ShutDownTimer = @ShutDownTimer, OpenTimer = @OpenTimer  WHERE Id = @Id";
 

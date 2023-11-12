@@ -46,8 +46,7 @@ namespace AgriculturalManagement.ResolveProfileMapper
 
 
             // Timer Device Driver
-            CreateMap<TimerDeviceDriverDisplayModel, TimerDeviceDriverEntity>().ReverseMap();
-            CreateMap<TimerDeviceDriverCreateModel, TimerDeviceDriverEntity>();
+            CreateMap<TimerDeviceDriverEntity, TimerDeviceDriverDisplayModel>();
 
             // InstrumentSetThreshold
             CreateMap<DeviceInstrumentThresholdEntity, InstrumentSetThresholdDisplayModel>();
@@ -61,7 +60,7 @@ namespace AgriculturalManagement.ResolveProfileMapper
             CreateMap<ModuleEntity, ModuleDisplayModel>();
             CreateMap<DeviceEntity, DeviceDisplayModel>();
 
-            CreateMap<DeviceCreateModel, DeviceEntity>().ForMember(dest => dest.Gpio, opt => opt.MapFrom(src => src.Gpio.ToString()));
+
 
         }
     }

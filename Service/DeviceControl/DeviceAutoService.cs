@@ -75,7 +75,7 @@ namespace Service
         public async Task<IEnumerable<DeviceDriverTurnOnTurnOffModel>> GetDeviceDriverTurnOnTurnOffModels()
         {
             logger.LogInformation("Job background device driver --> start");
-            var query = TimerDeviceDriverQuery.GetAllTimerSQL;
+            var query = TimerDeviceDriverQuery.GetTimerAvailableOfUserSQL;
             IEnumerable<DeviceDriverTurnOnTurnOffModel> listTime;
             using (var connection = dapperContext.CreateConnection())
             {
