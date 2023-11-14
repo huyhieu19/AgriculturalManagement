@@ -32,15 +32,14 @@ namespace Service.DeviceTimer
         #region using EF Core
         public async Task<bool> CreateTimer(TimerDeviceDriverCreateModel model)
         {
-            var entity = new TimerDeviceDriverEntity()
+            var entity = new TimerDeviceEntity()
             {
                 DateCreated = SetTimeZone.GetDateTimeVN(),
                 DateUpdated = null,
-                DeviceDriverId = model.DeviceDriverId,
+                DeviceId = model.DeviceDriverId,
                 IsRemove = false,
                 IsSuccess = false,
                 Note = model.Note,
-                IsAffected = false,
                 OpenTimer = model.OpenTimer,
                 ShutDownTimer = model.ShutDownTimer
             };

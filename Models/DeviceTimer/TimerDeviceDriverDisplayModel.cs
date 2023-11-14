@@ -14,6 +14,6 @@
         public bool IsSuccess { get; set; }
         public bool IsRemove { get; set; }
 
-        public Guid DeviceDriverId { get; set; }
+        public Guid DeviceId { get; set; }
     }
 }

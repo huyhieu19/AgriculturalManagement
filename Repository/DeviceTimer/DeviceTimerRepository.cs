@@ -7,26 +7,26 @@ using Repository.Contracts.DeviceTimer;
 
 namespace Repository.DeviceTimer
 {
-    public sealed class DeviceTimerRepository : RepositoryBase<TimerDeviceDriverEntity>, IDeviceTimerRepository
+    public sealed class DeviceTimerRepository : RepositoryBase<TimerDeviceEntity>, IDeviceTimerRepository
     {
         public DeviceTimerRepository(FactDbContext factDbContext) : base(factDbContext)
         {
         }
 
 
-        public void CreateTimer(TimerDeviceDriverEntity entity)
+        public void CreateTimer(TimerDeviceEntity entity)
         {
             Create(entity);
         }
 
-        public async Task<List<TimerDeviceDriverEntity>> GetAllTimerHistory()
+        public async Task<List<TimerDeviceEntity>> GetAllTimerHistory()
         {
             return await FindByCondition(prop => prop.IsSuccess || prop.IsRemove, false).ToListAsync();
         }
 
-        public async Task<List<TimerDeviceDriverEntity>> GetAllTimerHistoryByDeviceId(Guid deviceId)
+        public async Task<List<TimerDeviceEntity>> GetAllTimerHistoryByDeviceId(Guid deviceId)
         {
-            return await FindByCondition(prop => prop.DeviceDriverId == deviceId && (prop.IsSuccess || prop.IsRemove), false).ToListAsync();
+            return await FindByCondition(prop => prop.DeviceId == deviceId && (prop.IsSuccess || prop.IsRemove), false).ToListAsync();
         }
 
         public async Task<bool> UpdateTimer(TimerDeviceDriverUpdateModel model)

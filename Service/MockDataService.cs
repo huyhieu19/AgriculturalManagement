@@ -53,22 +53,22 @@ namespace Service
             switch (type)
             {
                 case ModuleType.ESP32:
-                    return await _repositoryManager.mockData.MockModule(mockModuleEsp32);
+                    return await _repositoryManager.MockData.MockModule(mockModuleEsp32);
                 case ModuleType.ESP8266:
-                    return await _repositoryManager.mockData.MockModule(mockModuleEsp8266);
+                    return await _repositoryManager.MockData.MockModule(mockModuleEsp8266);
             }
             return false;
         }
 
         public async Task<bool> MockDataDeviceOnModule(Guid moduleId)
         {
-            var typeModule = await _repositoryManager.mockData.GetTypeModule(moduleId);
+            var typeModule = await _repositoryManager.MockData.GetTypeModule(moduleId);
             switch (typeModule)
             {
                 case ModuleType.ESP32:
-                    return await _repositoryManager.mockData.MockDevicesOnModule(GetDeviceMock(ModuleType.ESP32, moduleId));
+                    return await _repositoryManager.MockData.MockDevicesOnModule(GetDeviceMock(ModuleType.ESP32, moduleId));
                 case ModuleType.ESP8266:
-                    return await _repositoryManager.mockData.MockDevicesOnModule(GetDeviceMock(ModuleType.ESP8266, moduleId));
+                    return await _repositoryManager.MockData.MockDevicesOnModule(GetDeviceMock(ModuleType.ESP8266, moduleId));
             }
             return false;
         }
@@ -81,9 +81,9 @@ namespace Service
                 {
                     ModuleId = moduleId,
                     Id = GenerateGuid.GetGuid(),
-                    Unit = "*C",
+                    Unit = "*C/%",
                     Gate = ESP8266GateTransferDataType.D0.ToString(),
-                    NameRef = "Thiết bị đo nhiệt độ không khí - 1",
+                    NameRef = "Nhiệt độ/Độ ẩm - 1",
                     DateCreated = null,
                     Description = null,
                     IsAction = false,
@@ -91,31 +91,31 @@ namespace Service
                     IsUsed = false,
                     Name = null,
                     ZoneId = null,
-                    DeviceType = DeviceType.R,
+                    DeviceType = DeviceType.R.ToString(),
+                },
+                new DeviceEntity()
+                {
+                    ModuleId = moduleId,
+                    Id = GenerateGuid.GetGuid(),
+                    Unit = "*C/%",
+                    Gate = ESP8266GateTransferDataType.D1.ToString(),
+                    NameRef = "Nhiệt độ/Độ ẩm - 2",
+                    DateCreated = null,
+                    Description = null,
+                    Name = null,
+                    IsAction = false,
+                    IsAuto = false,
+                    IsUsed = false,
+                    ZoneId = null,
+                    DeviceType = DeviceType.R.ToString(),
                 },
                 new DeviceEntity()
                 {
                     ModuleId = moduleId,
                     Id = GenerateGuid.GetGuid(),
                     Unit = "%",
-                    Gate = ESP8266GateTransferDataType.D1.ToString(),
-                    NameRef = "Thiết bị đo độ ẩm không khí - 1",
-                    DateCreated = null,
-                    Description = null,
-                    Name = null,
-                    IsAction = false,
-                    IsAuto = false,
-                    IsUsed = false,
-                    ZoneId = null,
-                    DeviceType = DeviceType.R,
-                },
-                new DeviceEntity()
-                {
-                    ModuleId = moduleId,
-                    Id = GenerateGuid.GetGuid(),
-                    Unit = "*C",
                     Gate = ESP8266GateTransferDataType.D2.ToString(),
-                    NameRef = "Thiết bị đo nhiệt độ không khí - 2",
+                    NameRef = "Độ ẩm đất - 1",
                     DateCreated = null,
                     Description = null,
                     IsAction = false,
@@ -123,7 +123,7 @@ namespace Service
                     IsUsed = false,
                     Name = null,
                     ZoneId = null,
-                    DeviceType = DeviceType.R,
+                    DeviceType = DeviceType.R.ToString(),
                 },
                 new DeviceEntity()
                 {
@@ -131,7 +131,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = "%",
                     Gate = ESP8266GateTransferDataType.D3.ToString(),
-                    NameRef = "Thiết bị đo độ ẩm không khí - 2",
+                    NameRef = "Độ ẩm đất - 2",
                     DateCreated = null,
                     Description = null,
                     Name = null,
@@ -139,7 +139,7 @@ namespace Service
                     IsAuto = false,
                     IsUsed = false,
                     ZoneId = null,
-                    DeviceType = DeviceType.R,
+                    DeviceType = DeviceType.R.ToString(),
                 },
                 new DeviceEntity()
                 {
@@ -147,7 +147,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = "%",
                     Gate = ESP8266GateTransferDataType.D4.ToString(),
-                    NameRef = "Thiết bị đo độ ẩm đất - 1",
+                    NameRef = "Độ ẩm đất - 3",
                     DateCreated = null,
                     Description = null,
                     Name = null,
@@ -155,7 +155,7 @@ namespace Service
                     IsAuto = false,
                     IsUsed = false,
                     ZoneId = null,
-                    DeviceType = DeviceType.R,
+                    DeviceType = DeviceType.R.ToString(),
                 },
                 new DeviceEntity()
                 {
@@ -163,7 +163,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = "%",
                     Gate = ESP8266GateTransferDataType.D5.ToString(),
-                    NameRef = "Thiết bị đo độ ẩm đất - 2",
+                    NameRef = "Độ ẩm đất - 4",
                     DateCreated = null,
                     Description = null,
                     Name = null,
@@ -171,7 +171,7 @@ namespace Service
                     IsAuto = false,
                     IsUsed = false,
                     ZoneId = null,
-                    DeviceType = DeviceType.R,
+                    DeviceType = DeviceType.R.ToString(),
                 },
                 new DeviceEntity()
                 {
@@ -187,7 +187,7 @@ namespace Service
                     IsAuto = false,
                     IsUsed = false,
                     ZoneId = null,
-                    DeviceType = DeviceType.W,
+                    DeviceType = DeviceType.W.ToString(),
                 },
                 new DeviceEntity()
                 {
@@ -203,7 +203,7 @@ namespace Service
                     IsAuto = false,
                     IsUsed = false,
                     ZoneId = null,
-                    DeviceType = DeviceType.W,
+                    DeviceType = DeviceType.W.ToString(),
                 },
                 new DeviceEntity()
                 {
@@ -219,7 +219,7 @@ namespace Service
                     IsAuto = false,
                     IsUsed = false,
                     ZoneId = null,
-                    DeviceType = DeviceType.W,
+                    DeviceType = DeviceType.W.ToString(),
                 }
             };
             switch (type)
@@ -234,7 +234,7 @@ namespace Service
 
         public Task<bool> DeleteMockDataDeviceOnModule(Guid moduleId)
         {
-            return _repositoryManager.mockData.DeleteMockDataDeviceOnModule(moduleId);
+            return _repositoryManager.MockData.DeleteMockDataDeviceOnModule(moduleId);
         }
     }
 }

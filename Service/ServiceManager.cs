@@ -57,9 +57,9 @@ namespace Service
 
         public IImageService Image => image.Value;
 
-        public IDeviceTimerService DeviceDriver => deviceDriver.Value;
+        public IDeviceTimerService DeviceTimer => deviceDriver.Value;
 
-        public IAuthenticationService AuthenticationService => authentication.Value;
+        public IAuthenticationService Authentication => authentication.Value;
 
         public IValueTypeService ValueType => valueType.Value;
 
@@ -67,7 +67,7 @@ namespace Service
 
         public IUserService User => user.Value;
 
-        public IModuleService EspService => esp.Value;
+        public IModuleService Module => esp.Value;
 
         public IDeviceService Device => device.Value;
 

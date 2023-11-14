@@ -1,6 +1,4 @@
-﻿using Common.Enum;
-
-namespace Models.Device
+﻿namespace Models.Device
 {
     public class DeviceDisplayModel
     {
@@ -16,6 +14,6 @@ namespace Models.Device
         public bool IsAuto { get; set; }
         public string? Unit { get; set; }
         public string? Gate { get; set; }
-        public DeviceType DeviceType { get; set; }
+        public string? DeviceType { get; set; }
     }
 }

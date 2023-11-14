@@ -17,7 +17,7 @@
 			   WHERE UserId = @UserId
 			   ) AS Ex
             ON 
-                Ex.DeviceId = TDD.DeviceDriverId
+                Ex.DeviceId = TDD.DeviceId
 
             WHERE TDD.IsSuccess = 0 AND IsRemove = 0";
         public const string GetAllTimerAvailable =
@@ -30,7 +30,7 @@
             INNER JOIN
                Device AS D
             ON 
-                Ex.DeviceId = TDD.DeviceDriverId
+                Ex.DeviceId = TDD.DeviceId
 
             WHERE TDD.IsSuccess = 0 AND IsRemove = 0";
 

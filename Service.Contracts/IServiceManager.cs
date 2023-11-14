@@ -12,12 +12,12 @@ namespace Service.Contracts
         IFarmService Farm { get; }
         IZoneService Zone { get; }
         IImageService Image { get; }
-        IDeviceTimerService DeviceDriver { get; }
-        IAuthenticationService AuthenticationService { get; }
+        IDeviceTimerService DeviceTimer { get; }
+        IAuthenticationService Authentication { get; }
         IValueTypeService ValueType { get; }
         IInstrumentSetThresholdService InstrumentSetThreshold { get; }
         IUserService User { get; }
-        IModuleService EspService { get; }
+        IModuleService Module { get; }
         IDeviceService Device { get; }
         IMockDataService MockData { get; }
     }

@@ -12,18 +12,11 @@ namespace Repository.Contracts
         IZoneRepository Zone { get; }
         IImageRepository Image { get; }
         IDeviceTimerRepository DeviceDriver { get; }
-
         IInstrumentSetThresholdRepository InstrumentSetThreshold { get; }
-
-
-        #region Value Type Repository
         IInstrumentationTypeRepository InstrumentationType { get; }
-        ITypeTreeRepository TypeTree { get; }
-        #endregion
-
         IModuleRepository Module { get; }
         IDeviceRepository Device { get; }
-        IMockDataRepository mockData { get; }
+        IMockDataRepository MockData { get; }
 
         Task<int> SaveAsync();
     }

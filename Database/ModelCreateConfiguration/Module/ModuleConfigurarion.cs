@@ -11,7 +11,7 @@ namespace Database.ModelCreateConfiguration
             builder.ToTable("Module");
             builder.Property<Guid>(p => p.Id).IsRequired();
             // config relationship table
-            builder.HasOne(p => p.User).WithMany(p => p.Esps).HasForeignKey(p => p.UserId);
+            builder.HasOne(p => p.User).WithMany(p => p.Modules).HasForeignKey(p => p.UserId);
 
             builder.Property(p => p.ClientId).HasDefaultValue("ClientId");
             builder.Property(p => p.MqttServer).HasDefaultValue("broker.emqx.io");

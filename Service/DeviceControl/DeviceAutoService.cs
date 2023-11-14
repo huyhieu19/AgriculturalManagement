@@ -88,10 +88,10 @@ namespace Service
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete()
         {
             var query = InstrumentationSetThresholdQuery.InstrumentationNotDelete;
-            IEnumerable<DeviceInstrumentThresholdEntity> result;
+            IEnumerable<ThresholdDeviceEntity> result;
             using (var connection = dapperContext.CreateConnection())
             {
-                result = await connection.QueryAsync<DeviceInstrumentThresholdEntity>(query);
+                result = await connection.QueryAsync<ThresholdDeviceEntity>(query);
             }
             return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);
         }

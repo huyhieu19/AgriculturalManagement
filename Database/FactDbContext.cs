@@ -1,7 +1,6 @@
 ﻿using Database.ModelCreateConfiguration;
 using Database.ModelCreateConfiguration.Role;
 using Entities;
-using Entities.CommonType;
 using Entities.Farm;
 using Entities.Image;
 using Entities.Module;
@@ -49,7 +48,6 @@ namespace Database
 
             // Device Driver Configuration
             builder.ApplyConfiguration(new TimerDeviceDriverConfiguration());
-            builder.ApplyConfiguration(new TypeTreeConfiguration());
 
             // InstrumentSetThreshold
             builder.ApplyConfiguration(new DeviceInstrumentThresholdConfiguration());
@@ -59,7 +57,7 @@ namespace Database
             builder.ApplyConfiguration(new DeviceConfiguration());
         }
         // DeviceDriver DataSet
-        public DbSet<TimerDeviceDriverEntity> TimerDeviceDriverEntities { get; set; } = null!;
+        public DbSet<TimerDeviceEntity> TimerDeviceDriverEntities { get; set; } = null!;
 
         // Farms
         public DbSet<FarmEntity> FarmEntities { get; set; } = null!;
@@ -67,15 +65,11 @@ namespace Database
         // Image
         public DbSet<ImageEntity> ImageEntities { get; set; } = null!;
 
-
-        // Type
-        public DbSet<TypeTreeEntity> TypeTreeEntities { get; set; } = null!;
-
         // Zone 
         public DbSet<ZoneEntity> ZoneEntityEntities { get; set; } = null!;
 
         // InstrumentSetThreshold
-        public DbSet<DeviceInstrumentThresholdEntity> DeviceInstrumentThresholdEntities { get; set; } = null!;
+        public DbSet<ThresholdDeviceEntity> DeviceInstrumentThresholdEntities { get; set; } = null!;
 
         // ESP
         public DbSet<ModuleEntity> ModuleEntities { get; set; } = null!;

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Common.ResolveProfileMapper;
 using Entities;
-using Entities.CommonType;
 using Entities.Farm;
 using Entities.Image;
 using Entities.Module;
@@ -38,20 +37,16 @@ namespace AgriculturalManagement.ResolveProfileMapper
             CreateMap<InstrumentationTypeEntity, InstrumentationTypeDisplayModel>().ReverseMap();
             CreateMap<InstrumentationTypeCreateModel, InstrumentationTypeEntity>();
 
-
-            CreateMap<TypeTreeEntity, TypeTreeDisplayModel>().ReverseMap();
-            CreateMap<TypeTreeCreateModel, TypeTreeEntity>();
-
             // Device Driver profile mapping
 
 
             // Timer Device Driver
-            CreateMap<TimerDeviceDriverEntity, TimerDeviceDriverDisplayModel>();
+            CreateMap<TimerDeviceEntity, TimerDeviceDriverDisplayModel>();
 
             // InstrumentSetThreshold
-            CreateMap<DeviceInstrumentThresholdEntity, InstrumentSetThresholdDisplayModel>();
-            CreateMap<InstrumentSetThresholdUpdateModel, DeviceInstrumentThresholdEntity>();
-            CreateMap<InstrumentSetThresholdCreateModel, DeviceInstrumentThresholdEntity>();
+            CreateMap<ThresholdDeviceEntity, InstrumentSetThresholdDisplayModel>();
+            CreateMap<InstrumentSetThresholdUpdateModel, ThresholdDeviceEntity>();
+            CreateMap<InstrumentSetThresholdCreateModel, ThresholdDeviceEntity>();
 
             // User
             CreateMap<UserEntity, ProfileUser>();

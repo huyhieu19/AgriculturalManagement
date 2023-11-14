@@ -18,6 +18,6 @@ namespace Entities
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
         public ICollection<FarmEntity>? Farms { get; set; }
-        public ICollection<ModuleEntity>? Esps { get; set; }
+        public ICollection<ModuleEntity>? Modules { get; set; }
     }
 }

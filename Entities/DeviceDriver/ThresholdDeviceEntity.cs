@@ -2,7 +2,7 @@
 
 namespace Entities
 {
-    public class DeviceInstrumentThresholdEntity
+    public class ThresholdDeviceEntity
     {
         public int Id { get; set; }
         public Guid DeviceDriverId { get; set; }

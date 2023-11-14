@@ -42,7 +42,7 @@ namespace Startup
                     {
                         // Handle exceptions here
                         context.Response.StatusCode = 200; // Internal Server Error
-                        var errorMessage = "you have no permissions to access this website.";
+                        var errorMessage = "You do not have permission to access this website.";
 
                         // Create an ResponseModel with error details
                         var apiResponse = new ResponseModel<object>
@@ -54,12 +54,6 @@ namespace Startup
 
                         // Serialize the ResponseModel to JSON
                         responseContent = JsonConvert.SerializeObject(apiResponse);
-
-                        // Write the formatted response to the original response stream
-                        ////var bytes = Encoding.UTF8.GetBytes(formattedResponse);
-                        ////await originalBodyStream.WriteAsync(bytes, 0, bytes.Length);
-                        ////responseBody.Seek(0, SeekOrigin.Begin);
-                        ////await responseBody.CopyToAsync(originalBodyStream);
                     }
 
                     // Write the formatted response to the original response stream

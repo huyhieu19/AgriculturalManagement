@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Entities;
-using Entities.CommonType;
 using Models;
 using Repository.Contracts;
 using Service.Contracts;
@@ -39,26 +38,6 @@ namespace Service
             }
         }
 
-        public async Task<bool> CreateTypeTrees(TypeTreeCreateModel model)
-        {
-            try
-            {
-                logger.LogInformation($"Value Type Service - CreateTypeTrees - Start");
-                var entity = mapper.Map<TypeTreeEntity>(model);
-                repository.TypeTree.CreateTypeTrees(entity);
-                await repository.SaveAsync();
-                logger.LogInformation($"Value Type Service - CreateTypeTrees - End");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                logger.LogInformation($"Value Type Service - CreateTypeTrees - Exception: {ex.Message}");
-                throw new AggregateException(ex.Message);
-            }
-        }
-
-
-
         public async Task<bool> DeleteTypeInstrumentations(InstrumentationTypeDisplayModel model)
         {
             try
@@ -77,25 +56,6 @@ namespace Service
             }
         }
 
-        public async Task<bool> DeleteTypeTrees(TypeTreeDisplayModel model)
-        {
-            try
-            {
-                logger.LogInformation($"Value Type Service - DeleteTypeInstrumentations - Start");
-                var typeTree = mapper.Map<TypeTreeEntity>(model);
-                repository.TypeTree.DeleteTypeTrees(typeTree);
-                logger.LogInformation($"Value Type Service - DeleteTypeInstrumentations - End");
-                await repository.SaveAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                logger.LogInformation($"Value Type Service - DeleteTypeTrees - Exception: {ex.Message}");
-                throw new AggregateException(ex.Message);
-            }
-        }
-
-
         public async Task<List<InstrumentationTypeDisplayModel>> GetTypeInstrumentation()
         {
             try
@@ -112,25 +72,6 @@ namespace Service
             }
         }
 
-        public async Task<List<TypeTreeDisplayModel>> GetTypeTrees()
-        {
-            try
-            {
-                logger.LogInformation($"Value Type Service - GetTypeTrees - Start");
-                var typeTrees = await repository.TypeTree.GetTypeTree();
-                var result = mapper.Map<List<TypeTreeDisplayModel>>(typeTrees);
-                logger.LogInformation($"Value Type Service - GetTypeTrees - End");
-                return result;
-            }
-            catch (Exception ex)
-            {
-                logger.LogInformation($"Value Type Service - GetTypeTrees - Exception: {ex.Message}");
-                throw new AggregateException(ex.Message);
-            }
-        }
-
-
-
         public async Task<bool> UpdateTypeInstrumentation(InstrumentationTypeDisplayModel model)
         {
             try
@@ -145,24 +86,6 @@ namespace Service
             catch (Exception ex)
             {
                 logger.LogInformation($"Value Type Service - UpdateTypeDeviceDriver - Exception: {ex.Message}");
-                throw new AggregateException(ex.Message);
-            }
-        }
-
-        public async Task<bool> UpdateTypeTree(TypeTreeDisplayModel model)
-        {
-            try
-            {
-                logger.LogInformation($"Value Type Service - UpdateTypeTree - Start");
-                var entity = mapper.Map<TypeTreeEntity>(model);
-                repository.TypeTree.UpdateTypeTree(entity);
-                await repository.SaveAsync();
-                logger.LogInformation($"Value Type Service - UpdateTypeTree - End");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                logger.LogInformation($"Value Type Service - UpdateTypeTree - Exception: {ex.Message}");
                 throw new AggregateException(ex.Message);
             }
         }

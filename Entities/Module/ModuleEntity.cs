@@ -8,6 +8,7 @@ namespace Entities.Module
     {
         public Guid Id { get; set; }
         public ModuleType ModuleType { get; set; }
+        // FK - User
         public string? UserId { get; set; }
         public UserEntity? User { get; set; }
         public string? Name { get; set; }

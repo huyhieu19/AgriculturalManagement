@@ -4,12 +4,12 @@ namespace Repository.Contracts.DeviceThreshold
 {
     public interface IInstrumentSetThresholdRepository
     {
-        Task<IEnumerable<DeviceInstrumentThresholdEntity>> DeviceInstrumentOnOff();
-        Task<IEnumerable<DeviceInstrumentThresholdEntity>> DeviceInstrumentOnOffNotDelete();
-        Task<IEnumerable<DeviceInstrumentThresholdEntity>> DeviceInstrumentOnOffDelete();
-        Task<IEnumerable<DeviceInstrumentThresholdEntity>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id);
-        void DeviceInstrumentOnOffUpdate(DeviceInstrumentThresholdEntity updateModel);
-        void DeviceInstrumentOnOffCreate(DeviceInstrumentThresholdEntity model);
+        Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOff();
+        Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffNotDelete();
+        Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffDelete();
+        Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id);
+        void DeviceInstrumentOnOffUpdate(ThresholdDeviceEntity updateModel);
+        void DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model);
         void DeviceInstrumentOnOffDeleteById(int Id);
     }
 }

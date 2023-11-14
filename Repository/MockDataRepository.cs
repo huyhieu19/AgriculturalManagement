@@ -18,7 +18,7 @@ namespace Repository
         public async Task<bool> DeleteMockDataDeviceOnModule(Guid moduleId)
         {
             var entities = await factDbContext.DeviceEntities.Where(prop => prop.ModuleId == moduleId).ToListAsync();
-            factDbContext.DeviceEntities.RemoveRange(entities);
+            factDbContext.RemoveRange(entities);
             return await factDbContext.SaveChangesAsync() > 0;
         }
 

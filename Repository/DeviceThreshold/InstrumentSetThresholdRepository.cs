@@ -5,44 +5,44 @@ using Repository.Contracts.DeviceThreshold;
 
 namespace Repository.DeviceThreshold
 {
-    public class InstrumentSetThresholdRepository : RepositoryBase<DeviceInstrumentThresholdEntity>, IInstrumentSetThresholdRepository
+    public class InstrumentSetThresholdRepository : RepositoryBase<ThresholdDeviceEntity>, IInstrumentSetThresholdRepository
     {
 
         public InstrumentSetThresholdRepository(FactDbContext factDbContext) : base(factDbContext)
         {
         }
 
-        public async Task<IEnumerable<DeviceInstrumentThresholdEntity>> DeviceInstrumentOnOff()
+        public async Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOff()
         {
             return await FindAll(false).ToListAsync();
         }
 
-        public async Task<IEnumerable<DeviceInstrumentThresholdEntity>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id)
+        public async Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id)
         {
             return await FindByCondition(p => p.DeviceDriverId == Id && !p.IsDelete, false).ToListAsync();
         }
 
-        public void DeviceInstrumentOnOffCreate(DeviceInstrumentThresholdEntity model)
+        public void DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model)
         {
             Create(model);
         }
 
         public void DeviceInstrumentOnOffDeleteById(int Id)
         {
-            Update(new DeviceInstrumentThresholdEntity() { Id = Id, IsDelete = true });
+            Update(new ThresholdDeviceEntity() { Id = Id, IsDelete = true });
         }
 
-        public async Task<IEnumerable<DeviceInstrumentThresholdEntity>> DeviceInstrumentOnOffDelete()
+        public async Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffDelete()
         {
             return await FindByCondition(p => p.IsDelete, false).ToListAsync();
         }
 
-        public async Task<IEnumerable<DeviceInstrumentThresholdEntity>> DeviceInstrumentOnOffNotDelete()
+        public async Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffNotDelete()
         {
             return await FindByCondition(p => !p.IsDelete, false).ToListAsync();
         }
 
-        public void DeviceInstrumentOnOffUpdate(DeviceInstrumentThresholdEntity updateModel)
+        public void DeviceInstrumentOnOffUpdate(ThresholdDeviceEntity updateModel)
         {
             Update(updateModel);
         }

@@ -18,7 +18,7 @@ namespace AgriculturalManagement.Controllers.Authentication
         [HttpPost, Route("register")]
         public async Task<IdentityResult> RegisterUser(UserRegisterationModel userRegisterationModel)
         {
-            var result = await _service.AuthenticationService.RegisterUser(userRegisterationModel);
+            var result = await _service.Authentication.RegisterUser(userRegisterationModel);
             if (!result.Succeeded)
             {
                 throw new AggregateException(result.ToString());
@@ -28,23 +28,23 @@ namespace AgriculturalManagement.Controllers.Authentication
         [HttpPost("login")]
         public async Task<IActionResult> Authenticate([FromBody] LoginModel user)
         {
-            if (!await _service.AuthenticationService.ValidateUser(user))
+            if (!await _service.Authentication.ValidateUser(user))
                 return BadRequest("Email or Password incorrect");
 
-            var tokenModel = await _service.AuthenticationService.CreateToken(populateExp: true);
-            var profile = _service.AuthenticationService.GetProfilebyToken(tokenModel.AccessToken);
+            var tokenModel = await _service.Authentication.CreateToken(populateExp: true);
+            var profile = _service.Authentication.GetProfilebyToken(tokenModel.AccessToken);
 
             return Ok(new { profile, tokenModel });
         }
         [HttpGet("roles")]
-        public async Task<List<IdentityRole>> GetRoles() => await _service.AuthenticationService.GetRoles();
+        public async Task<List<IdentityRole>> GetRoles() => await _service.Authentication.GetRoles();
         [HttpPost("role-add-to-user")]
-        public async Task<bool> AddRoleToUser(string roleName, string email) => await _service.AuthenticationService.AddRoleToUser(roleName, email);
+        public async Task<bool> AddRoleToUser(string roleName, string email) => await _service.Authentication.AddRoleToUser(roleName, email);
 
         [HttpPost("password-reset")]
         public async Task<ResponseResetPasswordModel> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
-            return await _service.AuthenticationService.ChangePassword(resetPasswordModel);
+            return await _service.Authentication.ChangePassword(resetPasswordModel);
         }
     }
 }

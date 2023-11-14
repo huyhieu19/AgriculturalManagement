@@ -27,14 +27,4 @@ namespace Common.Enum
         D7 = 7,// GPIO13
         D8 = 8,// GPIO15
     }
-
-    public enum GpioGateNotTransferDataType
-    {
-        CLK = 9,// GPIO6
-        SDO = 10,// GPIO7
-        CMD = 11,// GPIO11
-        SD1 = 12,// GPIO8
-        SD2 = 13,// GPIO9
-        SD3 = 14,// GPIO10
-    }
 }

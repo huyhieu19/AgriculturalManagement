@@ -37,14 +37,14 @@ namespace Service.Device
         public async Task<List<DeviceDisplayModel>> GetDevicesControlOnZone(int zoneId)
         {
             var devices = await GetDevicesOnZone(zoneId);
-            var result = devices.Where(prop => prop.DeviceType == Common.Enum.DeviceType.W).ToList();
+            var result = devices.Where(prop => prop.DeviceType == Common.Enum.DeviceType.W.ToString()).ToList();
             return result;
         }
 
         public async Task<List<DeviceDisplayModel>> GetDevicesInstrumentationOnZone(int zoneId)
         {
             var devices = await GetDevicesOnZone(zoneId);
-            var result = devices.Where(prop => prop.DeviceType == Common.Enum.DeviceType.R).ToList();
+            var result = devices.Where(prop => prop.DeviceType == Common.Enum.DeviceType.R.ToString()).ToList();
             return result;
         }
     }

@@ -32,21 +32,21 @@ namespace AgriculturalManagement.Controllers.Module
         [HttpPost("get-modules-all")]
         public async Task<List<ModuleDisplayModel>> GetModulesAll()
         {
-            return await _serviceManager.EspService.GetModulesAll();
+            return await _serviceManager.Module.GetModulesAll();
         }
 
         [HttpPost("get-modules")]
         public async Task<List<ModuleDisplayModel>> GetModules()
         {
             var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
-            return await _serviceManager.EspService.GetModules(userId);
+            return await _serviceManager.Module.GetModules(userId);
         }
 
         [HttpPost("add-module-to-user")]
         public async Task<bool> AddModuleToUser(Guid moduleId)
         {
             var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
-            return await _serviceManager.EspService.AddModuleToUser(moduleId, userId);
+            return await _serviceManager.Module.AddModuleToUser(moduleId, userId);
 
         }
 
@@ -55,7 +55,7 @@ namespace AgriculturalManagement.Controllers.Module
         {
 
             var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
-            return await _serviceManager.EspService.RemoveModuleFromUser(deviceId, userId);
+            return await _serviceManager.Module.RemoveModuleFromUser(deviceId, userId);
         }
         #endregion
 
@@ -63,19 +63,19 @@ namespace AgriculturalManagement.Controllers.Module
         [HttpPost("devices-on-module")]
         public async Task<List<DeviceDisplayModel>> DeviceOnModuleDisplay(Guid id)
         {
-            return await _serviceManager.EspService.DeviceOnModuleDisplay(id);
+            return await _serviceManager.Module.DeviceOnModuleDisplay(id);
         }
 
         [HttpPost("devices-used-on-module")]
         public async Task<List<DeviceDisplayModel>> DeviceUsedOnModuleDisplay(Guid id)
         {
-            return await _serviceManager.EspService.DeviceUsedOnModuleDisplay(id);
+            return await _serviceManager.Module.DeviceUsedOnModuleDisplay(id);
         }
 
         [HttpPost("devices-not-used-on-module")]
         public async Task<List<DeviceDisplayModel>> DeviceUsedNotOnModuleDisplay(Guid id)
         {
-            return await _serviceManager.EspService.DeviceUsedNotOnModuleDisplay(id);
+            return await _serviceManager.Module.DeviceUsedNotOnModuleDisplay(id);
         }
         #endregion
     }
