@@ -19,7 +19,7 @@ namespace AgriculturalManagement.Controllers.Authentication
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Refresh([FromBody] TokenModel tokenDto)
         {
-            var tokenDtoToReturn = await serviceManager.AuthenticationService.RefreshToken(tokenDto);
+            var tokenDtoToReturn = await serviceManager.Authentication.RefreshToken(tokenDto);
             return Ok(tokenDtoToReturn);
         }
     }

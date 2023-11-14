@@ -4,16 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Models;
+using Models.Mongo;
 using MQTTProcess;
 using Repository;
 using Repository.Contracts;
 using Service;
-using Service.BackgroundJob;
 using Service.Contracts;
-using Service.Contracts.ESP;
-using Service.ESP;
+using Service.Contracts.Logger;
+using Service.Contracts.Module;
 using Service.Extensions;
+using Service.Logger;
+using Service.Module;
 
 namespace Startup
 {
@@ -35,9 +36,9 @@ namespace Startup
 
 
             // Inject background service
-            builder.Services.AddHostedService<ProcessDataReceivedFromMQTT>();
-            builder.Services.AddHostedService<JobForDeviceDriverService>();
-            builder.Services.AddHostedService<JobThresholdService>();
+            //builder.Services.AddHostedService<ProcessDataReceivedFromMQTT>();
+            //builder.Services.AddHostedService<JobForDeviceDriverService>();
+            //builder.Services.AddHostedService<JobThresholdService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

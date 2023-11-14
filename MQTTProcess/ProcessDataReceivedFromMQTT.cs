@@ -1,8 +1,8 @@
 ﻿using Entities;
 using Microsoft.Extensions.Hosting;
 using Service;
-using Service.Contracts;
-using Service.Contracts.ESP;
+using Service.Contracts.Module;
+using Service.Contracts.Logger;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 

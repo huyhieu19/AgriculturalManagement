@@ -22,236 +22,7 @@ namespace AgriculturalManagement.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Entities.DeviceDriverEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("DateStartedUsing")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeviceDriverTypeEntityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("DeviceTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("EspId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Gpio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAction")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<bool>("IsAuto")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Topic")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("D");
-
-                    b.Property<int?>("ZoneId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceDriverTypeEntityId");
-
-                    b.HasIndex("DeviceTypeId")
-                        .IsUnique()
-                        .HasFilter("[DeviceTypeId] IS NOT NULL");
-
-                    b.HasIndex("EspId");
-
-                    b.HasIndex("ZoneId");
-
-                    b.ToTable("DeviceDriver", (string)null);
-                });
-
-            modelBuilder.Entity("Entities.DeviceDriverTypeEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Manufacturer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DeviceDriverType", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("448baf97-9401-4aaa-a636-9d8512d7c5a4"),
-                            Name = "Máy bơm"
-                        },
-                        new
-                        {
-                            Id = new Guid("add310fe-34e9-4b07-8d66-38a16bc2b177"),
-                            Name = "Máy bơm"
-                        },
-                        new
-                        {
-                            Id = new Guid("0f0ae0bc-0454-42db-8c21-338a69448925"),
-                            Name = "Quạt gió"
-                        },
-                        new
-                        {
-                            Id = new Guid("032d4594-88fd-43af-bb83-9ea4351ed488"),
-                            Name = "Quạt gió"
-                        },
-                        new
-                        {
-                            Id = new Guid("134d6c68-d44c-4bad-b1e5-8e30aadf2c53"),
-                            Name = "Rèm cửa"
-                        });
-                });
-
-            modelBuilder.Entity("Entities.DeviceInstrumentThresholdEntity", b =>
-                {
-                    b.Property<int>("DeviceDriverId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InstrumentationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDelete")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<bool?>("OnInUpperThreshold")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<double?>("ThresholdValueOff")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("ThresholdValueOn")
-                        .HasColumnType("float");
-
-                    b.HasKey("DeviceDriverId", "InstrumentationId");
-
-                    b.HasIndex("InstrumentationId");
-
-                    b.ToTable("DeviceInstrumentThreshold", (string)null);
-                });
-
-            modelBuilder.Entity("Entities.ESP.DeviceTypeOnEspEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("DeviceType")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("EspId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Gpio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAction")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ResponseType")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("Topic")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EspId");
-
-                    b.ToTable("DeviceType", (string)null);
-                });
-
-            modelBuilder.Entity("Entities.ESP.EspEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ClientId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("ClientId");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MqttPort")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1883);
-
-                    b.Property<string>("MqttServer")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("broker.emqx.io");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("public");
-
-                    b.Property<Guid>("Topic")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserName")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("emqx");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Esp", (string)null);
-                });
-
-            modelBuilder.Entity("Entities.FarmEntity", b =>
+            modelBuilder.Entity("Entities.Farm.FarmEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -265,7 +36,7 @@ namespace AgriculturalManagement.Migrations
                     b.Property<double?>("Area")
                         .HasColumnType("float");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -289,7 +60,7 @@ namespace AgriculturalManagement.Migrations
                     b.ToTable("Farms", (string)null);
                 });
 
-            modelBuilder.Entity("Entities.ImageEntity", b =>
+            modelBuilder.Entity("Entities.Image.ImageEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -324,11 +95,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceDriverId");
-
                     b.HasIndex("FarmId");
-
-                    b.HasIndex("InstrumentationId");
 
                     b.HasIndex("ZoneHarvestId");
 
@@ -337,131 +104,13 @@ namespace AgriculturalManagement.Migrations
                     b.ToTable("Image", (string)null);
                 });
 
-            modelBuilder.Entity("Entities.InstrumentationEntity", b =>
+            modelBuilder.Entity("Entities.JobInZoneEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("DateStartedUsing")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("DeviceTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("Esp8266Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("EspId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Gpio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("InstrumentationTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Topic")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("I");
-
-                    b.Property<int?>("ZoneId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceTypeId")
-                        .IsUnique();
-
-                    b.HasIndex("Esp8266Id");
-
-                    b.HasIndex("InstrumentationTypeId");
-
-                    b.HasIndex("ZoneId");
-
-                    b.ToTable("Instrumentation", (string)null);
-                });
-
-            modelBuilder.Entity("Entities.InstrumentationTypeEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Manufacturer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Unit")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("InstrumentationType", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("743b3068-bb94-41f4-bd10-7f4ed802a36c"),
-                            Name = "Cảm biến đo nhiệt độ, độ ẩm không khí",
-                            Unit = "*C/%"
-                        },
-                        new
-                        {
-                            Id = new Guid("d67fb159-c95d-4c67-8f2e-065f14fc5e58"),
-                            Name = "Cảm biến đo nhiệt độ, độ ẩm không khí",
-                            Unit = "*C/%"
-                        },
-                        new
-                        {
-                            Id = new Guid("b6976895-e254-487e-a59c-c22621b2c54a"),
-                            Name = "Cảm biến nước mưa",
-                            Unit = "true/false"
-                        },
-                        new
-                        {
-                            Id = new Guid("1c44a06c-e539-4ead-8c62-fc7d56ec9e34"),
-                            Name = "Độ ẩm đất",
-                            Unit = "%"
-                        },
-                        new
-                        {
-                            Id = new Guid("97f47bef-17cc-45c3-9fbf-69ef9364e12f"),
-                            Name = "Cảm biên gió",
-                            Unit = "Km/h"
-                        },
-                        new
-                        {
-                            Id = new Guid("3057e9c9-b039-489b-be7b-581a751ca4cb"),
-                            Name = "Cảm biên đo độ PH của đất",
-                            Unit = "PH"
-                        });
-                });
-
-            modelBuilder.Entity("Entities.JobInZoneEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateCreate")
                         .HasColumnType("datetime2");
@@ -484,10 +133,159 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("JobInZone", (string)null);
+                    b.HasIndex("ZoneId");
+
+                    b.ToTable("JobInZoneEntity");
                 });
 
-            modelBuilder.Entity("Entities.TimerDeviceDriverEntity", b =>
+            modelBuilder.Entity("Entities.Module.DeviceEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAction")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAuto")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("ModuleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameRef")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ZoneId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
+
+                    b.HasIndex("ZoneId");
+
+                    b.ToTable("Device", (string)null);
+                });
+
+            modelBuilder.Entity("Entities.Module.ModuleEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ClientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("ClientId");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ModuleType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MqttPort")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1883);
+
+                    b.Property<string>("MqttServer")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("broker.emqx.io");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("public");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserName")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("emqx");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Module", (string)null);
+                });
+
+            modelBuilder.Entity("Entities.ThresholdDeviceEntity", b =>
+                {
+                    b.Property<Guid>("DeviceDriverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InstrumentationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DeviceEntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDelete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool?>("OnInUpperThreshold")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<double?>("ThresholdValueOff")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("ThresholdValueOn")
+                        .HasColumnType("float");
+
+                    b.HasKey("DeviceDriverId", "InstrumentationId");
+
+                    b.HasIndex("DeviceEntityId");
+
+                    b.HasIndex("InstrumentationId");
+
+                    b.ToTable("DeviceInstrumentThreshold", (string)null);
+                });
+
+            modelBuilder.Entity("Entities.TimerDeviceEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -498,14 +296,11 @@ namespace AgriculturalManagement.Migrations
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DeviceDriverId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsAffected")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDaily")
-                        .HasColumnType("bit");
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsRemove")
                         .ValueGeneratedOnAdd()
@@ -528,157 +323,9 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceDriverId");
+                    b.HasIndex("DeviceId");
 
                     b.ToTable("TimerDeviceDriver", (string)null);
-                });
-
-            modelBuilder.Entity("Entities.TypeTreeEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TypeTree", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Loại cây ăn quả có thịnh hành tại Việt Nam.",
-                            NameType = "Xoài"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Loại cây ăn quả thường thấy trong vườn nhà dân.",
-                            NameType = "Chuối"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Cây sầu riêng thường được trồng ở miền Nam Việt Nam.",
-                            NameType = "Sầu riêng"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Loại cây ăn quả có hạt lớn và ngon.",
-                            NameType = "Mít"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Vải là loại cây ăn quả có quả nhỏ màu đỏ tươi.",
-                            NameType = "Vải"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "Nhãn là cây ăn quả thường thấy tại Việt Nam.",
-                            NameType = "Nhãn"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "Loại cây ăn quả có vỏ màu đỏ và hạt trắng.",
-                            NameType = "Chôm chôm"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Description = "Bưởi là loại cây ăn quả có vị ngọt và hấp dẫn.",
-                            NameType = "Bưởi"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Description = "Cam là loại cây ăn quả chứa nhiều vitamin C.",
-                            NameType = "Cam"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Description = "Nho là loại cây ăn quả có nhiều loại khác nhau.",
-                            NameType = "Nho"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Description = "Đu đủ là cây ăn quả phổ biến ở Việt Nam.",
-                            NameType = "Đu đủ"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Description = "Khế là cây ăn quả có hương vị chua ngọt đặc trưng.",
-                            NameType = "Khế"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Description = "Loại cây ăn quả có hình dáng độc đáo.",
-                            NameType = "Thanh long"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Description = "Dứa là cây ăn quả thường thấy trong vườn nhà dân.",
-                            NameType = "Dứa"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Description = "Cây cau thường trồng ở vùng nhiệt đới Việt Nam.",
-                            NameType = "Cây cau"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Description = "Chanh là cây ăn quả có vị chua và mùi thơm.",
-                            NameType = "Chanh"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Description = "Me là cây ăn quả có vị chua ngọt đặc trưng.",
-                            NameType = "Me"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Description = "Sapoche là loại cây ăn quả có vị ngọt và mùi thơm đặc trưng.",
-                            NameType = "Sapoche"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Description = "Cherry là loại cây ăn quả có hạt nhỏ màu đỏ.",
-                            NameType = "Cherry"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Description = "Lựu là cây ăn quả có hình dáng đặc trưng.",
-                            NameType = "Lựu"
-                        });
                 });
 
             modelBuilder.Entity("Entities.UserEntity", b =>
@@ -795,8 +442,6 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("FarmId");
 
-                    b.HasIndex("TypeTreeId");
-
                     b.ToTable("Zone", (string)null);
                 });
 
@@ -821,7 +466,7 @@ namespace AgriculturalManagement.Migrations
 
                     b.HasIndex("ZoneId");
 
-                    b.ToTable("ZoneHarvest", (string)null);
+                    b.ToTable("ZoneHarvestEntity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -971,69 +616,7 @@ namespace AgriculturalManagement.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Entities.DeviceDriverEntity", b =>
-                {
-                    b.HasOne("Entities.DeviceDriverTypeEntity", null)
-                        .WithMany("DeviceDrivers")
-                        .HasForeignKey("DeviceDriverTypeEntityId");
-
-                    b.HasOne("Entities.ESP.DeviceTypeOnEspEntity", "DeviceType")
-                        .WithOne("DeviceDriver")
-                        .HasForeignKey("Entities.DeviceDriverEntity", "DeviceTypeId");
-
-                    b.HasOne("Entities.ESP.EspEntity", "Esp")
-                        .WithMany()
-                        .HasForeignKey("EspId");
-
-                    b.HasOne("Entities.ZoneEntity", "Zone")
-                        .WithMany("ZoneDeviceDrivers")
-                        .HasForeignKey("ZoneId");
-
-                    b.Navigation("DeviceType");
-
-                    b.Navigation("Esp");
-
-                    b.Navigation("Zone");
-                });
-
-            modelBuilder.Entity("Entities.DeviceInstrumentThresholdEntity", b =>
-                {
-                    b.HasOne("Entities.DeviceDriverEntity", "DeviceDriver")
-                        .WithMany("DeviceInstrumentOnOffs")
-                        .HasForeignKey("DeviceDriverId")
-                        .IsRequired();
-
-                    b.HasOne("Entities.InstrumentationEntity", "Instrumentation")
-                        .WithMany("DeviceInstrumentOnOffs")
-                        .HasForeignKey("InstrumentationId")
-                        .IsRequired();
-
-                    b.Navigation("DeviceDriver");
-
-                    b.Navigation("Instrumentation");
-                });
-
-            modelBuilder.Entity("Entities.ESP.DeviceTypeOnEspEntity", b =>
-                {
-                    b.HasOne("Entities.ESP.EspEntity", "Esp")
-                        .WithMany()
-                        .HasForeignKey("EspId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Esp");
-                });
-
-            modelBuilder.Entity("Entities.ESP.EspEntity", b =>
-                {
-                    b.HasOne("Entities.UserEntity", "User")
-                        .WithMany("Esps")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Entities.FarmEntity", b =>
+            modelBuilder.Entity("Entities.Farm.FarmEntity", b =>
                 {
                     b.HasOne("Entities.UserEntity", "User")
                         .WithMany("Farms")
@@ -1043,19 +626,11 @@ namespace AgriculturalManagement.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Entities.ImageEntity", b =>
+            modelBuilder.Entity("Entities.Image.ImageEntity", b =>
                 {
-                    b.HasOne("Entities.DeviceDriverEntity", "DeviceDriver")
-                        .WithMany()
-                        .HasForeignKey("DeviceDriverId");
-
-                    b.HasOne("Entities.FarmEntity", "Farm")
+                    b.HasOne("Entities.Farm.FarmEntity", "Farm")
                         .WithMany()
                         .HasForeignKey("FarmId");
-
-                    b.HasOne("Entities.InstrumentationEntity", "Instrumentation")
-                        .WithMany()
-                        .HasForeignKey("InstrumentationId");
 
                     b.HasOne("Entities.ZoneHarvestEntity", "ZoneHarvest")
                         .WithMany()
@@ -1065,81 +640,87 @@ namespace AgriculturalManagement.Migrations
                         .WithMany()
                         .HasForeignKey("ZoneId");
 
-                    b.Navigation("DeviceDriver");
-
                     b.Navigation("Farm");
-
-                    b.Navigation("Instrumentation");
 
                     b.Navigation("Zone");
 
                     b.Navigation("ZoneHarvest");
                 });
 
-            modelBuilder.Entity("Entities.InstrumentationEntity", b =>
-                {
-                    b.HasOne("Entities.ESP.DeviceTypeOnEspEntity", "DeviceType")
-                        .WithOne("Instrumentation")
-                        .HasForeignKey("Entities.InstrumentationEntity", "DeviceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.ESP.EspEntity", "Esp8266")
-                        .WithMany()
-                        .HasForeignKey("Esp8266Id");
-
-                    b.HasOne("Entities.InstrumentationTypeEntity", "InstrumentationType")
-                        .WithMany("Instrumentations")
-                        .HasForeignKey("InstrumentationTypeId");
-
-                    b.HasOne("Entities.ZoneEntity", "Zone")
-                        .WithMany("Instrumentations")
-                        .HasForeignKey("ZoneId");
-
-                    b.Navigation("DeviceType");
-
-                    b.Navigation("Esp8266");
-
-                    b.Navigation("InstrumentationType");
-
-                    b.Navigation("Zone");
-                });
-
             modelBuilder.Entity("Entities.JobInZoneEntity", b =>
                 {
                     b.HasOne("Entities.ZoneEntity", "Zone")
                         .WithMany("JobInZones")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ZoneId");
 
                     b.Navigation("Zone");
                 });
 
-            modelBuilder.Entity("Entities.TimerDeviceDriverEntity", b =>
+            modelBuilder.Entity("Entities.Module.DeviceEntity", b =>
                 {
-                    b.HasOne("Entities.DeviceDriverEntity", "DeviceDriver")
-                        .WithMany("TimerDevices")
+                    b.HasOne("Entities.Module.ModuleEntity", "Module")
+                        .WithMany("Devices")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.ZoneEntity", "Zone")
+                        .WithMany("Devices")
+                        .HasForeignKey("ZoneId");
+
+                    b.Navigation("Module");
+
+                    b.Navigation("Zone");
+                });
+
+            modelBuilder.Entity("Entities.Module.ModuleEntity", b =>
+                {
+                    b.HasOne("Entities.UserEntity", "User")
+                        .WithMany("Modules")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Entities.ThresholdDeviceEntity", b =>
+                {
+                    b.HasOne("Entities.Module.DeviceEntity", "DeviceDriver")
+                        .WithMany()
                         .HasForeignKey("DeviceDriverId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Module.DeviceEntity", null)
+                        .WithMany("DeviceInstrumentOnOffs")
+                        .HasForeignKey("DeviceEntityId");
+
+                    b.HasOne("Entities.Module.DeviceEntity", "DeviceInstrumentation")
+                        .WithMany()
+                        .HasForeignKey("InstrumentationId")
                         .IsRequired();
 
                     b.Navigation("DeviceDriver");
+
+                    b.Navigation("DeviceInstrumentation");
+                });
+
+            modelBuilder.Entity("Entities.TimerDeviceEntity", b =>
+                {
+                    b.HasOne("Entities.Module.DeviceEntity", "Devices")
+                        .WithMany("TimerDevices")
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Devices");
                 });
 
             modelBuilder.Entity("Entities.ZoneEntity", b =>
                 {
-                    b.HasOne("Entities.FarmEntity", "Farm")
+                    b.HasOne("Entities.Farm.FarmEntity", "Farm")
                         .WithMany("Zones")
                         .HasForeignKey("FarmId");
 
-                    b.HasOne("Entities.TypeTreeEntity", "TypeTree")
-                        .WithMany("Zones")
-                        .HasForeignKey("TypeTreeId");
-
                     b.Navigation("Farm");
-
-                    b.Navigation("TypeTree");
                 });
 
             modelBuilder.Entity("Entities.ZoneHarvestEntity", b =>
@@ -1202,63 +783,37 @@ namespace AgriculturalManagement.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Entities.DeviceDriverEntity", b =>
+            modelBuilder.Entity("Entities.Farm.FarmEntity", b =>
+                {
+                    b.Navigation("Zones");
+                });
+
+            modelBuilder.Entity("Entities.Module.DeviceEntity", b =>
                 {
                     b.Navigation("DeviceInstrumentOnOffs");
 
                     b.Navigation("TimerDevices");
                 });
 
-            modelBuilder.Entity("Entities.DeviceDriverTypeEntity", b =>
+            modelBuilder.Entity("Entities.Module.ModuleEntity", b =>
                 {
-                    b.Navigation("DeviceDrivers");
-                });
-
-            modelBuilder.Entity("Entities.ESP.DeviceTypeOnEspEntity", b =>
-                {
-                    b.Navigation("DeviceDriver")
-                        .IsRequired();
-
-                    b.Navigation("Instrumentation")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Entities.FarmEntity", b =>
-                {
-                    b.Navigation("Zones");
-                });
-
-            modelBuilder.Entity("Entities.InstrumentationEntity", b =>
-                {
-                    b.Navigation("DeviceInstrumentOnOffs");
-                });
-
-            modelBuilder.Entity("Entities.InstrumentationTypeEntity", b =>
-                {
-                    b.Navigation("Instrumentations");
-                });
-
-            modelBuilder.Entity("Entities.TypeTreeEntity", b =>
-                {
-                    b.Navigation("Zones");
+                    b.Navigation("Devices");
                 });
 
             modelBuilder.Entity("Entities.UserEntity", b =>
                 {
-                    b.Navigation("Esps");
-
                     b.Navigation("Farms");
+
+                    b.Navigation("Modules");
                 });
 
             modelBuilder.Entity("Entities.ZoneEntity", b =>
                 {
+                    b.Navigation("Devices");
+
                     b.Navigation("Harvests");
 
-                    b.Navigation("Instrumentations");
-
                     b.Navigation("JobInZones");
-
-                    b.Navigation("ZoneDeviceDrivers");
                 });
 #pragma warning restore 612, 618
         }

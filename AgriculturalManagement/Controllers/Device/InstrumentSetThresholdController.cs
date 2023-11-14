@@ -32,7 +32,7 @@ namespace AgriculturalManagement.Controllers.Device
             return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOff();
         }
         [HttpGet, Route("DatatableByIdDeviceDrive")]
-        public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffByIdDeviceDriver(int Id)
+        public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id)
         {
             return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffByIdDeviceDriver(Id);
         }
