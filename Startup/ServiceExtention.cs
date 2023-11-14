@@ -33,6 +33,7 @@ namespace Startup
             builder.Services.AddSingleton<IEspBackgroundProcessService, EspBackgroundProcessService>();
 
 
+            builder.Services.AddHostedService<ProcessBackgroundMqtt>();
 
 
             // Inject background service
