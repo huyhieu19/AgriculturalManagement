@@ -6,7 +6,7 @@ namespace Service
     {
         Task PushDataToDB(InstrumentValueByFiveSecondEntity addModel);
         Task PushMultipleDataToDB(List<InstrumentValueByFiveSecondEntity> addModels);
-        Task GetData();
+        Task PullData();
         Task StatisticsWeek();
         Task StatisticsMonth();
         Task StatisticsDay();

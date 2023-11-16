@@ -1,17 +1,17 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Models;
 using Service.Contracts;
-
+using Service.Contracts.Logger;
 
 namespace Service.BackgroundJob
 {
     public class JobThresholdService : BackgroundService
     {
         private readonly ILoggerManager logger;
-        private readonly IDeviceAutoService deviceAutoService;
+        private readonly IDeviceControlService deviceAutoService;
 
         public JobThresholdService(ILoggerManager logger,
-            IDeviceAutoService deviceAutoService)
+            IDeviceControlService deviceAutoService)
         {
             this.logger = logger;
             this.deviceAutoService = deviceAutoService;

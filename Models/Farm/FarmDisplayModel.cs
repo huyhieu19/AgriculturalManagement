@@ -9,7 +9,6 @@
         public string? Address { get; set; }
         public double? Area { get; set; }
         public string? Note { get; set; }
-        //public string? UserId { get; set; }
 
         // Adding
         public int? CountZone { get; set; }

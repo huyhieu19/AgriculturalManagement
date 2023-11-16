@@ -3,7 +3,7 @@
     public enum DeviceType
     {
         None = 0,
-        DeviceDriver = 1,
-        Instrumentation = 2
+        W = 1, // DeviceDriver
+        R = 2 // Instrumentation
     }
 }

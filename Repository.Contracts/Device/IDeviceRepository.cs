@@ -1,19 +1,18 @@
-﻿using Entities.ESP;
+﻿using Entities.Module;
 
 namespace Repository.Contracts.Device
 {
-    /// <summary>
-    /// Sử dụng trong page Zone
-    /// 
-    /// - Display Device -> Get device have ZoneId = param ZoneId, isUsed = true
-    /// - Thêm Device bằng cách ,DeviceId -> isUsed = true.
-    /// - Xoá Device bằng cách Chon DeviceId -> isUsed = false.
-    /// 
-    /// </summary>
+
     public interface IDeviceRepository
     {
-        Task<List<DeviceEntity>> DevicesDisplay(int zoneId);
-        Task DeviceCreate(Guid deviceId, int ZoneId);
-        Task DeviceRemove(Guid deviceId, int ZoneId);
+        #region Screen Device On Zone Management
+        Task<List<DeviceEntity>> GetDevicesOnZone(int zoneId);
+        Task AddDeviceToZone(Guid deviceId, int ZoneId);
+        Task RemoveDeviceFromZone(Guid deviceId, int ZoneId);
+        #endregion
+
+        #region Screen Device On Module Device Management
+        Task<List<DeviceEntity>> DeviceOnModuleDisplay(Guid moduleId);
+        #endregion
     }
 }

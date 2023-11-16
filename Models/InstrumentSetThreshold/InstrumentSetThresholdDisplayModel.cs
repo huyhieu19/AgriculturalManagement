@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public int DeviceDriverId { get; set; }
+        public Guid DeviceDriverId { get; set; }
 
         public int InstrumentationId { get; set; }
 

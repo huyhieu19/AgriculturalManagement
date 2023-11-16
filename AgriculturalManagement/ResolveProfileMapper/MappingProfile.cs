@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Common.ResolveProfileMapper;
 using Entities;
-using Entities.ESP;
+using Entities.Farm;
+using Entities.Image;
+using Entities.Module;
 using Models;
 using Models.Device;
+using Models.DeviceTimer;
 
 namespace AgriculturalManagement.ResolveProfileMapper
 {
@@ -18,7 +21,6 @@ namespace AgriculturalManagement.ResolveProfileMapper
             CreateMap<FarmEntity, FarmDisplayModel>();
             CreateMap<FarmCreateModel, FarmEntity>();
             CreateMap<FarmUpdateModel, FarmEntity>();
-            CreateMap<FarmEntity, FarmFilterNameModel>();
 
             // Zone mapper profile 
             CreateMap<ZoneEntity, ZoneDisplayModel>()
@@ -35,32 +37,23 @@ namespace AgriculturalManagement.ResolveProfileMapper
             CreateMap<InstrumentationTypeEntity, InstrumentationTypeDisplayModel>().ReverseMap();
             CreateMap<InstrumentationTypeCreateModel, InstrumentationTypeEntity>();
 
-
-            CreateMap<TypeTreeEntity, TypeTreeDisplayModel>().ReverseMap();
-            CreateMap<TypeTreeCreateModel, TypeTreeEntity>();
-
             // Device Driver profile mapping
 
 
             // Timer Device Driver
-            CreateMap<TimerDeviceDriverDisplayModel, TimerDeviceDriverEntity>().ReverseMap();
-            CreateMap<TimerDeviceDriverCreateModel, TimerDeviceDriverEntity>();
+            CreateMap<TimerDeviceEntity, TimerDeviceDriverDisplayModel>();
 
             // InstrumentSetThreshold
-            CreateMap<DeviceInstrumentThresholdEntity, InstrumentSetThresholdDisplayModel>();
-            CreateMap<InstrumentSetThresholdUpdateModel, DeviceInstrumentThresholdEntity>();
-            CreateMap<InstrumentSetThresholdCreateModel, DeviceInstrumentThresholdEntity>();
+            CreateMap<ThresholdDeviceEntity, InstrumentSetThresholdDisplayModel>();
+            CreateMap<InstrumentSetThresholdUpdateModel, ThresholdDeviceEntity>();
+            CreateMap<InstrumentSetThresholdCreateModel, ThresholdDeviceEntity>();
 
             // User
             CreateMap<UserEntity, ProfileUser>();
 
-            // ESP
-            CreateMap<EspEntity, EspDisplayModel>();
-            CreateMap<EspCreateModel, EspEntity>();
+            // Module
+            CreateMap<ModuleEntity, ModuleDisplayModel>();
             CreateMap<DeviceEntity, DeviceDisplayModel>();
-
-            CreateMap<DeviceCreateModel, DeviceEntity>().ForMember(dest => dest.Gpio, opt => opt.MapFrom(src => src.Gpio.ToString()));
-
         }
     }
 }

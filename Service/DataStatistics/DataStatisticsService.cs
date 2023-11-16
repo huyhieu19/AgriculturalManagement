@@ -1,8 +1,8 @@
 ﻿using Entities;
 using Microsoft.Extensions.Options;
-using Models;
+using Models.Config.Mongo;
 using MongoDB.Driver;
-using Service.Contracts;
+using Service.Contracts.Logger;
 
 namespace Service
 {
@@ -12,7 +12,7 @@ namespace Service
         private readonly MongoClient client;
         private readonly ILoggerManager logger;
 
-        public DataStatisticsService(IOptions<MongoDbConfig> mongoDbConfig, ILoggerManager logger)
+        public DataStatisticsService(IOptions<MongoDbConfigModel> mongoDbConfig, ILoggerManager logger)
         {
             this.client = new MongoClient(mongoDbConfig.Value.ConnectionString);
             var database = this.client.GetDatabase(mongoDbConfig.Value.DatabaseName);
@@ -20,7 +20,7 @@ namespace Service
             this.logger = logger;
         }
 
-        public Task GetData()
+        public Task PullData()
         {
             throw new NotImplementedException();
         }
@@ -42,7 +42,7 @@ namespace Service
 
         public async Task PushDataToDB(InstrumentValueByFiveSecondEntity addModel)
         {
-            logger.LogInformation($"Push start payload: {addModel.PayLoad}, topic: {addModel.Topic}");
+            logger.LogInformation($"Push start payload: {addModel.PayLoad}");
             await instrumentValue.InsertOneAsync(addModel);
             logger.LogInformation("Push end");
         }

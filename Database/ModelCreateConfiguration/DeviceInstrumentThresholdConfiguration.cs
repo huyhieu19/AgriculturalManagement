@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Database.ModelCreateConfiguration
 {
-    public class DeviceInstrumentThresholdConfiguration : IEntityTypeConfiguration<DeviceInstrumentThresholdEntity>
+    public class DeviceInstrumentThresholdConfiguration : IEntityTypeConfiguration<ThresholdDeviceEntity>
     {
-        public void Configure(EntityTypeBuilder<DeviceInstrumentThresholdEntity> builder)
+        public void Configure(EntityTypeBuilder<ThresholdDeviceEntity> builder)
         {
             builder.ToTable("DeviceInstrumentThreshold");
             builder.HasKey(x => new { x.DeviceDriverId, x.InstrumentationId });

@@ -2,6 +2,7 @@
 using Models.Device;
 using Repository.Contracts;
 using Service.Contracts.Device;
+using Common.Enum;
 
 namespace Service.Device
 {
@@ -15,47 +16,37 @@ namespace Service.Device
             this.mapper = mapper;
         }
 
-        public async Task<DeviceModifyResponseModel> DeviceCreate(Guid deviceId, int zoneId)
+        public async Task<bool> AddDeviceToZone(Guid deviceId, int zoneId)
         {
-            await repository.device.DeviceCreate(deviceId, zoneId);
-            var change = await repository.SaveAsync();
-            var response = new DeviceModifyResponseModel();
-            if (change > 0)
-            {
-                response.success = true;
-                response.displayModels = await DevicesDisplay(zoneId);
-            }
-            else
-            {
-                response.success = false;
-                response.displayModels = await DevicesDisplay(zoneId);
-            }
-            return response;
+            await repository.Device.AddDeviceToZone(deviceId, zoneId);
+            return await repository.SaveAsync() > 0;
         }
 
-        public async Task<DeviceModifyResponseModel> DeviceRemove(Guid deviceId, int zoneId)
+        public async Task<bool> RemoveDeviceFromZone(Guid deviceId, int zoneId)
         {
-            await repository.device.DeviceRemove(deviceId, zoneId);
-            var change = await repository.SaveAsync();
-            var response = new DeviceModifyResponseModel();
-            if (change > 0)
-            {
-                response.success = true;
-                response.displayModels = await DevicesDisplay(zoneId);
-            }
-            else
-            {
-                response.success = false;
-                response.displayModels = await DevicesDisplay(zoneId);
-            }
-            return response;
+            await repository.Device.RemoveDeviceFromZone(deviceId, zoneId);
+            return await repository.SaveAsync() > 0;
         }
 
-        public async Task<List<DeviceDisplayModel>> DevicesDisplay(int zoneId)
+        private async Task<List<DeviceDisplayModel>> GetDevicesOnZone(int zoneId)
         {
-            var deviceEntities = await repository.device.DevicesDisplay(zoneId);
+            var deviceEntities = await repository.Device.GetDevicesOnZone(zoneId);
             var deviceModels = mapper.Map<List<DeviceDisplayModel>>(deviceEntities);
             return deviceModels;
+        }
+
+        public async Task<List<DeviceDisplayModel>> GetDevicesControlOnZone(int zoneId)
+        {
+            var devices = await GetDevicesOnZone(zoneId);
+            var result = devices.Where(prop => prop.DeviceType == DeviceType.W.ToString()).ToList();
+            return result;
+        }
+
+        public async Task<List<DeviceDisplayModel>> GetDevicesInstrumentationOnZone(int zoneId)
+        {
+            var devices = await GetDevicesOnZone(zoneId);
+            var result = devices.Where(prop => prop.DeviceType == DeviceType.R.ToString()).ToList();
+            return result;
         }
     }
 }

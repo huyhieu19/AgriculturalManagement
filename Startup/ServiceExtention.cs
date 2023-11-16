@@ -4,15 +4,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Models;
+using Models.Config.Mongo;
+using Models.Config.Mqtt;
 using MQTTProcess;
 using Repository;
 using Repository.Contracts;
 using Service;
 using Service.Contracts;
-using Service.Contracts.ESP;
-using Service.ESP;
+using Service.Contracts.Logger;
+using Service.Contracts.Module;
 using Service.Extensions;
+using Service.Logger;
+using Service.Module;
 
 namespace Startup
 {
@@ -26,11 +29,13 @@ namespace Startup
             builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
             builder.Services.AddSingleton<DapperContext>();
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
-            builder.Services.AddSingleton<IDeviceAutoService, DeviceAutoService>();
+            builder.Services.AddSingleton<IDeviceControlService, DeviceControlService>();
             builder.Services.AddSingleton<IRestartAsyncMQTTService, ProcessDataReceivedFromMQTT>();
             builder.Services.AddSingleton<IEspBackgroundProcessService, EspBackgroundProcessService>();
+            builder.Services.AddSingleton<IDeviceJobMqtt, DeviceJobMqtt>();
 
 
+            builder.Services.AddHostedService<ProcessJobMqtt>();
 
 
             // Inject background service
@@ -59,8 +64,9 @@ namespace Startup
                     });
             });
 
-            ////// add config mongodb
-            builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection("MongoDbConfig"));
+            // add config to model
+            builder.Services.Configure<MongoDbConfigModel>(builder.Configuration.GetSection("MongoDbConfig"));
+            //builder.Services.Configure<MqttConnectionConfigModel>(builder.Configuration.GetSection("MqttConfig"));
 
             // add caching
             ///builder.Services.ConfigureResponseCaching();

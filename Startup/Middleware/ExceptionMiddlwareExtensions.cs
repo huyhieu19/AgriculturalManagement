@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Models;
-using Service.Contracts;
+using Models.BaseModel.Response;
+using Service.Contracts.Logger;
 using System.Net;
 
 

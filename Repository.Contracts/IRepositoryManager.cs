@@ -1,4 +1,8 @@
 ﻿using Repository.Contracts.Device;
+using Repository.Contracts.DeviceThreshold;
+using Repository.Contracts.DeviceTimer;
+using Repository.Contracts.Farm;
+using Repository.Contracts.Image;
 
 namespace Repository.Contracts
 {
@@ -7,20 +11,12 @@ namespace Repository.Contracts
         IFarmRepository Farm { get; }
         IZoneRepository Zone { get; }
         IImageRepository Image { get; }
-        IDeviceDriverRepository DeviceDriver { get; }
-
+        IDeviceTimerRepository DeviceDriver { get; }
         IInstrumentSetThresholdRepository InstrumentSetThreshold { get; }
-
-
-        #region Value Type Repository
         IInstrumentationTypeRepository InstrumentationType { get; }
-        ITypeTreeRepository TypeTree { get; }
-        #endregion
-
-        IEspRepository Esp { get; }
-        IDeviceEspRepository DeviceEsp { get; }
-
-        IDeviceRepository device { get; }
+        IModuleRepository Module { get; }
+        IDeviceRepository Device { get; }
+        IMockDataRepository MockData { get; }
 
         Task<int> SaveAsync();
     }
