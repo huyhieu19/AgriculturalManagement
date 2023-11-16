@@ -20,7 +20,7 @@ namespace Service
             this.logger = logger;
         }
 
-        public Task GetData()
+        public Task PullData()
         {
             throw new NotImplementedException();
         }

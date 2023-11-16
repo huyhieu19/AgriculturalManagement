@@ -29,9 +29,10 @@ namespace Startup
             builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
             builder.Services.AddSingleton<DapperContext>();
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
-            builder.Services.AddSingleton<IDeviceAutoService, DeviceAutoService>();
+            builder.Services.AddSingleton<IDeviceControlService, DeviceControlService>();
             builder.Services.AddSingleton<IRestartAsyncMQTTService, ProcessDataReceivedFromMQTT>();
             builder.Services.AddSingleton<IEspBackgroundProcessService, EspBackgroundProcessService>();
+            builder.Services.AddSingleton<IDeviceJobMqtt, DeviceJobMqtt>();
 
 
             builder.Services.AddHostedService<ProcessJobMqtt>();

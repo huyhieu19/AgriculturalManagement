@@ -3,19 +3,16 @@ using Models.DeviceAuto;
 
 namespace Service.Contracts
 {
-    public interface IDeviceAutoService
+    public interface IDeviceControlService
     {
         #region Device
         // Đóng thiết bị
-        Task DeviceDriverTurnOff(int DeviceDriverId);
+        Task<bool> DeviceDriverTurnOff(Guid DeviceId);
         // Mở thiết bị
-        Task DeviceDriverTurnOn(int DeviceDriverId);
-        Task<IEnumerable<DeviceDriverTurnOnTurnOffModel>> GetDeviceDriverTurnOnTurnOffModels();
+        Task DeviceDriverTurnOn(Guid DeviceId);
         #endregion
 
         #region Timer
-        Task DeleteTimer(int Id);
-
         Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete();
         #endregion
     }

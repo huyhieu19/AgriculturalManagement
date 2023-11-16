@@ -17,15 +17,12 @@ namespace MQTTProcess
 {
     public class ProcessJobMqtt : BackgroundService
     {
-
         private readonly ILoggerManager logger;
         private readonly IConfiguration configuration;
         private static List<InstrumentValueByFiveSecondEntity> _messageList = new List<InstrumentValueByFiveSecondEntity>();
         private static int _messageCount = 0;
         private const int MaxMessageCount = 5;
         private readonly IDataStatisticsService dataStatisticsService;
-
-
 
         public ProcessJobMqtt(ILoggerManager logger, IConfiguration configuration,
             IDataStatisticsService dataStatisticsService)
@@ -46,18 +43,13 @@ namespace MQTTProcess
                 if (mqttClient == null || !mqttClient.IsConnected)
                 {
                     mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
-                    logger.LogInformation("Connected to MQTT Broker");
-                    List<string> mqttTopics = new();
-                    List<byte> msgBases = new();
-                    string mqttTopic = $"{connection.SystemId}/#";
 
-                    mqttTopics.Add(mqttTopic);
-                    msgBases.Add(MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE);
-                    logger.LogInformation("Sub -> " + mqttTopic);
+                    logger.LogInformation("Connected to MQTT Broker");
+                    string mqttTopic = $"{connection.SystemId}/#";
 
                     mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
                     mqttClient.Subscribe(new[] { mqttTopic },new[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-
+                    logger.LogInformation("Sub -> " + mqttTopic);
                 }
                 await Task.Delay(TimeSpan.FromSeconds(10));
             }
@@ -78,7 +70,7 @@ namespace MQTTProcess
                 DeviceId = topicSplits[1],
                 DeviceNameType = topicSplits[3],
                 DeviceType = topicSplits[2],
-                ValueDate = SetTimeZone.GetDateTimeVN()
+                ValueDate = DateTime.Now.AddHours(+7)
             };
             Task.Run(async () => await ProcessAndSaveDataAsync(entity));
 

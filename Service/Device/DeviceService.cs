@@ -2,6 +2,7 @@
 using Models.Device;
 using Repository.Contracts;
 using Service.Contracts.Device;
+using Common.Enum;
 
 namespace Service.Device
 {
@@ -37,14 +38,14 @@ namespace Service.Device
         public async Task<List<DeviceDisplayModel>> GetDevicesControlOnZone(int zoneId)
         {
             var devices = await GetDevicesOnZone(zoneId);
-            var result = devices.Where(prop => prop.DeviceType == Common.Enum.DeviceType.W.ToString()).ToList();
+            var result = devices.Where(prop => prop.DeviceType == DeviceType.W.ToString()).ToList();
             return result;
         }
 
         public async Task<List<DeviceDisplayModel>> GetDevicesInstrumentationOnZone(int zoneId)
         {
             var devices = await GetDevicesOnZone(zoneId);
-            var result = devices.Where(prop => prop.DeviceType == Common.Enum.DeviceType.R.ToString()).ToList();
+            var result = devices.Where(prop => prop.DeviceType == DeviceType.R.ToString()).ToList();
             return result;
         }
     }
