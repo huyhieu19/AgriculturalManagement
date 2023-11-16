@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Database;
 using Entities;
 using Models;
 using Repository.Contracts;
@@ -9,24 +10,26 @@ namespace Service
     public sealed class FarmService : IFarmService
     {
         private readonly IRepositoryManager repositoryManager;
-        private readonly ILoggerManager _logger;
-        private readonly IMapper _mapper;
-        public FarmService(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper)
+        private readonly ILoggerManager logger;
+        private readonly IMapper mapper;
+        private readonly DapperContext dapperContext;
+        public FarmService(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper, DapperContext dapperContext)
         {
             this.repositoryManager = repositoryManager;
-            _logger = logger;
-            _mapper = mapper;
+            this.logger = logger;
+            this.mapper = mapper;
+            this.dapperContext = dapperContext;
         }
 
         public async Task<bool> AddFarm(FarmCreateModel createModel)
         {
             try
             {
-                _logger.LogInfomation("Create farm in Farm service layer");
-                var companyEntity = _mapper.Map<FarmEntity>(createModel);
+                logger.LogInformation("Create farm in Farms service layer");
+                var companyEntity = mapper.Map<FarmEntity>(createModel);
                 repositoryManager.Farm.CreateFarm(companyEntity);
-                await repositoryManager.SaveAsync();
-                return true;
+                int isChange = await repositoryManager.SaveAsync();
+                return isChange > 0;
             }
             catch (Exception ex)
             {
@@ -38,9 +41,9 @@ namespace Service
         {
             try
             {
-                _logger.LogInfomation("Get all farms in Service layer");
+                logger.LogInformation("Get all farms in Service layer");
                 var farms = await repositoryManager.Farm.GetAllFarm(trackChanges);
-                var farmsDisplayModel = _mapper.Map<IEnumerable<FarmDisplayModel>>(farms);
+                var farmsDisplayModel = mapper.Map<IEnumerable<FarmDisplayModel>>(farms);
                 return farmsDisplayModel;
             }
             catch (Exception ex)
@@ -49,31 +52,36 @@ namespace Service
             }
         }
 
-        public async Task<IEnumerable<FarmDisplayModel>> GetByCondition(FarmQueryModel model, bool trackChanges)
+        public async Task<IEnumerable<FarmDisplayModel>> GetFarms(string userId, bool trackChanges)
         {
             try
             {
-                _logger.LogInfomation($"Farm Service| Get By Condition | start ");
+                logger.LogInformation($"Farms Service| Get farm by user | start ");
 
-                var responseEntities = await repositoryManager.Farm.GetByCondition(model, trackChanges);
-                var response = _mapper.Map<IEnumerable<FarmDisplayModel>>(responseEntities);
+                var farms = await repositoryManager.Farm.GetFarms(userId, trackChanges);
 
-                _logger.LogInfomation($"Farm Service | Get By Condition | end ");
-                return response;
+                //string query = FarmQuery.GetFarmSQL;
+                //IEnumerable<FarmDisplayModel> response;
+                //using (var connection = dapperContext.CreateConnection())
+                //{
+                //    response = await connection.QueryAsync<FarmDisplayModel>(query, new { UserID = userId });
+                //}
+                logger.LogInformation($"Farms Service | Get farm by user | end ");
+                return farms;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Farm Service | Delete | Exeption: {ex}");
+                logger.LogError($"Farms Service | Delete | Exception: {ex}");
                 throw;
             }
         }
 
-        public async Task<IEnumerable<FarmFilterNameModel>> GetNameFarm()
+        public async Task<IEnumerable<FarmFilterNameModel>> GetNameFarm(string userId)
         {
             try
             {
-                var farms = await repositoryManager.Farm.GetAllFarm(false);
-                var farmsDisplayModel = _mapper.Map<IEnumerable<FarmFilterNameModel>>(farms);
+                var farms = await repositoryManager.Farm.GetFarms(userId, false);
+                var farmsDisplayModel = mapper.Map<IEnumerable<FarmFilterNameModel>>(farms);
                 return farmsDisplayModel;
             }
             catch (Exception ex)
@@ -82,18 +90,18 @@ namespace Service
             }
         }
 
-        public async Task<bool> RemoveFarm(int id, string UserId)
+        public async Task<bool> RemoveFarm(int id, string userId)
         {
             try
             {
-                _logger.LogInfomation($"Farm Service | Remove Farm: {id}");
-                repositoryManager.Farm.DeleteFarm(id, UserId);
-                await repositoryManager.SaveAsync();
-                return true;
+                logger.LogInformation($"Farms Service | Remove Farms: {id}");
+                repositoryManager.Farm.DeleteFarm(id, userId);
+                int isChange = await repositoryManager.SaveAsync();
+                return isChange > 0;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Farm Service | Exception: {ex}");
+                logger.LogError($"Farms Service | Exception: {ex}");
                 return false;
             }
         }
@@ -101,13 +109,15 @@ namespace Service
         {
             try
             {
-                _logger.LogInfomation($"Farm Service | Udpate Farm: {updateModel}");
-                repositoryManager.Farm.UpdateFarm(updateModel);
-                return await Task.FromResult(true);
+                logger.LogInformation($"Farms Service | Update Farms: {updateModel}");
+                var entity = mapper.Map<FarmEntity>(updateModel);
+                repositoryManager.Farm.UpdateFarm(entity);
+                int isChange = await repositoryManager.SaveAsync();
+                return isChange > 0;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Farm Service | Exception: {ex}");
+                logger.LogError($"Farms Service | Exception: {ex}");
                 return false;
             }
         }

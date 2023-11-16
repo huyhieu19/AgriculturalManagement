@@ -8,7 +8,7 @@ namespace Startup
 
         public static WebApplication UseService(this WebApplication app)
         {
-            app.UseCors();
+            app.UseCors("AllowAllHeaders");
             //if (app.Environment.IsDevelopment())
             //{
             //    app.UseSwagger();
@@ -25,12 +25,12 @@ namespace Startup
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseMiddleware<ApiResponseMiddleware>();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
 
-            app.UseRouting();
-            ////startupTask.StartAsync(CancellationToken.None).Wait();
+
             ///app.UseResponseCaching();
             ///app.UseHttpCacheHeaders();
 

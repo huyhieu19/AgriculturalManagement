@@ -5,8 +5,6 @@ using System.Text;
 
 namespace Startup
 {
-
-
     public class ApiResponseMiddleware
     {
         private readonly RequestDelegate _next;
@@ -30,7 +28,7 @@ namespace Startup
 
                     // Continue processing the request
                     await _next(context);
-                    string responseContent = "abc";
+                    string responseContent = "\n---Hello Farm Manager!---";
                     // Intercept and modify the response
                     if (context.Response.StatusCode == 200)
                     {
@@ -46,15 +44,15 @@ namespace Startup
                         context.Response.StatusCode = 200; // Internal Server Error
                         var errorMessage = "you have no permissions to access this website.";
 
-                        // Create an ApiResponseModel with error details
-                        var apiResponse = new ApiResponseModel<object>
+                        // Create an ResponseModel with error details
+                        var apiResponse = new ResponseModel<object>
                         {
                             Success = false,
                             ErrorMessage = errorMessage,
                             StatusCode = 401
                         };
 
-                        // Serialize the ApiResponseModel to JSON
+                        // Serialize the ResponseModel to JSON
                         responseContent = JsonConvert.SerializeObject(apiResponse);
 
                         // Write the formatted response to the original response stream
@@ -81,15 +79,15 @@ namespace Startup
                     context.Response.StatusCode = 200; // Internal Server Error
                     var errorMessage = ex.Message;
 
-                    // Create an ApiResponseModel with error details
-                    var apiResponse = new ApiResponseModel<object>
+                    // Create an ResponseModel with error details
+                    var apiResponse = new ResponseModel<object>
                     {
                         Success = false,
                         ErrorMessage = errorMessage,
                         StatusCode = 500
                     };
 
-                    // Serialize the ApiResponseModel to JSON
+                    // Serialize the ResponseModel to JSON
                     var formattedResponse = JsonConvert.SerializeObject(apiResponse);
 
                     // Write the formatted response to the original response stream
@@ -117,7 +115,7 @@ namespace Startup
             var responseData = JsonConvert.DeserializeObject(responseContent);
 
             // Create your ApiResponse<T> object
-            var apiResponse = new ApiResponseModel<object>
+            var apiResponse = new ResponseModel<object>
             {
                 Success = true,
                 Data = responseData,
@@ -130,5 +128,4 @@ namespace Startup
             return formattedResponse;
         }
     }
-
 }

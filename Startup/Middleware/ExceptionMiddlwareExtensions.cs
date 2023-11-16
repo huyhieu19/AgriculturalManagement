@@ -11,7 +11,7 @@ namespace Startup
     public static class ExceptionMiddlewareExtensions
     {
         public static void ConfigureExceptionHandler(this WebApplication app,
-        ILoggerManager logger)
+            ILoggerManager logger)
         {
             app.UseExceptionHandler(appError =>
             {

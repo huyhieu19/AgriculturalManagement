@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Database;
 using Entities;
 using Models;
 using Repository.Contracts;
@@ -10,11 +11,13 @@ namespace Service
     {
         private readonly IRepositoryManager repositoryManager;
         private readonly IMapper mapper;
+        private readonly DapperContext dapperContext;
 
-        public ZoneService(IRepositoryManager repositoryManager, IMapper mapper)
+        public ZoneService(IRepositoryManager repositoryManager, IMapper mapper, DapperContext dapperContext)
         {
             this.repositoryManager = repositoryManager;
             this.mapper = mapper;
+            this.dapperContext = dapperContext;
         }
 
         public async Task<bool> AddZone(ZoneCreateModel createModel)
@@ -25,26 +28,34 @@ namespace Service
             return true;
         }
 
-        public async Task<IEnumerable<ZoneDisplayModel>> GetZones(ZoneQueryDisplayModel model, bool trackChanges)
+        public async Task<IEnumerable<ZoneDisplayModel>> GetZones(int farmId, bool trackChanges)
         {
-            var ZonesModel = await repositoryManager.Zone.GetZones(model, trackChanges);
-            var result = mapper.Map<IEnumerable<ZoneDisplayModel>>(ZonesModel);
-            return result;
+            //string query = ZoneQuery.GetZoneSQL;
+            //IEnumerable<ZoneDisplayModel> result;
+            //using (var connection = dapperContext.CreateConnection())
+            //{
+            //    result = await connection.QueryAsync<ZoneDisplayModel>(query, new { FarmId = farmId });
+            //}
+            var entities = await repositoryManager.Zone.GetZones(farmId, trackChanges);
+            var zones = mapper.Map<IEnumerable<ZoneDisplayModel>>(entities);
+            return zones;
         }
 
         public async Task<bool> RemoveZone(int id)
         {
             repositoryManager.Zone.DeleteZone(id);
-            await repositoryManager.SaveAsync();
-            return true;
+            var isChange = await repositoryManager.SaveAsync();
+            return isChange > 0;
         }
 
         public async Task<bool> UpdateZone(ZoneUpdateModel updateModel)
         {
             try
             {
-                repositoryManager.Zone.UpdateZone(updateModel);
-                return await Task.FromResult(true);
+                var entity = mapper.Map<ZoneEntity>(updateModel);
+                repositoryManager.Zone.UpdateZone(entity);
+                int isChange = await repositoryManager.SaveAsync();
+                return isChange > 0;
             }
             catch (Exception ex)
             {

@@ -1,12 +1,12 @@
-﻿using Quartz;
+﻿//using Quartz;
 
-namespace JobBackground
-{
-    internal class TurnOffDeviceDriver : IJob
-    {
-        public Task Execute(IJobExecutionContext context)
-        {
-            throw new NotImplementedException();
-        }
-    }
-}
+//namespace JobBackground
+//{
+//    internal class TurnOffDeviceDriver : IJob
+//    {
+//        public Task Execute(IJobExecutionContext context)
+//        {
+//            throw new NotImplementedException();
+//        }
+//    }
+//}

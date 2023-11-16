@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
@@ -29,7 +29,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository.Contracts", "Rep
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Extensions", "Service.Extention\Service.Extensions.csproj", "{104D829B-4CF3-4727-8722-A837BAE5D7A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobBackground", "JobBackground\JobBackground.csproj", "{9A9AE75C-8CE5-4D8B-A26E-5E87E0A00EE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobBackground", "JobBackground\JobBackground.csproj", "{9A9AE75C-8CE5-4D8B-A26E-5E87E0A00EE1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTTProcess", "MQTTProcess\MQTTProcess.csproj", "{6692E853-9221-423E-967F-4ACF121749BB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{15104902-A02B-4594-8ADA-646F313E90B8} = {15104902-A02B-4594-8ADA-646F313E90B8}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +90,10 @@ Global
 		{9A9AE75C-8CE5-4D8B-A26E-5E87E0A00EE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A9AE75C-8CE5-4D8B-A26E-5E87E0A00EE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A9AE75C-8CE5-4D8B-A26E-5E87E0A00EE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6692E853-9221-423E-967F-4ACF121749BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6692E853-9221-423E-967F-4ACF121749BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6692E853-9221-423E-967F-4ACF121749BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6692E853-9221-423E-967F-4ACF121749BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Models;
+using Models.Authentication;
 
 namespace Service.Contracts
 {
@@ -11,5 +12,10 @@ namespace Service.Contracts
 
         Task<TokenModel> RefreshToken(TokenModel tokenModel);
         ProfileUser GetProfilebyToken(string token);
+        Task<bool> AddRoleToUser(string roleName, string email);
+        Task<List<IdentityRole>> GetRoles();
+
+        // Update password
+        Task<ResponseResetPasswordModel> ChangePassword(ResetPasswordModel changePasswordModel);
     }
 }

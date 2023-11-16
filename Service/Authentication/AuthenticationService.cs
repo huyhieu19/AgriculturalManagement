@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Database;
 using Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models;
+using Models.Authentication;
 using Service.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -20,13 +23,15 @@ namespace Service
         private readonly IConfiguration _configuration;
         private UserEntity? _user;
         private const int DayRefreshTokenExpiryTime = 7;
+        private readonly FactDbContext factDbContext;
 
-        public AuthenticationService(IMapper mapper, UserManager<UserEntity> userManager, ILoggerManager _logger, IConfiguration _configuration)
+        public AuthenticationService(IMapper mapper, FactDbContext factDbContext, UserManager<UserEntity> userManager, ILoggerManager _logger, IConfiguration _configuration)
         {
             this.mapper = mapper;
             this.userManager = userManager;
             this._logger = _logger;
             this._configuration = _configuration;
+            this.factDbContext = factDbContext;
         }
         public ProfileUser GetProfilebyToken(string token)
         {
@@ -56,16 +61,19 @@ namespace Service
 
             // Lấy thông tin từ token
             var jwtToken = (JwtSecurityToken)securityToken;
+            var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
             var userEmail = jwtToken.Claims.FirstOrDefault(c => c.Type == "Email")?.Value;
-            var userName = jwtToken.Claims.FirstOrDefault(c => c.Type == "Name")?.Value;
-            return new ProfileUser(userName, userEmail);
+            var userName = jwtToken.Claims.FirstOrDefault(c => c.Type == "UserName")?.Value;
+            var phoneNumber = jwtToken.Claims.FirstOrDefault(c => c.Type == "PhoneNumber")?.Value;
+            var address = jwtToken.Claims.FirstOrDefault(c => c.Type == "Address")?.Value;
+            return new ProfileUser(Id: userId!, userName, userEmail, Address: address, PhoneNumber: phoneNumber);
         }
 
         public async Task<TokenModel> CreateToken(bool populateExp)
         {
             try
             {
-                _logger.LogInfomation("AuthenticationService - CreateToken");
+                _logger.LogInformation("AuthenticationService - CreateToken");
 
                 var signingCredentials = GetSigningCredentials(); // Tạo chữ kí số
                 var claims = await GetClaims(); // Lấy ra những vai trò của user
@@ -93,10 +101,10 @@ namespace Service
 
             try
             {
-                _logger.LogInfomation("AuthenticationService - RegisterUser");
+                _logger.LogInformation("AuthenticationService - RegisterUser");
                 var user = mapper.Map<UserEntity>(userRegisterationModel);
                 var result = await userManager.CreateAsync(user,
-                userRegisterationModel.Password!);
+                    userRegisterationModel.Password!);
                 if (result.Succeeded && userRegisterationModel.Roles != null && userRegisterationModel.Roles.Any())
                     await userManager.AddToRolesAsync(user, userRegisterationModel.Roles);
                 return result;
@@ -110,7 +118,7 @@ namespace Service
         {
             _user = await userManager.FindByEmailAsync(userForAuth.Email!);
             var result = (_user != null && await userManager.CheckPasswordAsync(_user,
-            userForAuth.Password!));
+                userForAuth.Password!));
             if (!result)
                 _logger.LogWarning($"{nameof(ValidateUser)}: Authentication failed. Wrong user name or password.");
             return result;
@@ -130,13 +138,15 @@ namespace Service
         private async Task<List<Claim>> GetClaims()
         {
             var claims = new List<Claim>
-                {
-                    new Claim("Name", _user!.UserName!),
-                    new Claim("Email", _user!.Email!),
-                    new Claim("Id", _user.Id),
-                    new Claim(ClaimTypes.NameIdentifier, _user.Id),
-                    new Claim(ClaimTypes.Name, _user!.UserName!),
-                };
+            {
+                new Claim("Id", _user!.Id),
+                new Claim("UserName", _user.UserName ?? ""),
+                new Claim("Email", _user.Email!),
+                new Claim("PhoneNumber", _user.PhoneNumber ?? ""),
+                new Claim("Address", _user.Address ?? ""),
+                new Claim(ClaimTypes.Name, _user.UserName ?? ""),
+                new Claim(ClaimTypes.NameIdentifier, _user.Id ?? ""),
+            };
             var roles = await userManager.GetRolesAsync(_user);
             foreach (var role in roles)
             {
@@ -166,7 +176,7 @@ namespace Service
 
         private string GenerateRefreshToken()
         {
-            _logger.LogInfomation("AuthenticationService - GenerateRefreshToken");
+            _logger.LogInformation("AuthenticationService - GenerateRefreshToken");
             var ramdomNumber = new byte[32];
 
             using (var rng = RandomNumberGenerator.Create())
@@ -213,13 +223,103 @@ namespace Service
         {
             var principal = GetPrincipalFromExpiredToken(tokenModel.AccessToken);
 
-            var user = await userManager.FindByNameAsync(principal.Identity!.Name!);
+            var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                throw new SecurityTokenException("User Id not found in the token.");
+            }
+            var user = await userManager.FindByIdAsync(userId);
+
+            // var user = await userManager.FindByNameAsync(principal.Identity!.Name!); // you can use this line if you used claim Type Name in method get name
+
             if (user == null || user.RefreshToken != tokenModel.RefreshToken)
             {
                 throw new AggregateException("Invalid client request. The tokenDto has some invalid values.");
             }
             _user = user;
             return await CreateToken(populateExp: false);
+        }
+
+
+        public async Task<bool> AddRoleToUser(string roleName, string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return false;
+            }
+            var result = await userManager.AddToRoleAsync(user!, roleName);
+            if (!result.Succeeded)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<List<IdentityRole>> GetRoles()
+        {
+            return await factDbContext.Roles.ToListAsync();
+        }
+
+        public async Task<ResponseResetPasswordModel> ChangePassword(ResetPasswordModel resetPasswordModel)
+        {
+            try
+            {
+                var user = await userManager.FindByEmailAsync(resetPasswordModel.Email);
+                if (user == null)
+                {
+                    return new ResponseResetPasswordModel()
+                    {
+                        IsSuccess = false,
+                    };
+                }
+                var resetPassResult = await userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.Password);
+                if (resetPassResult.Succeeded)
+                {
+                    return new ResponseResetPasswordModel()
+                    {
+                        IsSuccess = false,
+                    };
+                }
+                return new ResponseResetPasswordModel()
+                {
+                    IsSuccess = true,
+                    TokenModel = await CreateToken1(true, user)
+                };
+            }
+            catch
+            {
+                _logger.LogError("Change password false");
+                throw;
+            }
+        }
+        private async Task<TokenModel> CreateToken1(bool populateExp, UserEntity user)
+        {
+            try
+            {
+                _logger.LogInformation("AuthenticationService - CreateToken");
+
+                var signingCredentials = GetSigningCredentials(); // Tạo chữ kí số
+                var claims = await GetClaims(); // Lấy ra những vai trò của user
+
+                var tokenOptions = GenerateTokenOptions(signingCredentials, claims); // Lấy ra JWTSecurityToken thích hợp để tạo Token
+
+                var refreshToken = GenerateRefreshToken();
+                user!.RefreshToken = refreshToken;
+                if (populateExp)
+                    user.RefreshTokenExpiryTime = DateTime.Now.AddDays(DayRefreshTokenExpiryTime);
+
+                await userManager.UpdateAsync(user);
+
+                var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions); // sử dụng tokenOptions ở trên và JwtSecurityTokenHandler() để tạo token
+                return new TokenModel(accessToken, refreshToken);
+            }
+            catch (Exception ex)
+            {
+                throw new AggregateException(ex.Message);
+            }
         }
     }
 }

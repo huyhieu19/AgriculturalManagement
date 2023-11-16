@@ -10,6 +10,5 @@ namespace Entities
         public string? Note { get; set; }
         public int? ZoneId { get; set; }
         public ZoneEntity? Zone { get; set; }
-        public ICollection<ImageEntity>? Images { get; set; }
     }
 }

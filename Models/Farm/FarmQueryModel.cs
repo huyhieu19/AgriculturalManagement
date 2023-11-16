@@ -1,10 +1,7 @@
-﻿using Common.Enum;
-
-namespace Models
+﻿namespace Models
 {
-    public class FarmQueryModel : QueryBaseModel
+    public class FarmQueryModel
     {
         public string? UserId { get; set; }
-
     }
 }

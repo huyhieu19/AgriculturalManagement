@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Database.ModelCreateConfiguration.Role
 {
@@ -15,11 +10,13 @@ namespace Database.ModelCreateConfiguration.Role
         {
             builder.HasData(new IdentityRole
             {
+                Id = "27cff7a9-5dd2-4300-9185-d7be99c4da16",
                 Name = "Manager",
                 NormalizedName = "MANAGER"
             },
             new IdentityRole
             {
+                Id = "efd37bbc-5fa6-45ba-a749-bf93cdadbf60",
                 Name = "Administrator",
                 NormalizedName = "ADMINISTRATOR"
             });

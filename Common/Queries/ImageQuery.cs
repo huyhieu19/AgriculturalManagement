@@ -3,7 +3,7 @@
     public static class ImageQuery
     {
         public const string CreateImageSQL = @"INSERT INTO Image (Url,IsDefault, Name, FarmId, StaffId, UserId, ZoneId, ZoneHarvestId) " +
-                   "VALUES (@Url, @IsDefault, @Name, @FarmId, @StaffId, @UserId, @ZoneId, @ZoneHarvestId);";
+                                             "VALUES (@Url, @IsDefault, @Name, @FarmId, @StaffId, @UserId, @ZoneId, @ZoneHarvestId);";
         public const string SetImageDefaultSQl = @"Update Image
                                                 Set IsDefault = 0
                                                 Where IsDefault = 1

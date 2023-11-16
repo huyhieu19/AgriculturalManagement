@@ -1,66 +1,52 @@
 ﻿using Database;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Quartz;
-using Quartz.Impl;
+using Models;
+using MQTTProcess;
 using Repository;
 using Repository.Contracts;
 using Service;
 using Service.Contracts;
-using Service.Extention;
+using Service.Contracts.ESP;
+using Service.ESP;
+using Service.Extensions;
 
 namespace Startup
 {
     public static class ServiceExtention
     {
-
         public static WebApplicationBuilder AddServicesBase(this WebApplicationBuilder builder)
         {
-
-
             // Add services to the container.
-            builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
-
-
+            builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
             builder.Services.AddSingleton<DapperContext>();
+            builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
+            builder.Services.AddSingleton<IDeviceAutoService, DeviceAutoService>();
+            builder.Services.AddSingleton<IRestartAsyncMQTTService, ProcessDataReceivedFromMQTT>();
+            builder.Services.AddSingleton<IEspBackgroundProcessService, EspBackgroundProcessService>();
 
 
-            builder.Services.AddSingleton<IScheduler>(provider =>
-            {
-                var schedulerFactory = new StdSchedulerFactory();
-                return schedulerFactory.GetScheduler().Result;
-            });
-
-            // config xong thì bỏ comment -> deploy
-            ///builder.Services.AddSingleton<JobSchedulerDeviceDriver>();
-
-            ///builder.Services.AddHostedService<JobSchedulerHostedService>();
-
-            ////// job chay background 5s 1 lần
-            ///builder.Services.AddHostedService<JobForDeviceDriverService>();
 
 
-            builder.Services.AddControllers(config =>
-            {
-                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
-                {
-                    Duration = 120
-                });
-            });
+            // Inject background service
+            //builder.Services.AddHostedService<ProcessDataReceivedFromMQTT>();
+            //builder.Services.AddHostedService<JobForDeviceDriverService>();
+            //builder.Services.AddHostedService<JobThresholdService>();
+
+            builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-
             builder.Services.AddAuthentication();
-
+            builder.Services.AddHttpContextAccessor();
             builder.Services.ConfigureIdentity();
+            builder.Services.ConfigureJWT(builder.Configuration);
 
             builder.Services.AddCors(options =>
             {
@@ -68,13 +54,15 @@ namespace Startup
                     builder =>
                     {
                         builder.AllowAnyOrigin()
-                               .AllowAnyHeader()
-                               .AllowAnyMethod();
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
                     });
             });
 
-            builder.Services.ConfigureJWT(builder.Configuration);
+            ////// add config mongodb
+            builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection("MongoDbConfig"));
 
+            // add caching
             ///builder.Services.ConfigureResponseCaching();
             ///builder.Services.ConfigureHttpCacheHeaders();
 
@@ -84,12 +72,12 @@ namespace Startup
         {
             // SQL Server dependency Injection
             builder.Services.AddDbContext<FactDbContext>(options =>
-                  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("AgriculturalManagement")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("AgriculturalManagement")));
 
 
             builder.Services.AddSwaggerGen(opt =>
             {
-                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Agricultural Management", Version = "v1" });
+                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Agricultural Management API", Version = "v1" });
 
                 opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

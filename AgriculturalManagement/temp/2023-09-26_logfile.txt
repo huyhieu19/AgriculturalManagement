@@ -1,9 +1,0 @@
-2023-09-26 14:03:06.6388|Info|AuthenticationService - CreateToken | 
-2023-09-26 14:04:22.2936|Info|AuthenticationService - CreateToken | 
-2023-09-26 14:04:27.8684|Info|AuthenticationService - CreateToken | 
-2023-09-26 14:04:28.7831|Info|AuthenticationService - CreateToken | 
-2023-09-26 14:04:29.6156|Info|AuthenticationService - CreateToken | 
-2023-09-26 14:04:30.2767|Info|AuthenticationService - CreateToken | 
-2023-09-26 14:04:30.9051|Info|AuthenticationService - CreateToken | 
-2023-09-26 14:04:31.6727|Info|AuthenticationService - CreateToken | 
-2023-09-26 14:04:32.3689|Info|AuthenticationService - CreateToken | 

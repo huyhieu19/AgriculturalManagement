@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using Database;
 using Repository.Contracts;
+using Repository.Contracts.Device;
+using Repository.Device;
+using Repository.ESP;
 using Service.Contracts;
 
 namespace Repository
@@ -10,28 +13,30 @@ namespace Repository
         private readonly Lazy<IFarmRepository> farmRepository;
         private readonly Lazy<IZoneRepository> zoneRepository;
         private readonly Lazy<IImageRepository> imageRepository;
-        private readonly Lazy<IInstrumentationRepository> instrumentationRepository;
         private readonly Lazy<IDeviceDriverRepository> deviceDriverRepository;
-        private readonly Lazy<IMachineRepository> machineRepository;
-        private readonly Lazy<IDeviceDriverTypeRepository> deviceDriverTypeRepository;
         private readonly Lazy<IInstrumentationTypeRepository> instrumentationTypeRepository;
         private readonly Lazy<ITypeTreeRepository> typeTreeRepository;
         private readonly Lazy<IInstrumentSetThresholdRepository> instrumentSetThresholdRepository;
+        private readonly Lazy<IEspRepository> espRepository;
+        private readonly Lazy<IDeviceEspRepository> deviceEspRepository;
+        private readonly Lazy<IDeviceRepository> deviceRepository;
+
+
         private readonly FactDbContext factDbContext;
 
         public RepositoryManager(FactDbContext factDbContext, ILoggerManager logger, DapperContext dapperContext, IMapper mapper)
         {
             this.factDbContext = factDbContext;
-            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext, logger, dapperContext));
-            zoneRepository = new Lazy<IZoneRepository>(() => new ZoneRepository(factDbContext, dapperContext));
+            farmRepository = new Lazy<IFarmRepository>(() => new FarmRepository(factDbContext, logger));
+            zoneRepository = new Lazy<IZoneRepository>(() => new ZoneRepository(factDbContext));
             imageRepository = new Lazy<IImageRepository>(() => new ImageRepository(factDbContext, dapperContext));
-            instrumentationRepository = new Lazy<IInstrumentationRepository>(() => new InstrumentationRepository(factDbContext, dapperContext));
-            deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext, mapper));
-            machineRepository = new Lazy<IMachineRepository>(() => new MachineRepository(factDbContext, dapperContext));
-            deviceDriverTypeRepository = new Lazy<IDeviceDriverTypeRepository>(() => new DeviceDriverTypeRepository(factDbContext, dapperContext));
+            deviceDriverRepository = new Lazy<IDeviceDriverRepository>(() => new DeviceDriverRepository(factDbContext, dapperContext));
             instrumentationTypeRepository = new Lazy<IInstrumentationTypeRepository>(() => new InstrumentationTypeRepository(factDbContext, dapperContext));
             typeTreeRepository = new Lazy<ITypeTreeRepository>(() => new TypeTreeRepository(factDbContext, dapperContext));
             instrumentSetThresholdRepository = new Lazy<IInstrumentSetThresholdRepository>(() => new InstrumentSetThresholdRepository(factDbContext));
+            espRepository = new Lazy<IEspRepository>(() => new EspRepository(factDbContext));
+            deviceEspRepository = new Lazy<IDeviceEspRepository>(() => new DeviceEspRepository(factDbContext));
+            this.deviceRepository = new Lazy<IDeviceRepository>(() => new DeviceRepository(factDbContext));
         }
 
         public IFarmRepository Farm => farmRepository.Value;
@@ -40,13 +45,7 @@ namespace Repository
 
         public IImageRepository Image => imageRepository.Value;
 
-        public IInstrumentationRepository Instrumentation => instrumentationRepository.Value;
-
         public IDeviceDriverRepository DeviceDriver => deviceDriverRepository.Value;
-
-        public IMachineRepository Machine => machineRepository.Value;
-
-        public IDeviceDriverTypeRepository DeviceDriverType => deviceDriverTypeRepository.Value;
 
         public IInstrumentationTypeRepository InstrumentationType => instrumentationTypeRepository.Value;
 
@@ -54,6 +53,11 @@ namespace Repository
 
         public IInstrumentSetThresholdRepository InstrumentSetThreshold => instrumentSetThresholdRepository.Value;
 
-        public async Task SaveAsync() => await factDbContext.SaveChangesAsync();
+        public IEspRepository Esp => espRepository.Value;
+        public IDeviceEspRepository DeviceEsp => deviceEspRepository.Value;
+
+        public IDeviceRepository device => deviceRepository.Value;
+
+        public async Task<int> SaveAsync() => await factDbContext.SaveChangesAsync();
     }
 }

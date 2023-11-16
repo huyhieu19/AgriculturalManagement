@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string ZoneName { get; set; } = null!;
+        public double? Area { get; set; }
         public string? Description { get; set; }
         public string? Note { get; set; }
         public DateTime? TimeToStartPlanting { get; set; }

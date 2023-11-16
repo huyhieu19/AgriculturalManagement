@@ -11,8 +11,7 @@
                     Z.Description AS ZoneDescription,
 
                     DDT.Name AS DeviceDriverTypeName,
-                    DDT.Manufacturer AS DeviceDriverTypeManufacturer,
-                    DDT.ImageUrl AS DeviceDriverTypeImageUrl
+                    DDT.Manufacturer AS DeviceDriverTypeManufacturer
 
                 FROM
                     DeviceDriver DD
