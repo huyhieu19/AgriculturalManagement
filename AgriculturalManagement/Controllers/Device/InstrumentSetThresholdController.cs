@@ -9,9 +9,9 @@ namespace AgriculturalManagement.Controllers.Device
     public class InstrumentSetThresholdController : ControllerBase
     {
         private readonly IServiceManager serviceManager;
-        private readonly IDeviceAutoService deviceAutoService;
+        private readonly IDeviceControlService deviceAutoService;
 
-        public InstrumentSetThresholdController(IServiceManager serviceManager, IDeviceAutoService deviceAutoService)
+        public InstrumentSetThresholdController(IServiceManager serviceManager, IDeviceControlService deviceAutoService)
         {
             this.serviceManager = serviceManager;
             this.deviceAutoService = deviceAutoService;

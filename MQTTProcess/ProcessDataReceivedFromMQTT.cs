@@ -1,8 +1,9 @@
-﻿using Entities;
+﻿using Common.TimeHelper;
+using Entities;
 using Microsoft.Extensions.Hosting;
 using Service;
-using Service.Contracts.Module;
 using Service.Contracts.Logger;
+using Service.Contracts.Module;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 
@@ -19,7 +20,7 @@ namespace MQTTProcess
         private readonly IEspBackgroundProcessService espBackgroundProcessService;
         private static List<InstrumentValueByFiveSecondEntity> _messageList = new List<InstrumentValueByFiveSecondEntity>();
         private static int _messageCount = 0;
-        private const int MaxMessageCount = 50;
+        private const int MaxMessageCount = 5;
         private static bool _isBreakLoop = false;
         private static bool _isContinue = false;
         private MqttClient? mqttClient;
@@ -117,13 +118,17 @@ namespace MQTTProcess
             string payload = System.Text.Encoding.Default.GetString(e.Message);
 
             logger.LogInformation($"Received `{payload}` from `{e.Topic}` topic");
+            // Topic: SystemId/DeviceId/DeviceType/DeviceNumber:
+            string[] topicSplits = e.Topic.Split("/");
 
             // Create an InstrumentValueByFiveSecondEntity object for the incoming data
             var entity = new InstrumentValueByFiveSecondEntity()
             {
                 PayLoad = payload,
-                Topic = e.Topic,
-                ValueDate = DateTime.Now
+                DeviceId = topicSplits[1],
+                DeviceNameType = topicSplits[3],
+                DeviceType = topicSplits[2],
+                ValueDate = SetTimeZone.GetDateTimeVN()
             };
 
             // Add many process working with topic

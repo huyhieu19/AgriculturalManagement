@@ -54,9 +54,6 @@ namespace AgriculturalManagement.ResolveProfileMapper
             // Module
             CreateMap<ModuleEntity, ModuleDisplayModel>();
             CreateMap<DeviceEntity, DeviceDisplayModel>();
-
-
-
         }
     }
 }

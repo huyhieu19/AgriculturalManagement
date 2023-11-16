@@ -8,8 +8,12 @@ namespace Entities
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
-        [BsonElement("Topic")]
-        public string? Topic { get; set; }
+        [BsonElement("DeviceId")]
+        public string? DeviceId { get; set; }
+        [BsonElement("DeviceType")]
+        public string? DeviceType { get; set; }
+        [BsonElement("DeviceNumber")]
+        public string? DeviceNameType { get; set; }
         [BsonElement("PayLoad")]
         public string? PayLoad { get; set; }
         [BsonElement("ValueDate")]

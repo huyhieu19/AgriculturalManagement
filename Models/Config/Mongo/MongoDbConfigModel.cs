@@ -1,6 +1,6 @@
-﻿namespace Models.Mongo
+﻿namespace Models.Config.Mongo
 {
-    public class MongoDbConfig
+    public class MongoDbConfigModel
     {
         public string ConnectionString { get; set; } = null!;
 

@@ -40,6 +40,7 @@
         public const string GetAllHistoryByDeviceIdSQL = @"SELECT * FROM TimerDeviceDriver WHERE IsRemove = 0 AND DeviceDriverId = @DeviceDriverId";
 
         public const string RemoveTimerSQL = @"UPDATE TimerDeviceDriver SET IsRemove = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
+
         public const string SuccessTimerSQL = @"UPDATE TimerDeviceDriver SET IsSuccess = 1, IsRemove = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
 
         public const string UpdateTimerSQL = @"UPDATE TimerDeviceDriver SET IsDaily = @IsDaily,IsAuto = @IsAuto, ShutDownTimer = @ShutDownTimer, OpenTimer = @OpenTimer  WHERE Id = @Id";

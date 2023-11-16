@@ -16,6 +16,8 @@ using Service.DeviceThreshold;
 using Service.DeviceTimer;
 using Service.Farm;
 using Service.Image;
+using Service;
+using MQTTProcess;
 
 namespace Service
 {
@@ -35,7 +37,7 @@ namespace Service
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
-            IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration, DapperContext dapperContext, FactDbContext factDbContext)
+            IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration, DapperContext dapperContext, FactDbContext factDbContext, IDeviceJobMqtt deviceJobMqtt)
         {
             this.farm = new Lazy<IFarmService>(() => new FarmService(repositoryManager, logger, mapper));
             this.zone = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper));
@@ -72,5 +74,6 @@ namespace Service
         public IDeviceService Device => device.Value;
 
         public IMockDataService MockData => mockData.Value;
+
     }
 }
