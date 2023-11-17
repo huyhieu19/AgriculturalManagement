@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Models.DeviceControl;
 using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers.Device
@@ -15,10 +15,10 @@ namespace AgriculturalManagement.Controllers.Device
             _services = services;
         }
 
-        [HttpGet]
-        public Task<bool> DeviceDriverTurnOff(Guid DeviceId)
+        [HttpPost("OnOffModel")]
+        public Task<bool> DeviceDriverOnOff(OnOffDeviceQueryModel model)
         {
-            return _services.DeviceDriverTurnOff(DeviceId);
+            return _services.DeviceDriverOnOff(model);
         }
     }
 }

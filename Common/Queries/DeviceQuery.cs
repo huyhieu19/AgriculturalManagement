@@ -1,12 +1,48 @@
 ﻿namespace Common.Queries
 {
-    public static class TimerDeviceDriverQuery
+    public static class DeviceQuery
     {
+        public const string GetDeviceDriverByZoneSQL = @"SELECT
+                    DD.*,
+
+                    F.Name AS FarmName,
+
+                    Z.ZoneName,
+                    Z.Description AS ZoneDescription,
+
+                    DDT.Name AS DeviceDriverTypeName,
+                    DDT.Manufacturer AS DeviceDriverTypeManufacturer
+
+                FROM
+                    DeviceDriver DD
+                INNER JOIN
+                    Zone Z
+                ON
+                    DD.ZoneId = Z.Id
+                INNER JOIN
+                    Farm F
+                ON
+                    F.Id = Z.FarmId
+                LEFT JOIN
+                    DeviceDriverType DDT
+                ON
+                    DD.DeviceDriverTypeId = DDT.Id
+                WHERE
+                    Z.Id = @ZoneId";
+
+
+        public const string GetTurnOnAndTurnOffSQL = @"SELECT [Id]
+                          ,[IsDaily]
+                          ,[IsAuto]
+                          ,[ShutDownTimer]
+                          ,[OpenTimer]
+                          ,[DeviceDriverId]
+                      FROM [AgriculturalManagement].[dbo].[TimerDeviceDriver]";
+
         public const string GetTimerAvailableOfUserSQL =
-            @"SELECT 
+        @"SELECT 
                 TDD.*,
 		        Ex.IsActionDevice
-		
             FROM 
                 TimerDeviceDriver TDD
             INNER JOIN
@@ -20,17 +56,21 @@
                 Ex.DeviceId = TDD.DeviceId
 
             WHERE TDD.IsSuccess = 0 AND IsRemove = 0";
+
         public const string GetAllTimerAvailable =
             @"SELECT 
                 TDD.*,
-		        D.IsAction
+		        D.IsAction,
+				D.IsAuto,
+				D.DeviceType,
+				D.NameRef
 
             FROM 
                 TimerDeviceDriver TDD
             INNER JOIN
                Device AS D
             ON 
-                Ex.DeviceId = TDD.DeviceId
+                D.Id = TDD.DeviceId
 
             WHERE TDD.IsSuccess = 0 AND IsRemove = 0";
 
@@ -45,12 +85,15 @@
 
         public const string UpdateTimerSQL = @"UPDATE TimerDeviceDriver SET IsDaily = @IsDaily,IsAuto = @IsAuto, ShutDownTimer = @ShutDownTimer, OpenTimer = @OpenTimer  WHERE Id = @Id";
 
-        public const string UpdateTurnOnSQL = @"Update [DeviceDriver]
+
+
+        public const string UpdateTurnOnSQL = @"Update [Device]
                                             Set IsAction = 1
                                             Where Id = @Id";
 
-        public const string UpdateTurnOffSQL = @"Update [DeviceDriver]
+        public const string UpdateTurnOffSQL = @"Update [Device]
                                             Set IsAction = 0
                                             Where Id = @Id";
+
     }
 }
