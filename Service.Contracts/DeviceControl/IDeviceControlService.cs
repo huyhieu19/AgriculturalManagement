@@ -1,19 +1,17 @@
 ﻿using Models;
 using Models.DeviceAuto;
+using Models.DeviceControl;
+using Models.DeviceTimer;
 
 namespace Service.Contracts
 {
     public interface IDeviceControlService
     {
-        #region Device
-        // Đóng thiết bị
-        Task<bool> DeviceDriverTurnOff(Guid DeviceId);
-        // Mở thiết bị
-        Task DeviceDriverTurnOn(Guid DeviceId);
-        #endregion
+        #region Đóng Mở thiết bị
+        Task<bool> DeviceDriverOnOff(OnOffDeviceQueryModel model);
 
-        #region Timer
-        Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete();
+        Task<bool> SuccessJobTimer(int timerId, Guid deviceId);
+        Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerAvailable();
         #endregion
     }
 }

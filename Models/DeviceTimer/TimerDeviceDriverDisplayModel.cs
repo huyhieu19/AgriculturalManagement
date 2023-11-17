@@ -1,4 +1,6 @@
-﻿namespace Models.DeviceTimer
+﻿using Common.Enum;
+
+namespace Models.DeviceTimer
 {
     public class TimerDeviceDriverDisplayModel
     {
@@ -13,6 +15,9 @@
         public bool? IsAffected { get; set; }
         public bool IsSuccess { get; set; }
         public bool IsRemove { get; set; }
+        public bool IsAuto { get; set; }
+        public DeviceType DeviceType { get; set; }
+        public string NameRef { get; set; } = null!;
 
         public Guid DeviceId { get; set; }
     }
