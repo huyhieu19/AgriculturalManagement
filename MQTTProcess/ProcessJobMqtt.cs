@@ -1,13 +1,9 @@
 ﻿// Ignore Spelling: Mqtt
 
-using Common.TimeHelper;
 using Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Models.Config.Mongo;
 using Models.Config.Mqtt;
-using MongoDB.Bson.Serialization.IdGenerators;
 using Service;
 using Service.Contracts.Logger;
 using uPLibrary.Networking.M2Mqtt;
@@ -23,6 +19,7 @@ namespace MQTTProcess
         private static int _messageCount = 0;
         private const int MaxMessageCount = 5;
         private readonly IDataStatisticsService dataStatisticsService;
+        private static MqttClient? mqttClient = null;
 
         public ProcessJobMqtt(ILoggerManager logger, IConfiguration configuration,
             IDataStatisticsService dataStatisticsService)
@@ -34,7 +31,7 @@ namespace MQTTProcess
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            MqttClient? mqttClient = null;
+            //MqttClient? mqttClient = null;
             var connection = GetConnection();
 
             while (!stoppingToken.IsCancellationRequested)
@@ -48,10 +45,10 @@ namespace MQTTProcess
                     string mqttTopic = $"{connection.SystemId}/#";
 
                     mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
-                    mqttClient.Subscribe(new[] { mqttTopic },new[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                    mqttClient.Subscribe(new[] { mqttTopic }, new[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                     logger.LogInformation("Sub -> " + mqttTopic);
                 }
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                await Task.Delay(TimeSpan.FromMinutes(10));
             }
         }
 

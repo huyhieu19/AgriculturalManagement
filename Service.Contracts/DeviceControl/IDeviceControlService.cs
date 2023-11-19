@@ -1,6 +1,4 @@
-﻿using Models;
-using Models.DeviceAuto;
-using Models.DeviceControl;
+﻿using Models.DeviceControl;
 using Models.DeviceTimer;
 
 namespace Service.Contracts
@@ -10,7 +8,8 @@ namespace Service.Contracts
         #region Đóng Mở thiết bị
         Task<bool> DeviceDriverOnOff(OnOffDeviceQueryModel model);
 
-        Task<bool> SuccessJobTimer(int timerId, Guid deviceId);
+        Task<bool> SuccessJobTurnOnDeviceTimer(int timerId, Guid deviceId);
+        Task<bool> SuccessJobTurnOffDeviceTimer(int timerId, Guid deviceId);
         Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerAvailable();
         #endregion
     }

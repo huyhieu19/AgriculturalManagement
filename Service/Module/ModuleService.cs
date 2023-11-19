@@ -17,16 +17,16 @@ namespace Service
             _mapper = mapper;
         }
         #region Module
-        public async Task<bool> RemoveModuleFromUser(Guid deviceId, string userId)
+        public async Task<bool> RemoveModuleFromUser(Guid moduleId, string userId)
         {
-            await _repositoryManager.Module.RemoveModuleFromUser(deviceId, userId);
+            await _repositoryManager.Module.RemoveModuleFromUser(moduleId, userId);
             int isChange = await _repositoryManager.SaveAsync();
             return isChange == 1;
         }
 
-        public async Task<bool> AddModuleToUser(Guid espId, string userId)
+        public async Task<bool> AddModuleToUser(Guid moduleId, string userId)
         {
-            return await _repositoryManager.Module.AddModuleToUser(espId, userId);
+            return await _repositoryManager.Module.AddModuleToUser(moduleId, userId);
         }
 
         public async Task<List<ModuleDisplayModel>> GetModulesAll()

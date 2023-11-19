@@ -13,8 +13,9 @@ namespace Models.DeviceTimer
         public DateTime? OpenTimer { get; set; }
 
         public bool? IsAffected { get; set; }
-        public bool IsSuccess { get; set; }
-        public bool IsRemove { get; set; }
+        public bool IsSuccessON { get; set; } = false;
+        public bool IsSuccessOFF { get; set; } = false;
+        public bool IsRemove { get; set; } = false;
         public bool IsAuto { get; set; }
         public DeviceType DeviceType { get; set; }
         public string NameRef { get; set; } = null!;

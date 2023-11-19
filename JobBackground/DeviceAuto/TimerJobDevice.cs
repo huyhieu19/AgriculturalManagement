@@ -1,14 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Models.DeviceControl;
-using Models.DeviceTimer;
 using Service.Contracts;
-using Service.Contracts.DeviceTimer;
 using Service.Contracts.Logger;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobBackground.DeviceAuto
 {
@@ -17,7 +10,7 @@ namespace JobBackground.DeviceAuto
         private readonly ILoggerManager logger;
         private readonly IDeviceControlService deviceControlService;
 
-        public TimerJobDevice(ILoggerManager logger,  IDeviceControlService deviceControlService)
+        public TimerJobDevice(ILoggerManager logger, IDeviceControlService deviceControlService)
         {
             this.logger = logger;
             this.deviceControlService = deviceControlService;
@@ -29,11 +22,9 @@ namespace JobBackground.DeviceAuto
             while (!stoppingToken.IsCancellationRequested)
             {
                 logger.LogInformation("Start Timer Job service");
-
                 await ToDoAsyncIsAuto(); // Simulate work.
-
-                logger.LogInformation("End Timer Job servicee");
-                await Task.Delay(TimeSpan.FromMinutes(5));
+                logger.LogInformation("End Timer Job service");
+                await Task.Delay(TimeSpan.FromSeconds(10));
             }
         }
 
@@ -43,8 +34,8 @@ namespace JobBackground.DeviceAuto
 
             if (listTime.Any(p => p!.OpenTimer!.Value.Minute == DateTime.Now.AddHours(+7).Minute && p.IsAuto) || listTime.Any(p => p!.ShutDownTimer!.Value.Minute == DateTime.Now.AddHours(+7).Minute))
             {
-                var entitiesTurnOn = listTime.Where(p => p!.OpenTimer!.Value.Minute == DateTime.Now.AddHours(+7).Minute)!.ToList();
-                var entitiesTurnOff = listTime.Where(p => p!.ShutDownTimer!.Value.Minute == DateTime.Now.AddHours(+7).Minute)!.ToList();
+                var entitiesTurnOn = listTime.Where(p => p!.OpenTimer!.Value.Minute == DateTime.Now.AddHours(+7).Minute && !p.IsSuccessON)!.ToList();
+                var entitiesTurnOff = listTime.Where(p => p!.ShutDownTimer!.Value.Minute == DateTime.Now.AddHours(+7).Minute && !p.IsSuccessOFF)!.ToList();
 
                 foreach (var entity in entitiesTurnOn)
                 {
@@ -58,7 +49,7 @@ namespace JobBackground.DeviceAuto
                     var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
                     if (IsComplete)
                     {
-                        await deviceControlService.SuccessJobTimer(entity.Id, entity.DeviceId);
+                        await deviceControlService.SuccessJobTurnOnDeviceTimer(entity.Id, entity.DeviceId);
                     }
                 }
                 foreach (var entity in entitiesTurnOff)
@@ -73,7 +64,7 @@ namespace JobBackground.DeviceAuto
                     var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
                     if (IsComplete)
                     {
-                        await deviceControlService.SuccessJobTimer(entity.Id, entity.DeviceId);
+                        await deviceControlService.SuccessJobTurnOffDeviceTimer(entity.Id, entity.DeviceId);
                     }
                 }
             }

@@ -55,7 +55,7 @@
             ON 
                 Ex.DeviceId = TDD.DeviceId
 
-            WHERE TDD.IsSuccess = 0 AND IsRemove = 0";
+            WHERE (TDD.IsSuccessON = 0 OR TDD.IsSuccessON = 0) AND IsRemove = 0";
 
         public const string GetAllTimerAvailable =
             @"SELECT 
@@ -72,7 +72,7 @@
             ON 
                 D.Id = TDD.DeviceId
 
-            WHERE TDD.IsSuccess = 0 AND IsRemove = 0";
+            WHERE (TDD.IsSuccessON = 0 OR TDD.IsSuccessON = 0) AND IsRemove = 0";
 
 
         public const string GetAllHistorySQL = @"SELECT * FROM TimerDeviceDriver WHERE IsRemove = 0";
@@ -81,7 +81,8 @@
 
         public const string RemoveTimerSQL = @"UPDATE TimerDeviceDriver SET IsRemove = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
 
-        public const string SuccessTimerSQL = @"UPDATE TimerDeviceDriver SET IsSuccess = 1, IsRemove = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
+        public const string SuccessJobTurnOnDeviceTimerSQL = @"UPDATE TimerDeviceDriver SET IsSuccessON = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
+        public const string SuccessJobTurnOffDeviceTimerSQL = @"UPDATE TimerDeviceDriver SET IsSuccessOFF = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
 
         public const string UpdateTimerSQL = @"UPDATE TimerDeviceDriver SET IsDaily = @IsDaily,IsAuto = @IsAuto, ShutDownTimer = @ShutDownTimer, OpenTimer = @OpenTimer  WHERE Id = @Id";
 

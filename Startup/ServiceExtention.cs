@@ -1,22 +1,18 @@
 ﻿using Database;
-using JobBackground.DeviceAuto;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Models.Config.Mongo;
-using Models.Config.Mqtt;
 using MQTTProcess;
 using Repository;
 using Repository.Contracts;
 using Service;
 using Service.Contracts;
 using Service.Contracts.Logger;
-using Service.Contracts.Module;
 using Service.Extensions;
 using Service.Logger;
-using Service.Module;
 
 namespace Startup
 {
@@ -31,13 +27,11 @@ namespace Startup
             builder.Services.AddSingleton<DapperContext>();
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
             builder.Services.AddSingleton<IDeviceControlService, DeviceControlService>();
-            //builder.Services.AddSingleton<IRestartAsyncMQTTService, ProcessDataReceivedFromMQTT>();
-            builder.Services.AddSingleton<IEspBackgroundProcessService, EspBackgroundProcessService>();
             builder.Services.AddSingleton<IDeviceJobMqtt, DeviceJobMqtt>();
 
 
             builder.Services.AddHostedService<ProcessJobMqtt>();
-            builder.Services.AddHostedService<TimerJobDevice>();
+            //builder.Services.AddHostedService<TimerJobDevice>();
 
 
             // Inject background service

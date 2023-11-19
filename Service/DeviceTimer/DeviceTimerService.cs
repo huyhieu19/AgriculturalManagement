@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Common.Queries;
-using Common.TimeHelper;
 using Dapper;
 using Database;
 using Entities;
@@ -34,11 +33,12 @@ namespace Service.DeviceTimer
         {
             var entity = new TimerDeviceEntity()
             {
-                DateCreated = SetTimeZone.GetDateTimeVN(),
+                DateCreated = DateTime.Now.AddHours(+7),
                 DateUpdated = null,
                 DeviceId = model.DeviceDriverId,
                 IsRemove = false,
-                IsSuccess = false,
+                IsSuccessON = false,
+                IsSuccessOFF = false,
                 Note = model.Note,
                 OpenTimer = model.OpenTimer,
                 ShutDownTimer = model.ShutDownTimer
