@@ -307,7 +307,12 @@ namespace AgriculturalManagement.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsSuccess")
+                    b.Property<bool>("IsSuccessOFF")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsSuccessON")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
@@ -708,7 +713,6 @@ namespace AgriculturalManagement.Migrations
                     b.HasOne("Entities.Module.DeviceEntity", "Devices")
                         .WithMany("TimerDevices")
                         .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Devices");

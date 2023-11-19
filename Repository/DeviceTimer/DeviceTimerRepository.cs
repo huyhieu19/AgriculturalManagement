@@ -21,12 +21,12 @@ namespace Repository.DeviceTimer
 
         public async Task<List<TimerDeviceEntity>> GetAllTimerHistory()
         {
-            return await FindByCondition(prop => prop.IsSuccess || prop.IsRemove, false).ToListAsync();
+            return await FindByCondition(prop => prop.IsSuccessON || prop.IsSuccessOFF || prop.IsRemove, false).ToListAsync();
         }
 
         public async Task<List<TimerDeviceEntity>> GetAllTimerHistoryByDeviceId(Guid deviceId)
         {
-            return await FindByCondition(prop => prop.DeviceId == deviceId && (prop.IsSuccess || prop.IsRemove), false).ToListAsync();
+            return await FindByCondition(prop => prop.DeviceId == deviceId && (prop.IsSuccessON || prop.IsSuccessOFF || prop.IsRemove), false).ToListAsync();
         }
 
         public async Task<bool> UpdateTimer(TimerDeviceDriverUpdateModel model)

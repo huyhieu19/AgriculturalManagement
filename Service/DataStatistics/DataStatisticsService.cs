@@ -20,9 +20,9 @@ namespace Service
             this.logger = logger;
         }
 
-        public Task PullData()
+        public async Task<List<InstrumentValueByFiveSecondEntity>> PullData()
         {
-            throw new NotImplementedException();
+            return await instrumentValue.Find(_ => true).ToListAsync();
         }
 
         public async Task PushMultipleDataToDB(List<InstrumentValueByFiveSecondEntity> addModels)

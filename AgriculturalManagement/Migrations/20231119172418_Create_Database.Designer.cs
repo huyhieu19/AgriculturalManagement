@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriculturalManagement.Migrations
 {
     [DbContext(typeof(FactDbContext))]
-    [Migration("20231114155754_UpdateTable20231114-1")]
-    partial class UpdateTable202311141
+    [Migration("20231119172418_Create_Database")]
+    partial class Create_Database
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -310,7 +310,12 @@ namespace AgriculturalManagement.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsSuccess")
+                    b.Property<bool>("IsSuccessOFF")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsSuccessON")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
@@ -711,7 +716,6 @@ namespace AgriculturalManagement.Migrations
                     b.HasOne("Entities.Module.DeviceEntity", "Devices")
                         .WithMany("TimerDevices")
                         .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Devices");

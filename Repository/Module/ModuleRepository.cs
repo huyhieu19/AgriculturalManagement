@@ -24,13 +24,13 @@ namespace Repository
             }
         }
 
-        public async Task<bool> AddModuleToUser(Guid espId, string userId)
+        public async Task<bool> AddModuleToUser(Guid moduleId, string userId)
         {
             /*
              * Can use FindAsync or Where
              * 
              */
-            var entity = await FindByCondition(p => p.Id == espId, true).FirstOrDefaultAsync();
+            var entity = await FindByCondition(p => p.Id == moduleId, true).FirstOrDefaultAsync();
 
             //var entity = await FactDbContext.Esp8266Entities.FindAsync(espId);
 

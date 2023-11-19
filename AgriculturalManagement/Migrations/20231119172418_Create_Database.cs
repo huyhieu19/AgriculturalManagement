@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgriculturalManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateTable202311121 : Migration
+    public partial class Create_Database : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,22 +25,6 @@ namespace AgriculturalManagement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TypeTree",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NameType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TypeTree", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -251,11 +235,6 @@ namespace AgriculturalManagement.Migrations
                         column: x => x.FarmId,
                         principalTable: "Farms",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Zone_TypeTree_TypeTreeId",
-                        column: x => x.TypeTreeId,
-                        principalTable: "TypeTree",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -273,10 +252,8 @@ namespace AgriculturalManagement.Migrations
                     IsUsed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     IsAuto = table.Column<bool>(type: "bit", nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Gpio = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Topic = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DeviceType = table.Column<int>(type: "int", nullable: false),
-                    ResponseType = table.Column<int>(type: "int", nullable: true)
+                    Gate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeviceType = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -377,20 +354,21 @@ namespace AgriculturalManagement.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShutDownTimer = table.Column<DateTime>(type: "datetime2", nullable: true),
                     OpenTimer = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsAffected = table.Column<bool>(type: "bit", nullable: true),
-                    IsSuccess = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    IsSuccessON = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    IsSuccessOFF = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     IsRemove = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeviceDriverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DeviceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TimerDeviceDriver", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TimerDeviceDriver_Device_DeviceDriverId",
-                        column: x => x.DeviceDriverId,
+                        name: "FK_TimerDeviceDriver_Device_DeviceId",
+                        column: x => x.DeviceId,
                         principalTable: "Device",
                         principalColumn: "Id");
                 });
@@ -437,33 +415,6 @@ namespace AgriculturalManagement.Migrations
                 {
                     { "27cff7a9-5dd2-4300-9185-d7be99c4da16", null, "Manager", "MANAGER" },
                     { "efd37bbc-5fa6-45ba-a749-bf93cdadbf60", null, "Administrator", "ADMINISTRATOR" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "TypeTree",
-                columns: new[] { "Id", "Description", "ImageUrl", "NameType", "Note" },
-                values: new object[,]
-                {
-                    { 1, "Loại cây ăn quả có thịnh hành tại Việt Nam.", null, "Xoài", null },
-                    { 2, "Loại cây ăn quả thường thấy trong vườn nhà dân.", null, "Chuối", null },
-                    { 3, "Cây sầu riêng thường được trồng ở miền Nam Việt Nam.", null, "Sầu riêng", null },
-                    { 4, "Loại cây ăn quả có hạt lớn và ngon.", null, "Mít", null },
-                    { 5, "Vải là loại cây ăn quả có quả nhỏ màu đỏ tươi.", null, "Vải", null },
-                    { 6, "Nhãn là cây ăn quả thường thấy tại Việt Nam.", null, "Nhãn", null },
-                    { 7, "Loại cây ăn quả có vỏ màu đỏ và hạt trắng.", null, "Chôm chôm", null },
-                    { 8, "Bưởi là loại cây ăn quả có vị ngọt và hấp dẫn.", null, "Bưởi", null },
-                    { 9, "Cam là loại cây ăn quả chứa nhiều vitamin C.", null, "Cam", null },
-                    { 10, "Nho là loại cây ăn quả có nhiều loại khác nhau.", null, "Nho", null },
-                    { 11, "Đu đủ là cây ăn quả phổ biến ở Việt Nam.", null, "Đu đủ", null },
-                    { 12, "Khế là cây ăn quả có hương vị chua ngọt đặc trưng.", null, "Khế", null },
-                    { 13, "Loại cây ăn quả có hình dáng độc đáo.", null, "Thanh long", null },
-                    { 14, "Dứa là cây ăn quả thường thấy trong vườn nhà dân.", null, "Dứa", null },
-                    { 15, "Cây cau thường trồng ở vùng nhiệt đới Việt Nam.", null, "Cây cau", null },
-                    { 16, "Chanh là cây ăn quả có vị chua và mùi thơm.", null, "Chanh", null },
-                    { 17, "Me là cây ăn quả có vị chua ngọt đặc trưng.", null, "Me", null },
-                    { 18, "Sapoche là loại cây ăn quả có vị ngọt và mùi thơm đặc trưng.", null, "Sapoche", null },
-                    { 19, "Cherry là loại cây ăn quả có hạt nhỏ màu đỏ.", null, "Cherry", null },
-                    { 20, "Lựu là cây ăn quả có hình dáng đặc trưng.", null, "Lựu", null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -529,9 +480,9 @@ namespace AgriculturalManagement.Migrations
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TimerDeviceDriver_DeviceDriverId",
+                name: "IX_TimerDeviceDriver_DeviceId",
                 table: "TimerDeviceDriver",
-                column: "DeviceDriverId");
+                column: "DeviceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
@@ -564,11 +515,6 @@ namespace AgriculturalManagement.Migrations
                 name: "IX_Zone_FarmId",
                 table: "Zone",
                 column: "FarmId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Zone_TypeTreeId",
-                table: "Zone",
-                column: "TypeTreeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ZoneHarvestEntity_ZoneId",
@@ -623,9 +569,6 @@ namespace AgriculturalManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "Farms");
-
-            migrationBuilder.DropTable(
-                name: "TypeTree");
 
             migrationBuilder.DropTable(
                 name: "Users");
