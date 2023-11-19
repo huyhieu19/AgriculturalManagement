@@ -11,7 +11,8 @@ namespace Entities
         public string? Note { get; set; }
         public DateTime? ShutDownTimer { get; set; }
         public DateTime? OpenTimer { get; set; }
-        public bool IsSuccess { get; set; } = false;
+        public bool IsSuccessON { get; set; } = false;
+        public bool IsSuccessOFF { get; set; } = false;
         public bool IsRemove { get; set; } = false;
         // FK - Devices
         public Guid DeviceId { get; set; }

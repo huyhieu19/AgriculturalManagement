@@ -15,7 +15,8 @@ namespace Database.ModelCreateConfiguration
             builder.HasOne(t => t.Devices).WithMany(p => p.TimerDevices).HasForeignKey(t => t.DeviceId).OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.Property(t => t.IsRemove).HasDefaultValue(false);
-            builder.Property(t => t.IsSuccess).HasDefaultValue(false);
+            builder.Property(t => t.IsSuccessON).HasDefaultValue(false);
+            builder.Property(t => t.IsSuccessOFF).HasDefaultValue(false);
 
         }
     }

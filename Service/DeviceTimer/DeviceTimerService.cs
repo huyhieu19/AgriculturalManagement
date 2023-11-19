@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Common.Queries;
-using Common.TimeHelper;
 using Dapper;
 using Database;
 using Entities;
@@ -34,11 +33,12 @@ namespace Service.DeviceTimer
         {
             var entity = new TimerDeviceEntity()
             {
-                DateCreated = SetTimeZone.GetDateTimeVN(),
+                DateCreated = DateTime.Now.AddHours(+7),
                 DateUpdated = null,
                 DeviceId = model.DeviceDriverId,
                 IsRemove = false,
-                IsSuccess = false,
+                IsSuccessON = false,
+                IsSuccessOFF = false,
                 Note = model.Note,
                 OpenTimer = model.OpenTimer,
                 ShutDownTimer = model.ShutDownTimer
@@ -71,7 +71,7 @@ namespace Service.DeviceTimer
         #region using Dapper
         public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetTimerAvailableOfUser(string userId)
         {
-            var query = TimerDeviceDriverQuery.GetTimerAvailableOfUserSQL;
+            var query = DeviceQuery.GetTimerAvailableOfUserSQL;
             using (var connection = dapperContext.CreateConnection())
             {
                 connection.Open();
@@ -85,23 +85,7 @@ namespace Service.DeviceTimer
         public async Task<bool> RemoveTimer(int timerId, Guid deviceId)
         {
             logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {timerId}");
-            var query = TimerDeviceDriverQuery.RemoveTimerSQL;
-            var connection = dapperContext.CreateConnection();
-            connection.Open();
-            int execute;
-            using (var trans = connection.BeginTransaction())
-            {
-                execute = await connection.ExecuteAsync(query, new { Id = timerId, DeviceId = deviceId }, transaction: trans);
-                trans.Commit();
-            }
-            connection.Close();
-            return execute > 0;
-        }
-        // Hàm này dùng để set cho trạng thái của IsRemve = true và IsSuccess = true
-        public async Task<bool> SuccessJobTimer(int timerId, Guid deviceId)
-        {
-            logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {timerId}");
-            var query = TimerDeviceDriverQuery.SuccessTimerSQL;
+            var query = DeviceQuery.RemoveTimerSQL;
             var connection = dapperContext.CreateConnection();
             connection.Open();
             int execute;
@@ -114,17 +98,6 @@ namespace Service.DeviceTimer
             return execute > 0;
         }
 
-        public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerAvailable()
-        {
-            var query = TimerDeviceDriverQuery.GetAllTimerAvailable;
-            using (var connection = dapperContext.CreateConnection())
-            {
-                connection.Open();
-                var result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query);
-                connection.Close();
-                return result;
-            }
-        }
         #endregion
     }
 }

@@ -16,11 +16,11 @@ namespace AgriculturalManagement.Controllers.Device
             this.serviceManager = serviceManager;
             this.deviceAutoService = deviceAutoService;
         }
-        [HttpGet, Route("NotDelete")]
-        public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete()
-        {
-            return await deviceAutoService.DeviceInstrumentOnOffNotDelete();
-        }
+        //[HttpGet, Route("NotDelete")]
+        //public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete()
+        //{
+        //    return await deviceAutoService.DeviceInstrumentOnOffNotDelete();
+        //}
         [HttpGet, Route("Delete")]
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffDelete()
         {

@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Models.Config.Mqtt;
+using Models.DeviceControl;
 using Service.Contracts.Logger;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 
@@ -13,8 +9,7 @@ namespace MQTTProcess
 {
     public interface IDeviceJobMqtt
     {
-        Task<bool> TurnOnDevice(Guid deviceId);
-        Task<bool> TurnOffDevice(Guid deviceId, string DeviceType, string DeviceNameNumber);
+        Task<bool> OnOffDevice(OnOffDeviceQueryModel model);
     }
     public class DeviceJobMqtt : IDeviceJobMqtt
     {
@@ -27,11 +22,11 @@ namespace MQTTProcess
             this.logger = logger;
         }
 
-        public async Task<bool> TurnOffDevice(Guid deviceId, string DeviceType, string DeviceNameNumber)
+        public async Task<bool> OnOffDevice(OnOffDeviceQueryModel model)
         {
             MqttClient? mqttClient = null;
             var connection = GetConnection();
-            string topic = $"{connection.SystemId}/{deviceId}/{DeviceType}/{DeviceNameNumber}";
+            string topic = $"{connection.SystemId}/{model.DeviceId}/{model.DeviceType}/{model.DeviceNameNumber}";
             mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
 
             // Define a TaskCompletionSource to signal completion
@@ -47,7 +42,7 @@ namespace MQTTProcess
                     {
                         // Signal completion
                         tcs.TrySetResult(true);
-                        logger.LogInformation("Complete");
+                        logger.LogInformation("Receive turn on by mqtt");
                     }
                 };
                 client.Subscribe(new string[] { subscribeTopic }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
@@ -57,8 +52,16 @@ namespace MQTTProcess
             Subscribe(mqttClient, topic);
 
             // Publish the message
-            mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("N"));
-            logger.LogInformation("publish");
+            if (model.RequestOn)
+            {
+                mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("On"));
+            }
+            else if (model.RequestOn)
+            {
+                mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("Off"));
+            }
+
+            logger.LogInformation("finished publish");
 
             // Wait for completion or timeout (adjust timeout value as needed)
             var timeoutTask = Task.Delay(TimeSpan.FromSeconds(10)); // Adjust timeout as needed
@@ -75,35 +78,7 @@ namespace MQTTProcess
                 return false;
             }
         }
-        //static void Publish(MqttClient client, string topic)
-        //{
-        //    int msg_count = 0;
-        //    while (true)
-        //    {
-        //        System.Threading.Thread.Sleep(1 * 1000);
-        //        string? a = Console.ReadLine();
-        //        string msg = a;
-        //        client.Publish(topic, System.Text.Encoding.UTF8.GetBytes(msg));
-        //        Console.WriteLine("Send `{0}` a to topic `{1}`", msg, topic);
-        //        msg_count++;
-        //    }
-        //}
 
-        //static void Subscribe(MqttClient client, string topic)
-        //{
-        //    client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
-        //    client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-        //}
-        //static void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
-        //{
-        //    string payload = System.Text.Encoding.Default.GetString(e.Message);
-        //    Console.WriteLine("Received `{0}` from `{1}` topic", payload, e.Topic.ToString());
-        //}
-
-        public Task<bool> TurnOnDevice(Guid deviceId)
-        {
-            throw new NotImplementedException();
-        }
         private MqttConnectionConfigModel GetConnection()
         {
             var systemId = configuration["MqttConfig:SystemId"];

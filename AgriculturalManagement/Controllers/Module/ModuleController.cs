@@ -51,31 +51,31 @@ namespace AgriculturalManagement.Controllers.Module
         }
 
         [HttpPost("remove-module-from-user")]
-        public async Task<bool> RemoveModuleFromUser(Guid deviceId)
+        public async Task<bool> RemoveModuleFromUser(Guid moduleId)
         {
 
             var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
-            return await _serviceManager.Module.RemoveModuleFromUser(deviceId, userId);
+            return await _serviceManager.Module.RemoveModuleFromUser(moduleId, userId);
         }
         #endregion
 
         #region Device on module - Get & Remove
         [HttpPost("devices-on-module")]
-        public async Task<List<DeviceDisplayModel>> DeviceOnModuleDisplay(Guid id)
+        public async Task<List<DeviceDisplayModel>> DeviceOnModuleDisplay(Guid moduleId)
         {
-            return await _serviceManager.Module.DeviceOnModuleDisplay(id);
+            return await _serviceManager.Module.DeviceOnModuleDisplay(moduleId);
         }
 
         [HttpPost("devices-used-on-module")]
-        public async Task<List<DeviceDisplayModel>> DeviceUsedOnModuleDisplay(Guid id)
+        public async Task<List<DeviceDisplayModel>> DeviceUsedOnModuleDisplay(Guid moduleId)
         {
-            return await _serviceManager.Module.DeviceUsedOnModuleDisplay(id);
+            return await _serviceManager.Module.DeviceUsedOnModuleDisplay(moduleId);
         }
 
         [HttpPost("devices-not-used-on-module")]
-        public async Task<List<DeviceDisplayModel>> DeviceUsedNotOnModuleDisplay(Guid id)
+        public async Task<List<DeviceDisplayModel>> DeviceUsedNotOnModuleDisplay(Guid moduleId)
         {
-            return await _serviceManager.Module.DeviceUsedNotOnModuleDisplay(id);
+            return await _serviceManager.Module.DeviceUsedNotOnModuleDisplay(moduleId);
         }
         #endregion
     }
