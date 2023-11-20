@@ -8,9 +8,8 @@
         public string? Description { get; set; }
         public string? Note { get; set; }
         public DateTime? TimeToStartPlanting { get; set; }
-        public DateTime? DateCreateFarm { get; set; }
+        public DateTime? DateCreated { get; set; } = DateTime.Now;
         public string? Function { get; set; }
-        public int? TypeTreeId { get; set; }
         public int? FarmId { get; set; }
 
         // adding
