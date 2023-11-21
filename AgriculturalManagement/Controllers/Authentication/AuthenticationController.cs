@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Common.Enum;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Authentication;
 using Service.Contracts;
+using Service.Contracts.Logger;
 
 namespace AgriculturalManagement.Controllers.Authentication
 {
@@ -11,13 +13,16 @@ namespace AgriculturalManagement.Controllers.Authentication
     public class AuthenticationController : ControllerBase
     {
         private readonly IServiceManager _service;
-        public AuthenticationController(IServiceManager service)
+        private readonly ILoggerManager _logger;
+        public AuthenticationController(IServiceManager service, ILoggerManager _logger)
         {
             _service = service;
+            this._logger = _logger;
         }
         [HttpPost, Route("register")]
         public async Task<IdentityResult> RegisterUser(UserRegisterationModel userRegisterationModel)
         {
+            _logger.LogInformation(message: "Authentication", null, ProcessType: LoggerProcessType.Authentication, "Login", userRegisterationModel.Email);
             var result = await _service.Authentication.RegisterUser(userRegisterationModel);
             if (!result.Succeeded)
             {
@@ -28,6 +33,7 @@ namespace AgriculturalManagement.Controllers.Authentication
         [HttpPost("login")]
         public async Task<IActionResult> Authenticate([FromBody] LoginModel user)
         {
+            _logger.LogInformation("AuthenticationService - Login", "Authentication Service", LoggerProcessType.Authentication, "Login", user.Email);
             if (!await _service.Authentication.ValidateUser(user))
                 return BadRequest("Email or Password incorrect");
 
