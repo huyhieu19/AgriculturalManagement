@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Common.Enum;
 using Common.GuidHelper;
-using Common.TimeHelper;
 using Entities.Module;
 using Repository.Contracts;
 using Service.Contracts;
@@ -16,7 +15,7 @@ namespace Service
         {
             Id = new Guid(),
             Name = "Module ESP32 CP210x",
-            DateCreated = SetTimeZone.GetDateTimeVN(),
+            DateCreated = DateTime.UtcNow,
             Note = "This is Module ESP32 CP210x",
             MqttServer = "broker.emqx.io",
             MqttPort = 1883,
@@ -30,7 +29,7 @@ namespace Service
         {
             Id = new Guid(),
             Name = "Module ESP8266 CP210x",
-            DateCreated = SetTimeZone.GetDateTimeVN(),
+            DateCreated = DateTime.UtcNow,
             Note = "This is Module ESP8266 CP210x",
             MqttServer = "broker.emqx.io",
             MqttPort = 1883,
@@ -83,7 +82,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = "*C/%",
                     Gate = ESP8266GateTransferDataType.D0.ToString(),
-                    NameRef = "Nhiệt độ/Độ ẩm - 1",
+                    NameRef = "ND_DA-1",
                     DateCreated = null,
                     Description = null,
                     IsAction = false,
@@ -99,7 +98,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = "*C/%",
                     Gate = ESP8266GateTransferDataType.D1.ToString(),
-                    NameRef = "Nhiệt độ/Độ ẩm - 2",
+                    NameRef = "ND_DA-2",
                     DateCreated = null,
                     Description = null,
                     Name = null,
@@ -115,7 +114,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = "%",
                     Gate = ESP8266GateTransferDataType.D2.ToString(),
-                    NameRef = "Độ ẩm đất - 1",
+                    NameRef = "DAD-1",
                     DateCreated = null,
                     Description = null,
                     IsAction = false,
@@ -131,7 +130,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = "%",
                     Gate = ESP8266GateTransferDataType.D3.ToString(),
-                    NameRef = "Độ ẩm đất - 2",
+                    NameRef = "DAD-2",
                     DateCreated = null,
                     Description = null,
                     Name = null,
@@ -147,7 +146,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = "%",
                     Gate = ESP8266GateTransferDataType.D4.ToString(),
-                    NameRef = "Độ ẩm đất - 3",
+                    NameRef = "DAD-3",
                     DateCreated = null,
                     Description = null,
                     Name = null,
@@ -163,7 +162,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = "%",
                     Gate = ESP8266GateTransferDataType.D5.ToString(),
-                    NameRef = "Độ ẩm đất - 4",
+                    NameRef = "DAD-4",
                     DateCreated = null,
                     Description = null,
                     Name = null,
@@ -179,7 +178,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = null,
                     Gate = ESP8266GateTransferDataType.D6.ToString(),
-                    NameRef = "Đóng tắt thiết bị - 1",
+                    NameRef = "O_F-1",
                     DateCreated = null,
                     Description = null,
                     Name = null,
@@ -195,7 +194,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = null,
                     Gate = ESP8266GateTransferDataType.D7.ToString(),
-                    NameRef = "Đóng tắt thiết bị - 2",
+                    NameRef = "O_F-2",
                     DateCreated = null,
                     Description = null,
                     Name = null,
@@ -211,7 +210,7 @@ namespace Service
                     Id = GenerateGuid.GetGuid(),
                     Unit = null,
                     Gate = ESP8266GateTransferDataType.D8.ToString(),
-                    NameRef = "Đóng tắt thiết bị - 3",
+                    NameRef = "O_F-3",
                     DateCreated = null,
                     Description = null,
                     Name = null,

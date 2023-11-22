@@ -1,19 +1,24 @@
 ﻿using AutoMapper;
+using Common.Enum;
+using Common.Queries;
+using Dapper;
+using Database;
 using Models.Device;
 using Repository.Contracts;
 using Service.Contracts.Device;
-using Common.Enum;
 
 namespace Service.Device
 {
-    public class DeviceService : IDeviceService
+    public sealed class DeviceService : IDeviceService
     {
         private readonly IRepositoryManager repository;
         private readonly IMapper mapper;
-        public DeviceService(IRepositoryManager repository, IMapper mapper)
+        private readonly DapperContext dapperContext;
+        public DeviceService(IRepositoryManager repository, IMapper mapper, DapperContext dapperContext)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.dapperContext = dapperContext;
         }
 
         public async Task<bool> AddDeviceToZone(Guid deviceId, int zoneId)
@@ -47,6 +52,20 @@ namespace Service.Device
             var devices = await GetDevicesOnZone(zoneId);
             var result = devices.Where(prop => prop.DeviceType == DeviceType.R.ToString()).ToList();
             return result;
+        }
+        public async Task<bool> SetAutoDevice(Guid deviceId, bool IsAuto)
+        {
+            var queryAutoOn = DeviceQuery.UpdateIsAutoSQL;
+            var connection = dapperContext.CreateConnection();
+            connection.Open();
+            int execute;
+            using (var trans = connection.BeginTransaction())
+            {
+                execute = await connection.ExecuteAsync(queryAutoOn, new { Id = deviceId, IsAuto = (IsAuto == true) ? 1 : 0 }, transaction: trans);
+                trans.Commit();
+            }
+            connection.Close();
+            return execute > 0;
         }
     }
 }

@@ -6,7 +6,7 @@ using Service.Contracts.DeviceThreshold;
 
 namespace Service.DeviceThreshold
 {
-    public class InstrumentSetThresholdService : IInstrumentSetThresholdService
+    public sealed class InstrumentSetThresholdService : IInstrumentSetThresholdService
     {
         private readonly IRepositoryManager repositoryManager;
         private readonly IMapper mapper;

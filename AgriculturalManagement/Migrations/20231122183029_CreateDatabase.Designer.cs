@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriculturalManagement.Migrations
 {
     [DbContext(typeof(FactDbContext))]
-    [Migration("20231119172418_Create_Database")]
-    partial class Create_Database
+    [Migration("20231122183029_CreateDatabase")]
+    partial class CreateDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -421,7 +421,7 @@ namespace AgriculturalManagement.Migrations
                     b.Property<double?>("Area")
                         .HasColumnType("float");
 
-                    b.Property<DateTime?>("DateCreateFarm")
+                    b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -438,9 +438,6 @@ namespace AgriculturalManagement.Migrations
 
                     b.Property<DateTime?>("TimeToStartPlanting")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("TypeTreeId")
-                        .HasColumnType("int");
 
                     b.Property<string>("ZoneName")
                         .IsRequired()

@@ -6,7 +6,7 @@ using Service.Contracts;
 
 namespace Service
 {
-    public class ModuleService : IModuleService
+    public sealed class ModuleService : IModuleService
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;

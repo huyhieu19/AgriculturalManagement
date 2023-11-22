@@ -1,4 +1,7 @@
 ﻿using Entities;
+using Models;
+using Models.DeviceData;
+using Models.LoggerProcess;
 
 namespace Service
 {
@@ -6,7 +9,9 @@ namespace Service
     {
         Task PushDataToDB(InstrumentValueByFiveSecondEntity addModel);
         Task PushMultipleDataToDB(List<InstrumentValueByFiveSecondEntity> addModels);
-        Task<List<InstrumentValueByFiveSecondEntity>> PullData();
+        Task<BaseResModel<InstrumentValueByFiveSecondEntity>> PullData(DeviceDataQueryModel queryModel);
+        Task<BaseResModel<LogProcessEntity>> LoggerProcess(LoggerProcessQueryModel queryModel);
+        Task WriteLog(LogProcessEntity model);
         Task StatisticsWeek();
         Task StatisticsMonth();
         Task StatisticsDay();

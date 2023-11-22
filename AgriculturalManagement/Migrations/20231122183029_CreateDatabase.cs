@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgriculturalManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class Create_Database : Migration
+    public partial class CreateDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -223,9 +223,8 @@ namespace AgriculturalManagement.Migrations
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TimeToStartPlanting = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Function = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateCreateFarm = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FarmId = table.Column<int>(type: "int", nullable: true),
-                    TypeTreeId = table.Column<int>(type: "int", nullable: true)
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FarmId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
