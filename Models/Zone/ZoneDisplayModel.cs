@@ -8,7 +8,7 @@
         public string? Description { get; set; }
         public string? Note { get; set; }
         public DateTime? TimeToStartPlanting { get; set; }
-        public DateTime? DateCreated { get; set; } = DateTime.Now;
+        public DateTime? DateCreated { get; set; } = DateTime.UtcNow;
         public string? Function { get; set; }
         public int? FarmId { get; set; }
 

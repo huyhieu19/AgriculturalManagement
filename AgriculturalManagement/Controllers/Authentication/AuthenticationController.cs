@@ -22,7 +22,13 @@ namespace AgriculturalManagement.Controllers.Authentication
         [HttpPost, Route("register")]
         public async Task<IdentityResult> RegisterUser(UserRegisterationModel userRegisterationModel)
         {
-            _logger.LogInformation(message: "Authentication", null, ProcessType: LoggerProcessType.Authentication, "Login", userRegisterationModel.Email);
+            _logger.LogInformation(message: "Authentication - Register", new LogProcessModel()
+            {
+                LoggerProcessType = LoggerProcessType.Authentication,
+                LogMessageDetail = "Register",
+                ServiceName = null,
+                User = userRegisterationModel.Email
+            });
             var result = await _service.Authentication.RegisterUser(userRegisterationModel);
             if (!result.Succeeded)
             {
@@ -31,10 +37,16 @@ namespace AgriculturalManagement.Controllers.Authentication
             return result;
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Authenticate([FromBody] LoginModel user)
+        public async Task<IActionResult> Authenticate([FromBody] LoginModel loginModel)
         {
-            _logger.LogInformation("AuthenticationService - Login", "Authentication Service", LoggerProcessType.Authentication, "Login", user.Email);
-            if (!await _service.Authentication.ValidateUser(user))
+            _logger.LogInformation(message: "AuthenticationService - Login", new LogProcessModel()
+            {
+                LoggerProcessType = LoggerProcessType.Authentication,
+                LogMessageDetail = "Login",
+                ServiceName = null,
+                User = loginModel.Email
+            });
+            if (!await _service.Authentication.ValidateUser(loginModel))
                 return BadRequest("Email or Password incorrect");
 
             var tokenModel = await _service.Authentication.CreateToken(populateExp: true);
@@ -45,7 +57,17 @@ namespace AgriculturalManagement.Controllers.Authentication
         [HttpGet("roles")]
         public async Task<List<IdentityRole>> GetRoles() => await _service.Authentication.GetRoles();
         [HttpPost("role-add-to-user")]
-        public async Task<bool> AddRoleToUser(string roleName, string email) => await _service.Authentication.AddRoleToUser(roleName, email);
+        public async Task<bool> AddRoleToUser(string roleName, string email)
+        {
+            _logger.LogInformation(message: "Add Role To User", new LogProcessModel()
+            {
+                LoggerProcessType = LoggerProcessType.Authentication,
+                LogMessageDetail = $"{roleName} - {email}",
+                ServiceName = nameof(AddRoleToUser),
+                User = email
+            });
+            return await _service.Authentication.AddRoleToUser(roleName, email);
+        }
 
         [HttpPost("password-reset")]
         public async Task<ResponseResetPasswordModel> ResetPassword(ResetPasswordModel resetPasswordModel)

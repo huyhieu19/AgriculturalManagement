@@ -10,5 +10,6 @@
         DeviceStatistic = 5,
         DeviceCalc = 6,
         Authentication = 7,
+        DeviceControl = 8,
     }
 }

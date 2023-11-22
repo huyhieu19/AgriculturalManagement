@@ -18,7 +18,7 @@ namespace AgriculturalManagement.Controllers.Logger
         }
 
         [HttpPost]
-        public Task<BaseResModel<LogProcessModel>> LogProcess([FromBody] LoggerProcessQueryModel model)
+        public Task<BaseResModel<LogProcessEntity>> LogProcess([FromBody] LoggerProcessQueryModel model)
         {
             return service.LoggerProcess(model);
         }

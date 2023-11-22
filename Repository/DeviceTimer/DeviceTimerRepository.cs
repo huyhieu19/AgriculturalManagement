@@ -1,5 +1,4 @@
-﻿using Common.TimeHelper;
-using Database;
+﻿using Database;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Models.DeviceTimer;
@@ -36,7 +35,7 @@ namespace Repository.DeviceTimer
             {
                 entity.Note = model.Note;
                 entity.ShutDownTimer = model.ShutDownTimer;
-                entity.DateUpdated = SetTimeZone.GetDateTimeVN();
+                entity.DateUpdated = DateTime.UtcNow;
                 entity.OpenTimer = model.OpenTimer;
             }
             return await FactDbContext.SaveChangesAsync() > 0;

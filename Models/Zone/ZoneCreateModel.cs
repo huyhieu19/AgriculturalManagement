@@ -11,7 +11,7 @@ namespace Models
         public string? ImageUrl { get; set; }
         public string? Note { get; set; }
         public DateTime? HarvestTime { get; set; }
-        public DateTime? TimeToStartPlanting { get; set; } = DateTime.Now;
+        public DateTime? TimeToStartPlanting { get; set; } = DateTime.UtcNow;
         public string? Function { get; set; }
         public int? TypeTreeId { get; set; }
         [Required(ErrorMessage = "Please enter FarmId")]

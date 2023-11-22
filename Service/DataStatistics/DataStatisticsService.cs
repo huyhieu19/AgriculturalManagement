@@ -9,10 +9,10 @@ using Service.Contracts.Logger;
 
 namespace Service
 {
-    public class DataStatisticsService : IDataStatisticsService
+    public sealed class DataStatisticsService : IDataStatisticsService
     {
         private readonly IMongoCollection<InstrumentValueByFiveSecondEntity> instrumentValue;
-        private readonly IMongoCollection<LogProcessModel> logProcess;
+        private readonly IMongoCollection<LogProcessEntity> logProcess;
         private readonly MongoClient client;
         private readonly ILoggerManager logger;
 
@@ -21,7 +21,7 @@ namespace Service
             this.client = new MongoClient(mongoDbConfig.Value.ConnectionString);
             var database = this.client.GetDatabase(mongoDbConfig.Value.DatabaseName);
             instrumentValue = database.GetCollection<InstrumentValueByFiveSecondEntity>(mongoDbConfig.Value.CollectionName);
-            logProcess = database.GetCollection<LogProcessModel>(mongoDbConfig.Value.CollectionLog);
+            logProcess = database.GetCollection<LogProcessEntity>(mongoDbConfig.Value.CollectionLog);
             this.logger = logger;
         }
 
@@ -65,7 +65,7 @@ namespace Service
             logger.LogInformation("Push end");
         }
 
-        public async Task WriteLog(LogProcessModel model)
+        public async Task WriteLog(LogProcessEntity model)
         {
             await logProcess.InsertOneAsync(model);
         }
@@ -90,7 +90,7 @@ namespace Service
             throw new NotImplementedException();
         }
 
-        public async Task<BaseResModel<LogProcessModel>> LoggerProcess(LoggerProcessQueryModel queryModel)
+        public async Task<BaseResModel<LogProcessEntity>> LoggerProcess(LoggerProcessQueryModel queryModel)
         {
             var result = await logProcess.Find(_ => true).ToListAsync();
             if (queryModel.ValueDate != null)
@@ -105,7 +105,7 @@ namespace Service
             {
                 result = result.Where(p => p.LoggerType == queryModel.LoggerType.ToString()).ToList();
             }
-            var response = new BaseResModel<LogProcessModel>()
+            var response = new BaseResModel<LogProcessEntity>()
             {
                 Data = result.OrderByDescending(p => p.ValueDate).Skip(queryModel.PageSize * (queryModel.PageNumber - 1)).Take(queryModel.PageSize).ToList(),
                 PageNumber = queryModel.PageNumber,

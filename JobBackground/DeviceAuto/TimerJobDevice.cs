@@ -1,7 +1,7 @@
 ﻿using Common.Enum;
 using Microsoft.Extensions.Hosting;
+using Models;
 using Models.DeviceControl;
-using Service;
 using Service.Contracts;
 using Service.Contracts.Logger;
 
@@ -11,13 +11,11 @@ namespace JobBackground.DeviceAuto
     {
         private readonly ILoggerManager logger;
         private readonly IDeviceControlService deviceControlService;
-        private readonly IDataStatisticsService dataStatisticsService;
 
         public TimerJobDevice(ILoggerManager logger, IDeviceControlService deviceControlService)
         {
             this.logger = logger;
             this.deviceControlService = deviceControlService;
-            this.dataStatisticsService = dataStatisticsService;
         }
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -35,7 +33,12 @@ namespace JobBackground.DeviceAuto
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message, "TimerJobDevice", LoggerProcessType.DeviceTimer, ex.ToString());
+                logger.LogError(ex.Message, new LogProcessModel()
+                {
+                    LoggerProcessType = LoggerProcessType.DeviceTimer,
+                    LogMessageDetail = ex.ToString(),
+                    ServiceName = $"{nameof(TimerJobDevice)} -> {nameof(ExecuteAsync)}",
+                });
                 throw;
             }
         }
@@ -46,8 +49,8 @@ namespace JobBackground.DeviceAuto
 
             var listTimeCheckAuto = listTime.Where(t => t.IsAuto);
 
-            var entitiesTurnOn = listTimeCheckAuto.Where(p => p!.OpenTimer!.Value.Minute == DateTime.Now.AddHours(+7).Minute && !p.IsSuccessON)!.ToList();
-            var entitiesTurnOff = listTimeCheckAuto.Where(p => p!.ShutDownTimer!.Value.Minute == DateTime.Now.AddHours(+7).Minute && !p.IsSuccessOFF)!.ToList();
+            var entitiesTurnOn = listTimeCheckAuto.Where(p => p!.OpenTimer!.Value.Minute == DateTime.UtcNow.Minute && !p.IsSuccessON)!.ToList();
+            var entitiesTurnOff = listTimeCheckAuto.Where(p => p!.ShutDownTimer!.Value.Minute == DateTime.UtcNow.Minute && !p.IsSuccessOFF)!.ToList();
 
             if (entitiesTurnOn.Any())
             {

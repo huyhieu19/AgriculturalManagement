@@ -1,13 +1,12 @@
-﻿using Common.Enum;
-using Entities;
+﻿using Models;
 
 namespace Service.Contracts.Logger
 {
     public interface ILoggerManager
     {
-        void LogInformation(string message, string? ServiceName = null, LoggerProcessType? ProcessType = LoggerProcessType.None, string? MessageDetail = null, string? User = null);
-        void LogWarning(string message, string? ServiceName = null, LoggerProcessType? ProcessType = LoggerProcessType.None, string? MessageDetail = null, string? User = null);
+        void LogInformation(string message, LogProcessModel? logProcessModel = null);
+        void LogWarning(string message, LogProcessModel? logProcessModel = null);
         void LogDebug(string message, LogProcessModel? logProcessModel = null);
-        void LogError(string message, string? ServiceName = null, LoggerProcessType? ProcessType = LoggerProcessType.None, string? MessageDetail = null, string? User = null);
+        void LogError(string message, LogProcessModel? logProcessModel = null);
     }
 }

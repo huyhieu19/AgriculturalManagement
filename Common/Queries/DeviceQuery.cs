@@ -88,12 +88,12 @@
 
 
 
-        public const string UpdateTurnOnSQL = @"Update [Device]
-                                            Set IsAction = 1
+        public const string UpdateTurnOnOffSQL = @"Update [Device]
+                                            Set IsAction = @IsAction
                                             Where Id = @Id";
 
-        public const string UpdateTurnOffSQL = @"Update [Device]
-                                            Set IsAction = 0
+        public const string UpdateIsAutoSQL = @"Update [Device]
+                                            Set IsAuto = @IsAuto
                                             Where Id = @Id";
 
     }

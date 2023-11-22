@@ -418,7 +418,7 @@ namespace AgriculturalManagement.Migrations
                     b.Property<double?>("Area")
                         .HasColumnType("float");
 
-                    b.Property<DateTime?>("DateCreateFarm")
+                    b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -435,9 +435,6 @@ namespace AgriculturalManagement.Migrations
 
                     b.Property<DateTime?>("TimeToStartPlanting")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("TypeTreeId")
-                        .HasColumnType("int");
 
                     b.Property<string>("ZoneName")
                         .IsRequired()

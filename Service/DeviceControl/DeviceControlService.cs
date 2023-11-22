@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Common.Queries;
+﻿using Common.Queries;
 using Dapper;
 using Database;
 using Models.DeviceControl;
@@ -10,16 +9,14 @@ using Service.Contracts.Logger;
 
 namespace Service
 {
-    public class DeviceControlService : IDeviceControlService
+    public sealed class DeviceControlService : IDeviceControlService
     {
-        private readonly IMapper mapper;
         private readonly DapperContext dapperContext;
         private readonly ILoggerManager logger;
         private readonly IDeviceJobMqtt deviceJobMqtt;
 
-        public DeviceControlService(IMapper mapper, DapperContext dapperContext, ILoggerManager logger, IDeviceJobMqtt deviceJobMqtt)
+        public DeviceControlService(DapperContext dapperContext, ILoggerManager logger, IDeviceJobMqtt deviceJobMqtt)
         {
-            this.mapper = mapper;
             this.dapperContext = dapperContext;
             this.logger = logger;
             this.deviceJobMqtt = deviceJobMqtt;
@@ -33,28 +30,16 @@ namespace Service
         {
             logger.LogInformation($"DeviceDriver: Turn off or on --> DeviceDriverId: {model.DeviceId}");
 
-            string TurnOnSQL = DeviceQuery.UpdateTurnOnSQL;
-            string TurnOffSQL = DeviceQuery.UpdateTurnOffSQL;
+            string OnOffSQL = DeviceQuery.UpdateTurnOnOffSQL;
             var turnOffByMqtt = await deviceJobMqtt.OnOffDevice(model);
             int ChangeStageDB = 0;
-            if (turnOffByMqtt && model.RequestOn)
+            if (turnOffByMqtt)
             {
                 var connection = dapperContext.CreateConnection();
                 connection.Open();
                 using (var trans = connection.BeginTransaction())
                 {
-                    ChangeStageDB = await connection.ExecuteAsync(TurnOffSQL, new { Id = model.DeviceId }, transaction: trans);
-                    trans.Commit();
-                }
-                connection.Close();
-            }
-            else if (turnOffByMqtt && !model.RequestOn)
-            {
-                var connection = dapperContext.CreateConnection();
-                connection.Open();
-                using (var trans = connection.BeginTransaction())
-                {
-                    ChangeStageDB = await connection.ExecuteAsync(TurnOnSQL, new { Id = model.DeviceId }, transaction: trans);
+                    ChangeStageDB = await connection.ExecuteAsync(OnOffSQL, new { Id = model.DeviceId, IsAction = (model.RequestOn == true) ? 1 : 0 }, transaction: trans);
                     trans.Commit();
                 }
                 connection.Close();
@@ -105,5 +90,7 @@ namespace Service
             }
         }
         #endregion
+
+
     }
 }

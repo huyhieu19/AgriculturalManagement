@@ -3,13 +3,13 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Entities
 {
-    public class LogProcessModel
+    public class LogProcessEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
         [BsonElement("ValueDate")]
-        public DateTime? ValueDate { get; set; } = DateTime.Now;
+        public DateTime? ValueDate { get; set; } = DateTime.UtcNow;
         [BsonElement("ServiceName")]
         public string? ServiceName { get; set; }
         [BsonElement("LogMessage")]

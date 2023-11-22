@@ -15,7 +15,7 @@ namespace Entities
         public string? Note { get; set; }
         public DateTime? TimeToStartPlanting { get; set; }
         public string? Function { get; set; }
-        public DateTime? DateCreated { get; set; } = DateTime.Now;
+        public DateTime? DateCreated { get; set; } = DateTime.UtcNow;
         [ForeignKey("Farms")]
         public int? FarmId { get; set; }
         public FarmEntity? Farm { get; set; }

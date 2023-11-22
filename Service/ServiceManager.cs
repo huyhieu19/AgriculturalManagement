@@ -3,6 +3,7 @@ using Database;
 using Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using MQTTProcess;
 using Repository.Contracts;
 using Service.Contracts;
 using Service.Contracts.Device;
@@ -16,8 +17,6 @@ using Service.DeviceThreshold;
 using Service.DeviceTimer;
 using Service.Farm;
 using Service.Image;
-using Service;
-using MQTTProcess;
 
 namespace Service
 {
@@ -48,7 +47,7 @@ namespace Service
             this.instrumentSetThreshold = new Lazy<IInstrumentSetThresholdService>(() => new InstrumentSetThresholdService(repositoryManager, mapper));
             this.user = new Lazy<IUserService>(() => new UserService(repositoryManager, mapper, userManager));
             this.esp = new Lazy<IModuleService>(() => new ModuleService(repositoryManager, mapper));
-            this.device = new Lazy<IDeviceService>(() => new DeviceService(repositoryManager, mapper));
+            this.device = new Lazy<IDeviceService>(() => new DeviceService(repositoryManager, mapper, dapperContext));
             this.mockData = new Lazy<IMockDataService>(() => new MockDataService(repositoryManager, mapper));
         }
 
