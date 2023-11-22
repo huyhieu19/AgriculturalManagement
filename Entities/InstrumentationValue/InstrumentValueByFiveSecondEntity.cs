@@ -17,6 +17,6 @@ namespace Entities
         [BsonElement("PayLoad")]
         public string? PayLoad { get; set; }
         [BsonElement("ValueDate")]
-        public DateTime? ValueDate { get; set; } = DateTime.Now;
+        public DateTime? ValueDate { get; set; } = DateTime.UtcNow;
     }
 }

@@ -33,7 +33,7 @@ namespace Service.DeviceTimer
         {
             var entity = new TimerDeviceEntity()
             {
-                DateCreated = DateTime.Now.AddHours(+7),
+                DateCreated = DateTime.UtcNow,
                 DateUpdated = null,
                 DeviceId = model.DeviceDriverId,
                 IsRemove = false,
@@ -41,7 +41,7 @@ namespace Service.DeviceTimer
                 IsSuccessOFF = false,
                 Note = model.Note,
                 OpenTimer = model.OpenTimer,
-                ShutDownTimer = model.ShutDownTimer
+                ShutDownTimer = model.ShutDownTimer,
             };
 
             repositoryManager.DeviceDriver.CreateTimer(entity);
@@ -84,7 +84,7 @@ namespace Service.DeviceTimer
         // Hàm này dùng để set cho trạng thái của IsRemve = true
         public async Task<bool> RemoveTimer(int timerId, Guid deviceId)
         {
-            logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {timerId}");
+            logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {deviceId}");
             var query = DeviceQuery.RemoveTimerSQL;
             var connection = dapperContext.CreateConnection();
             connection.Open();
@@ -99,5 +99,6 @@ namespace Service.DeviceTimer
         }
 
         #endregion
+
     }
 }

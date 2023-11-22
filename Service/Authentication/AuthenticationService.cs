@@ -74,7 +74,6 @@ namespace Service
         {
             try
             {
-                _logger.LogInformation("AuthenticationService - CreateToken");
 
                 var signingCredentials = GetSigningCredentials(); // Tạo chữ kí số
                 var claims = await GetClaims(); // Lấy ra những vai trò của user

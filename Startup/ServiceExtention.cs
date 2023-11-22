@@ -1,4 +1,5 @@
 ﻿using Database;
+using JobBackground.DeviceAuto;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,11 +28,11 @@ namespace Startup
             builder.Services.AddSingleton<DapperContext>();
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
             builder.Services.AddSingleton<IDeviceControlService, DeviceControlService>();
-            builder.Services.AddSingleton<IDeviceJobMqtt, DeviceJobMqtt>();
+            builder.Services.AddSingleton<IDeviceJobMqtt, ProcessJobMqtt>();
 
 
             builder.Services.AddHostedService<ProcessJobMqtt>();
-            //builder.Services.AddHostedService<TimerJobDevice>();
+            builder.Services.AddHostedService<TimerJobDevice>();
 
 
             // Inject background service

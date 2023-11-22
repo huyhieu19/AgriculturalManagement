@@ -12,7 +12,11 @@ namespace AgriculturalManagement.Controllers.Farm
     public class ZoneController : ControllerBase
     {
         private readonly IServiceManager serviceManager;
-        public ZoneController(IServiceManager serviceManager) => this.serviceManager = serviceManager;
+        public ZoneController(IServiceManager serviceManager)
+        {
+            this.serviceManager = serviceManager;
+        }
+
 
         #region Information Zone
         [HttpPost, Route("zones")]
@@ -55,6 +59,12 @@ namespace AgriculturalManagement.Controllers.Farm
         public async Task<bool> DeviceRemove(Guid deviceId, int zoneId)
         {
             var response = await serviceManager.Device.RemoveDeviceFromZone(deviceId, zoneId);
+            return response;
+        }
+        [HttpPost, Route("set-auto-device")]
+        public async Task<bool> SetAutoDevice(Guid deviceId, bool IsAuto)
+        {
+            var response = await serviceManager.Device.SetAutoDevice(deviceId, IsAuto);
             return response;
         }
         #endregion
