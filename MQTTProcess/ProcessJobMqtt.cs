@@ -17,6 +17,7 @@ namespace MQTTProcess
     public interface IDeviceJobMqtt
     {
         Task<bool> OnOffDevice(OnOffDeviceQueryModel model);
+        Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models);
     }
     public class ProcessJobMqtt : BackgroundService, IDeviceJobMqtt
     {
@@ -67,6 +68,7 @@ namespace MQTTProcess
                     LoggerProcessType = LoggerProcessType.DeviceStatistic,
                     LogMessageDetail = ex.ToString(),
                     ServiceName = $"{nameof(ProcessJobMqtt)} -> {nameof(ExecuteAsync)}",
+                    User = "Auto"
                 });
                 throw;
             }
@@ -81,15 +83,15 @@ namespace MQTTProcess
 
             string[] topicSplits = e.Topic.Split("/");
             // Create an InstrumentValueByFiveSecondEntity object for the incoming data
-            var entity = new InstrumentValueByFiveSecondEntity()
-            {
-                PayLoad = payload,
-                DeviceId = topicSplits[1],
-                DeviceNameType = topicSplits[3],
-                DeviceType = topicSplits[2],
-                ValueDate = DateTime.UtcNow.AddHours(+7)
-            };
-            Task.Run(async () => await ProcessAndSaveDataAsync(entity));
+            //var entity = new InstrumentValueByFiveSecondEntity()
+            //{
+            //    PayLoad = payload,
+            //    DeviceId = topicSplits[1] ?? null,
+            //    DeviceNameType = topicSplits[3] ?? null,
+            //    DeviceType = topicSplits[2] ?? null,
+            //    ValueDate = DateTime.UtcNow.AddHours(+7)
+            //};
+            //Task.Run(async () => await ProcessAndSaveDataAsync(entity));
 
         }
         // Receive data and push data to Mongodb
@@ -148,7 +150,7 @@ namespace MQTTProcess
                 {
                     mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
                 }
-                string topic = $"{connection.SystemId}/{model.DeviceId}/{model.DeviceType}/{model.DeviceNameNumber}";
+                string topic = $"{connection.SystemId}/{model.ModuleId.ToString().ToUpper()}/{model.DeviceId.ToString().ToUpper()}/control";
 
                 // Define a TaskCompletionSource to signal completion
                 var tcs = new TaskCompletionSource<bool>();
@@ -159,7 +161,6 @@ namespace MQTTProcess
 
                     client.MqttMsgPublishReceived += (sender, e) =>
                     {
-
                         string payload = System.Text.Encoding.Default.GetString(e.Message);
                         if (payload.ToLower() == "c")
                         {
@@ -177,11 +178,11 @@ namespace MQTTProcess
                 // Publish the message
                 if (model.RequestOn)
                 {
-                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("On"));
+                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("1"));
                 }
                 else if (!model.RequestOn)
                 {
-                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("Off"));
+                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("0"));
                 }
 
                 logger.LogInformation("finished publish");
@@ -213,6 +214,28 @@ namespace MQTTProcess
                 });
                 throw;
             }
+        }
+
+        public async Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models)
+        {
+            var connection = GetConnection();
+            if (mqttClient == null || !mqttClient.IsConnected)
+            {
+                mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+            }
+            for (int i = 0; i < models.Count(); i++)
+            {
+                string topic = $"{connection.SystemId}/{models[i].ModuleId.ToString().ToUpper()}/{models[i].Id.ToString().ToUpper()}/control";
+                if (models[i].IsAction == true)
+                {
+                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("1"));
+                }
+                else if (models[i].IsAction == false)
+                {
+                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("0"));
+                }
+            }
+            return await Task.FromResult(true);
         }
     }
 }

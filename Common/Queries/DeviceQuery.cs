@@ -96,5 +96,8 @@
                                             Set IsAuto = @IsAuto
                                             Where Id = @Id";
 
+
+        public const string AsyncDeviceIsActionSQL = @"SELECT ModuleId, Id, IsAction, IsUsed FROM [Device] WHERE IsUsed = 1";
+
     }
 }
