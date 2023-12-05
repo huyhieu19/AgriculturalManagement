@@ -17,6 +17,7 @@ namespace MQTTProcess
     public interface IDeviceJobMqtt
     {
         Task<bool> OnOffDevice(OnOffDeviceQueryModel model);
+        Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models);
     }
     public class ProcessJobMqtt : BackgroundService, IDeviceJobMqtt
     {
@@ -24,7 +25,7 @@ namespace MQTTProcess
         private readonly IConfiguration configuration;
         private static List<InstrumentValueByFiveSecondEntity> _messageList = new List<InstrumentValueByFiveSecondEntity>();
         private static int _messageCount = 0;
-        private const int MaxMessageCount = 5;
+        private const int MaxMessageCount = 50;
         private readonly IDataStatisticsService dataStatisticsService;
         private static MqttClient? mqttClient = null;
 
@@ -57,7 +58,7 @@ namespace MQTTProcess
                         mqttClient.Subscribe(new[] { mqttTopic }, new[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                         logger.LogInformation("Sub -> " + mqttTopic);
                     }
-                    await Task.Delay(TimeSpan.FromMinutes(10));
+                    await Task.Delay(TimeSpan.FromMinutes(5));
                 }
             }
             catch (Exception ex)
@@ -67,6 +68,7 @@ namespace MQTTProcess
                     LoggerProcessType = LoggerProcessType.DeviceStatistic,
                     LogMessageDetail = ex.ToString(),
                     ServiceName = $"{nameof(ProcessJobMqtt)} -> {nameof(ExecuteAsync)}",
+                    User = "Auto"
                 });
                 throw;
             }
@@ -80,13 +82,14 @@ namespace MQTTProcess
             logger.LogInformation($"Received `{payload}` from `{e.Topic}` topic");
 
             string[] topicSplits = e.Topic.Split("/");
-            // Create an InstrumentValueByFiveSecondEntity object for the incoming data
+            //Create an InstrumentValueByFiveSecondEntity object for the incoming data
+
             var entity = new InstrumentValueByFiveSecondEntity()
             {
                 PayLoad = payload,
-                DeviceId = topicSplits[1],
-                DeviceNameType = topicSplits[3],
-                DeviceType = topicSplits[2],
+                DeviceId = topicSplits[2] ?? null,
+                DeviceNameType = topicSplits[4] ?? null,
+                DeviceType = topicSplits[3] ?? null,
                 ValueDate = DateTime.UtcNow.AddHours(+7)
             };
             Task.Run(async () => await ProcessAndSaveDataAsync(entity));
@@ -148,7 +151,7 @@ namespace MQTTProcess
                 {
                     mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
                 }
-                string topic = $"{connection.SystemId}/{model.DeviceId}/{model.DeviceType}/{model.DeviceNameNumber}";
+                string topic = $"{connection.SystemId}/{model.ModuleId.ToString().ToUpper()}/{model.DeviceId.ToString().ToUpper()}/control";
 
                 // Define a TaskCompletionSource to signal completion
                 var tcs = new TaskCompletionSource<bool>();
@@ -159,9 +162,9 @@ namespace MQTTProcess
 
                     client.MqttMsgPublishReceived += (sender, e) =>
                     {
-
+                        string[] topicSplits = e.Topic.Split('/');
                         string payload = System.Text.Encoding.Default.GetString(e.Message);
-                        if (payload.ToLower() == "c")
+                        if (topicSplits.Length == 5 && topicSplits[2] == model.DeviceId.ToString() && payload.ToLower() == "c")
                         {
                             // Signal completion
                             logger.LogInformation("Receive turn on device from mqtt");
@@ -177,11 +180,11 @@ namespace MQTTProcess
                 // Publish the message
                 if (model.RequestOn)
                 {
-                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("On"));
+                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("1"));
                 }
                 else if (!model.RequestOn)
                 {
-                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("Off"));
+                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("0"));
                 }
 
                 logger.LogInformation("finished publish");
@@ -213,6 +216,28 @@ namespace MQTTProcess
                 });
                 throw;
             }
+        }
+
+        public async Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models)
+        {
+            var connection = GetConnection();
+            if (mqttClient == null || !mqttClient.IsConnected)
+            {
+                mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+            }
+            for (int i = 0; i < models.Count(); i++)
+            {
+                string topic = $"{connection.SystemId}/{models[i].ModuleId.ToString().ToUpper()}/{models[i].Id.ToString().ToUpper()}/control";
+                if (models[i].IsAction == true)
+                {
+                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("1"));
+                }
+                else if (models[i].IsAction == false)
+                {
+                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("0"));
+                }
+            }
+            return await Task.FromResult(true);
         }
     }
 }

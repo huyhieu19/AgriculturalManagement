@@ -25,7 +25,7 @@ namespace Service
         #region Open or Close Device
 
         // Tắt device driver ---> IsAcction = false || mở device IsAcction = true
-        // Vd: Systemid/a0722586-845e-11ee-b962-0242ac120002/W/MB-1
+        // Vd: Systemid/ModuleId/DeviceId/MB-1
         public async Task<bool> DeviceDriverOnOff(OnOffDeviceQueryModel model)
         {
             logger.LogInformation($"DeviceDriver: Turn off or on --> DeviceDriverId: {model.DeviceId}");
@@ -39,14 +39,14 @@ namespace Service
                 connection.Open();
                 using (var trans = connection.BeginTransaction())
                 {
-                    ChangeStageDB = await connection.ExecuteAsync(OnOffSQL, new { Id = model.DeviceId, IsAction = (model.RequestOn == true) ? 1 : 0 }, transaction: trans);
+                    ChangeStageDB = await connection.ExecuteAsync(OnOffSQL, new { Id = model.DeviceId, IsAction = (model.RequestOn) ? 1 : 0 }, transaction: trans);
                     trans.Commit();
                 }
                 connection.Close();
             }
             return ChangeStageDB > 0;
         }
-        // Hàm này dùng để set cho trạng thái của IsRemve = true và IsSuccess = true
+        // Hàm này dùng để set cho trạng thái của IsRemove = true và IsSuccess = true
         public async Task<bool> SuccessJobTurnOnDeviceTimer(int timerId, Guid deviceId)
         {
             logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {timerId}");
@@ -92,5 +92,20 @@ namespace Service
         #endregion
 
 
+        #region Async status
+        public async Task<bool> AsyncStatusDeviceControl()
+        {
+            var query = DeviceQuery.AsyncDeviceIsActionSQL;
+            IEnumerable<StatusDeviceControlModel> result;
+            using (var connection = dapperContext.CreateConnection())
+            {
+                connection.Open();
+                result = await connection.QueryAsync<StatusDeviceControlModel>(query);
+                connection.Close();
+            }
+            var result1 = result.ToList();
+            return await deviceJobMqtt.AsyncStatusDeviceControl(result1);
+        }
+        #endregion
     }
 }
