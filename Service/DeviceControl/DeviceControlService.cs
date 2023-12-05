@@ -39,7 +39,7 @@ namespace Service
                 connection.Open();
                 using (var trans = connection.BeginTransaction())
                 {
-                    ChangeStageDB = await connection.ExecuteAsync(OnOffSQL, new { Id = model.DeviceId, IsAction = (model.RequestOn == true) ? 1 : 0 }, transaction: trans);
+                    ChangeStageDB = await connection.ExecuteAsync(OnOffSQL, new { Id = model.DeviceId, IsAction = (model.RequestOn) ? 1 : 0 }, transaction: trans);
                     trans.Commit();
                 }
                 connection.Close();
