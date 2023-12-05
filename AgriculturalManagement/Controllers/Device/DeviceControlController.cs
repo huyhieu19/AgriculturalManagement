@@ -20,5 +20,10 @@ namespace AgriculturalManagement.Controllers.Device
         {
             return _services.DeviceDriverOnOff(model);
         }
+        [HttpPost("asyncOnOff")]
+        public Task<bool> AsyncStatusDeviceControl()
+        {
+            return _services.AsyncStatusDeviceControl();
+        }
     }
 }
