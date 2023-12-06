@@ -38,33 +38,45 @@ namespace AgriculturalManagement.Controllers.Farm
 
         #region Device On Zone
         [HttpPost("device-control-used")]
+        [Authorize(Roles = "Administrator")]
         public async Task<List<DeviceDisplayModel>> GetDevicesControlOnZone(int zoneId)
         {
             var response = await serviceManager.Device.GetDevicesControlOnZone(zoneId);
             return response;
         }
         [HttpPost("device-instrumentation-used")]
+        [Authorize(Roles = "Administrator")]
         public async Task<List<DeviceDisplayModel>> GetDevicesInstrumentationOnZone(int zoneId)
         {
             var response = await serviceManager.Device.GetDevicesInstrumentationOnZone(zoneId);
             return response;
         }
         [HttpPost("add-used-device")]
+        [Authorize(Roles = "Administrator")]
         public async Task<bool> DeviceAdd(Guid deviceId, int zoneId)
         {
             var response = await serviceManager.Device.AddDeviceToZone(deviceId, zoneId);
             return response;
         }
         [HttpPost("remove-used-device")]
+        [Authorize(Roles = "Administrator")]
         public async Task<bool> DeviceRemove(Guid deviceId, int zoneId)
         {
             var response = await serviceManager.Device.RemoveDeviceFromZone(deviceId, zoneId);
             return response;
         }
         [HttpPost, Route("set-auto-device")]
+        [Authorize(Roles = "Administrator")]
         public async Task<bool> SetAutoDevice(Guid deviceId, bool IsAuto)
         {
             var response = await serviceManager.Device.SetAutoDevice(deviceId, IsAuto);
+            return response;
+        }
+        [HttpPost, Route("devices-on-zone")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<List<DeviceDisplayModel>> GetDevicesOnZone(int zoneId)
+        {
+            var response = await serviceManager.Device.GetDevicesOnZone(zoneId);
             return response;
         }
         #endregion

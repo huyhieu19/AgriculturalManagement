@@ -33,7 +33,7 @@ namespace Service.Device
             return await repository.SaveAsync() > 0;
         }
 
-        private async Task<List<DeviceDisplayModel>> GetDevicesOnZone(int zoneId)
+        public async Task<List<DeviceDisplayModel>> GetDevicesOnZone(int zoneId)
         {
             var deviceEntities = await repository.Device.GetDevicesOnZone(zoneId);
             var deviceModels = mapper.Map<List<DeviceDisplayModel>>(deviceEntities);
