@@ -12,8 +12,9 @@ namespace Service.Contracts
         #region Module
         Task<List<ModuleDisplayModel>> GetModulesAll();
         Task<List<ModuleDisplayModel>> GetModules(string userId);
+        Task<List<ModuleDisplayModel>> GetModulesUsed(string userId);
         Task<bool> RemoveModuleFromUser(Guid moduleId, string userId);
-        Task<bool> AddModuleToUser(Guid moduleId, string userId);
+        Task<bool> AddModuleToUser(Guid moduleId, string userId, string nameRef);
         #endregion
 
         #region Device on module

@@ -41,12 +41,18 @@ namespace AgriculturalManagement.Controllers.Module
             var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
             return await _serviceManager.Module.GetModules(userId);
         }
-
-        [HttpPost("add-module-to-user")]
-        public async Task<bool> AddModuleToUser(Guid moduleId)
+        [HttpPost("get-modules-devices-used")]
+        public async Task<List<ModuleDisplayModel>> GetModulesUsed()
         {
             var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
-            return await _serviceManager.Module.AddModuleToUser(moduleId, userId);
+            return await _serviceManager.Module.GetModulesUsed(userId);
+        }
+
+        [HttpPost("add-module-to-user")]
+        public async Task<bool> AddModuleToUser(Guid moduleId, string nameRef)
+        {
+            var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
+            return await _serviceManager.Module.AddModuleToUser(moduleId, userId, nameRef);
 
         }
 

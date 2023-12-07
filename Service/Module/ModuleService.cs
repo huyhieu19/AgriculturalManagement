@@ -24,9 +24,9 @@ namespace Service
             return isChange == 1;
         }
 
-        public async Task<bool> AddModuleToUser(Guid moduleId, string userId)
+        public async Task<bool> AddModuleToUser(Guid moduleId, string userId, string nameRef)
         {
-            return await _repositoryManager.Module.AddModuleToUser(moduleId, userId);
+            return await _repositoryManager.Module.AddModuleToUser(moduleId, userId, nameRef);
         }
 
         public async Task<List<ModuleDisplayModel>> GetModulesAll()
@@ -39,6 +39,29 @@ namespace Service
         {
             var entity = await _repositoryManager.Module.GetModules(userId);
             return _mapper.Map<List<ModuleDisplayModel>>(entity);
+        }
+        public async Task<List<ModuleDisplayModel>> GetModulesUsed(string userId)
+        {
+            var modules = await GetModules(userId); // Điều này giả sử bạn có một hàm GetModules để lấy danh sách các modules dựa trên userId.
+
+            var result = modules
+                .Select(module => new ModuleDisplayModel
+                {
+                    Id = module.Id,
+                    Name = module.Name,
+                    ModuleType = module.ModuleType,
+                    DateCreated = module.DateCreated,
+                    Note = module.Note,
+                    MqttServer = module.MqttServer,
+                    MqttPort = module.MqttPort,
+                    ClientId = module.ClientId,
+                    UserName = module.UserName,
+                    Password = module.Password,
+                    Devices = module.Devices?.Where(device => !device.IsUsed).ToList()
+                })
+                .ToList();
+
+            return result;
         }
         #endregion
 

@@ -24,7 +24,7 @@ namespace Repository
             }
         }
 
-        public async Task<bool> AddModuleToUser(Guid moduleId, string userId)
+        public async Task<bool> AddModuleToUser(Guid moduleId, string userId, string nameRef)
         {
             /*
              * Can use FindAsync or Where
@@ -44,6 +44,7 @@ namespace Repository
                 throw new ArgumentException("The Esp has been assigned to the user");
             }
             entity.UserId = userId;
+            entity.NameRef = nameRef;
             int change = await FactDbContext.SaveChangesAsync();
             return change == 1;
         }
