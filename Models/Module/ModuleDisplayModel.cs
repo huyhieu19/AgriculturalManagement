@@ -15,6 +15,7 @@ namespace Models
         public int MqttPort { get; set; }
         public string ClientId { get; set; } = null!;
         public string UserName { get; set; } = null!;
+        public string? NameRef { get; set; }
         public string Password { get; set; } = null!;
         public List<DeviceDisplayModel>? Devices { get; set; }
     }

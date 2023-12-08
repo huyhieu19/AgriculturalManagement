@@ -1,6 +1,7 @@
 ﻿using Database;
 using Entities.Module;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Repository.Contracts;
 
 namespace Repository
@@ -24,7 +25,7 @@ namespace Repository
             }
         }
 
-        public async Task<bool> AddModuleToUser(Guid moduleId, string userId)
+        public async Task<bool> AddModuleToUser(Guid moduleId, string userId, string nameRef)
         {
             /*
              * Can use FindAsync or Where
@@ -44,6 +45,7 @@ namespace Repository
                 throw new ArgumentException("The Esp has been assigned to the user");
             }
             entity.UserId = userId;
+            entity.NameRef = nameRef;
             int change = await FactDbContext.SaveChangesAsync();
             return change == 1;
         }
@@ -57,6 +59,21 @@ namespace Repository
         {
             var entities = await FindAll(false).Include(src => src.Devices!.OrderBy(prop => prop.Gate)).ToListAsync();
             return entities;
+        }
+
+        public async Task<bool> EditModule(ModuleUpdateModel model)
+        {
+            var entity = await FindByCondition(prop => prop.Id == model.Id, true).FirstOrDefaultAsync();
+            if (entity == null)
+            {
+                return false;
+            }
+            else
+            {
+                entity.NameRef = model.NameRef;
+                entity.Note = model.Note;
+            }
+            return await FactDbContext.SaveChangesAsync() > 0;
         }
     }
 }

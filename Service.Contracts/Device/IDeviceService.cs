@@ -13,6 +13,7 @@ namespace Service.Contracts.Device
 {
     public interface IDeviceService
     {
+        Task<List<DeviceDisplayModel>> GetDevicesOnZone(int zoneId);
         Task<List<DeviceDisplayModel>> GetDevicesControlOnZone(int zoneId);
         Task<List<DeviceDisplayModel>> GetDevicesInstrumentationOnZone(int zoneId);
         Task<bool> AddDeviceToZone(Guid deviceId, int zoneId);

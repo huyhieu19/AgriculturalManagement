@@ -26,10 +26,6 @@ namespace AgriculturalManagement.Controllers.Farm
         public async Task<FarmModifyResponseModel> CreateFarmAsync([FromBody] FarmCreateModel createModel)
         {
             var userId = GetUserId();
-            if (userId == null)
-            {
-                throw new ArgumentNullException("Vui lòng đăng nhập vào hệ thống");
-            }
             createModel.UserId = userId;
             return await serviceManager.Farm.AddFarm(createModel);
         }
@@ -39,11 +35,7 @@ namespace AgriculturalManagement.Controllers.Farm
         public async Task<List<FarmDisplayModel>> GetFarms()
         {
             var userId = GetUserId();
-            if (userId == null)
-            {
-                throw new ArgumentNullException("Vui lòng đăng nhập vào hệ thống");
-            }
-            return await serviceManager.Farm.GetFarms(userId, false);
+            return await serviceManager.Farm.GetFarms(userId!, false);
         }
 
         // Delete farm
@@ -52,11 +44,7 @@ namespace AgriculturalManagement.Controllers.Farm
         public async Task<FarmModifyResponseModel> DeleteFarm(int id)
         {
             var userId = GetUserId();
-            if (userId == null)
-            {
-                throw new ArgumentNullException("Vui lòng đăng nhập vào hệ thống");
-            }
-            return await serviceManager.Farm.RemoveFarm(id, userId);
+            return await serviceManager.Farm.RemoveFarm(id, userId!);
         }
         // update farm
         [HttpPost, Route("farm-update")]
@@ -64,10 +52,6 @@ namespace AgriculturalManagement.Controllers.Farm
         public async Task<FarmModifyResponseModel> UpdateFarm([FromBody] FarmUpdateModel model)
         {
             var userId = GetUserId();
-            if (userId == null)
-            {
-                throw new ArgumentNullException("Vui lòng đăng nhập vào hệ thống");
-            }
             model.UserId = userId;
             return await serviceManager.Farm.UpdateFarm(model);
         }
