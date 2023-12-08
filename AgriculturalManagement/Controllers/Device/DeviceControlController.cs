@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Models.DeviceControl;
 using Service.Contracts;
 
@@ -16,11 +17,13 @@ namespace AgriculturalManagement.Controllers.Device
         }
 
         [HttpPost("OnOffModel")]
+        [Authorize(Roles = "Administrator")]
         public Task<bool> DeviceDriverOnOff(OnOffDeviceQueryModel model)
         {
             return _services.DeviceDriverOnOff(model);
         }
         [HttpPost("asyncOnOff")]
+        [Authorize(Roles = "Administrator")]
         public Task<bool> AsyncStatusDeviceControl()
         {
             return _services.AsyncStatusDeviceControl();

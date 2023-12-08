@@ -1,4 +1,5 @@
 ﻿using Entities.Module;
+using Models;
 
 namespace Repository.Contracts.Device
 {
@@ -13,6 +14,7 @@ namespace Repository.Contracts.Device
 
         #region Screen Device On Module Device Management
         Task<List<DeviceEntity>> DeviceOnModuleDisplay(Guid moduleId);
+        Task<bool> UpdateDevice(DeviceEditModel device);
         #endregion
     }
 }

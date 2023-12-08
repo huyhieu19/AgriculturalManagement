@@ -7,6 +7,7 @@ using Service.Contracts;
 namespace Service
 {
     public sealed class ModuleService : IModuleService
+
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
@@ -63,6 +64,11 @@ namespace Service
 
             return result;
         }
+
+        public async Task<bool> EditModule(ModuleUpdateModel model)
+        {
+            return await _repositoryManager.Module.EditModule(model);
+        }
         #endregion
 
         #region Device On Module
@@ -82,6 +88,11 @@ namespace Service
         {
             var devices = await DeviceOnModuleDisplay(moduleId);
             return devices.Where(p => p.IsUsed == false && p.ZoneId == null).ToList();
+        }
+
+        public async Task<bool> UpdateDevice(DeviceEditModel devices)
+        {
+            return await _repositoryManager.Device.UpdateDevice(devices);
         }
 
         #endregion

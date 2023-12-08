@@ -21,7 +21,7 @@ namespace Repository.FarmZone
 
         public async Task<IEnumerable<ZoneEntity>> GetZones(int farmId, bool trackChanges)
         {
-            var zones = await FindByCondition(p => p.FarmId == farmId, trackChanges).OrderBy(prop => prop.DateCreated).OrderBy(p => p.ZoneName).ToListAsync();
+            var zones = await FindByCondition(p => p.FarmId == farmId, trackChanges).Include(p => p.Devices).OrderBy(prop => prop.DateCreated).OrderBy(p => p.ZoneName).ToListAsync();
             return zones;
         }
 

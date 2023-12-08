@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service.Contracts;
 
@@ -18,6 +19,7 @@ namespace AgriculturalManagement.Controllers
         }
 
         [HttpGet("profile")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ProfileUser> GetProfile()
         {
             var Id = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
@@ -25,6 +27,7 @@ namespace AgriculturalManagement.Controllers
             return profile;
         }
         [HttpPut("profile")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateProfile(ProfileUser profile)
         {
             var Id = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;

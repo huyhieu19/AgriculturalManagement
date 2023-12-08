@@ -1,6 +1,7 @@
 ﻿using Database;
 using Entities.Module;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Repository.Contracts;
 
 namespace Repository
@@ -58,6 +59,21 @@ namespace Repository
         {
             var entities = await FindAll(false).Include(src => src.Devices!.OrderBy(prop => prop.Gate)).ToListAsync();
             return entities;
+        }
+
+        public async Task<bool> EditModule(ModuleUpdateModel model)
+        {
+            var entity = await FindByCondition(prop => prop.Id == model.Id, true).FirstOrDefaultAsync();
+            if (entity == null)
+            {
+                return false;
+            }
+            else
+            {
+                entity.NameRef = model.NameRef;
+                entity.Note = model.Note;
+            }
+            return await FactDbContext.SaveChangesAsync() > 0;
         }
     }
 }
