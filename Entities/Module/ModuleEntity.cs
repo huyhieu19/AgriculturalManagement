@@ -13,6 +13,7 @@ namespace Entities.Module
         public UserEntity? User { get; set; }
         public string? Name { get; set; }
         public DateTime DateCreated { get; set; }
+        public string? NameRef { get; set; }
         public string? Note { get; set; }
         public string MqttServer { get; set; } = null!;
         public int MqttPort { get; set; }

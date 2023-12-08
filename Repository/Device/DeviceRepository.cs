@@ -1,6 +1,7 @@
 ﻿using Database;
 using Entities.Module;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Repository.Contracts.Device;
 
 namespace Repository.Device
@@ -49,6 +50,24 @@ namespace Repository.Device
         {
             var entities = await FindByCondition(prop => prop.ZoneId == zoneId && prop.IsUsed == true, false).ToListAsync();
             return entities;
+        }
+
+        public async Task<bool> UpdateDevice(DeviceEditModel device)
+        {
+            var entity = await FactDbContext.DeviceEntities.FindAsync(device.Id);
+            if (entity == null)
+            {
+                throw new ArgumentException("Device not found");
+            }
+            else
+            {
+                entity.Name = device.Name;
+                entity.Description = device.Description;
+                entity.IsAction = device.IsAction;
+                entity.IsUsed = device.IsUsed;
+                entity.IsAuto = device.IsAuto;
+            }
+            return await FactDbContext.SaveChangesAsync() > 0;
         }
         #endregion
     }

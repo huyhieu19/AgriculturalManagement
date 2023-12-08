@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgriculturalManagement.Migrations
 {
     [DbContext(typeof(FactDbContext))]
-    [Migration("20231122183029_CreateDatabase")]
-    partial class CreateDatabase
+    [Migration("20231208030043_createDatabase")]
+    partial class createDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -224,6 +224,9 @@ namespace AgriculturalManagement.Migrations
                         .HasDefaultValue("broker.emqx.io");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameRef")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Note")
