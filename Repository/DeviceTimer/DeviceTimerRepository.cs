@@ -28,6 +28,11 @@ namespace Repository.DeviceTimer
             return await FindByCondition(prop => prop.DeviceId == deviceId && (prop.IsSuccessON || prop.IsSuccessOFF || prop.IsRemove), false).ToListAsync();
         }
 
+        public Task<List<TimerDeviceDriverDisplayModel>> GetTimerAvailableOfUserForUI(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> UpdateTimer(TimerDeviceDriverUpdateModel model)
         {
             var entity = await FactDbContext.TimerDeviceDriverEntities.FindAsync(model.Id);

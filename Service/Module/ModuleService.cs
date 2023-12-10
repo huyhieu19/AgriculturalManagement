@@ -50,6 +50,7 @@ namespace Service
                 {
                     Id = module.Id,
                     Name = module.Name,
+                    NameRef = module.NameRef,
                     ModuleType = module.ModuleType,
                     DateCreated = module.DateCreated,
                     Note = module.Note,

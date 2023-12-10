@@ -13,6 +13,7 @@ namespace Service.Contracts.DeviceTimer
 
         #region Timer
         Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetTimerAvailableOfUser(string userId);
+        Task<List<TimerDeviceDriverDisplayModel>> GetTimerAvailableOfUserForUI(string userId);
         Task<bool> CreateTimer(TimerDeviceDriverCreateModel model);
         Task<bool> UpdateTimer(TimerDeviceDriverUpdateModel model);
         Task<bool> RemoveTimer(int timerId, Guid deviceId);
