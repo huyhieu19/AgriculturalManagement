@@ -4,8 +4,6 @@ namespace Models.DeviceTimer
 {
     public class TimerDeviceDriverCreateModel
     {
-        [Required]
-        public string NameRef { get; set; } = null!;
 
         public DateTime? ShutDownTimer { get; set; }
         public DateTime? OpenTimer { get; set; }
