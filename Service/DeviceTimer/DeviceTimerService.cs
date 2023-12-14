@@ -66,6 +66,12 @@ namespace Service.DeviceTimer
             var models = mapper.Map<List<TimerDeviceDriverDisplayModel>>(entities);
             return models;
         }
+        public async Task<List<TimerDeviceDriverDisplayModel>> GetTimerAvailableOfUserForUI(string userId)
+        {
+            var entities = await repositoryManager.DeviceDriver.GetTimerAvailableOfUserForUI(userId);
+            var models = mapper.Map<List<TimerDeviceDriverDisplayModel>>(entities);
+            return models;
+        }
         #endregion
 
         #region using Dapper

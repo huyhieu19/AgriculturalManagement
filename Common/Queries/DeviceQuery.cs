@@ -42,11 +42,12 @@
         public const string GetTimerAvailableOfUserSQL =
         @"SELECT 
                 TDD.*,
-		        Ex.IsActionDevice
+		        Ex.IsActionDevice,
+				Ex.DeviceName As DeviceName
             FROM 
                 TimerDeviceDriver TDD
             INNER JOIN
-               (Select ModuleId, M.UserId, D.IsAction AS IsActionDevice, D.Id AS DeviceId From Device AS D
+               (Select ModuleId, M.UserId, D.IsAction AS IsActionDevice, D.Id AS DeviceId, D.Name AS DeviceName From Device AS D
 			   INNER JOIN
 			   Module AS M
 			   ON M.Id = D.ModuleId
