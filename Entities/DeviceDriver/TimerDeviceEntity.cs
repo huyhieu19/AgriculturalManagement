@@ -6,8 +6,6 @@ namespace Entities
     {
         // PK
         public int Id { get; set; }
-        public string? NameRef { get; set; }
-
         public DateTime? DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
         public string? Note { get; set; }
