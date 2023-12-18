@@ -7,7 +7,7 @@
         public Guid DeviceDriverId { get; set; }
 
         public Guid InstrumentationId { get; set; }
-
+        public string TypeDevice { get; set; } = null!;
         public bool OnInUpperThreshold { get; set; }
         public bool DeviceDriverAction { get; set; }
         public string? DeviceInstrumentationName { get; set; }

@@ -9,6 +9,7 @@ namespace Entities
         public DeviceEntity? DeviceDriver { get; set; }
         public Guid InstrumentationId { get; set; }
         public DeviceEntity? DeviceInstrumentation { get; set; }
+        public string TypeDevice { get; set; } = null!;
         public bool? OnInUpperThreshold { get; set; }
         // Case: Device return value
         public double? ThresholdValueOn { get; set; }

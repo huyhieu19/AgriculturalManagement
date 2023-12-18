@@ -7,7 +7,7 @@
         public int? DeviceDriverId { get; set; }
 
         public int? InstrumentationId { get; set; }
-
+        public string TypeDevice { get; set; } = null!;
         public bool? OnInUpperThreshold { get; set; }
         // Case: Device return value
         public double? ThresholdValueOn { get; set; }
