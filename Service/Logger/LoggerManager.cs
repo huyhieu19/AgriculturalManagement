@@ -32,7 +32,6 @@ namespace Service.Logger
             {
                 Task.Run(async () =>
                 {
-                    var UserName = logProcessModel.User ?? _contextAccessor.HttpContext!.User.FindFirst("Email")!.Value;
                     await logProcess.InsertOneAsync(new LogProcessEntity()
                     {
                         LoggerProcessType = logProcessModel.LoggerProcessType.ToString(),
@@ -41,7 +40,7 @@ namespace Service.Logger
                         LogMessageDetail = logProcessModel.LogMessageDetail,
                         ValueDate = DateTime.UtcNow,
                         LoggerType = LoggerType.Debug.ToString(),
-                        User = UserName,
+                        User = "debug",
                     });
                 });
             }
@@ -54,7 +53,6 @@ namespace Service.Logger
             {
                 Task.Run(async () =>
                 {
-                    var UserName = logProcessModel.User ?? _contextAccessor.HttpContext!.User.FindFirst("Email")!.Value;
                     await logProcess.InsertOneAsync(new LogProcessEntity()
                     {
                         LoggerProcessType = logProcessModel.LoggerProcessType.ToString(),
@@ -63,7 +61,7 @@ namespace Service.Logger
                         LogMessageDetail = logProcessModel.LogMessageDetail,
                         ValueDate = DateTime.UtcNow,
                         LoggerType = LoggerType.Error.ToString(),
-                        User = UserName,
+                        User = "error",
                     });
                 });
             }

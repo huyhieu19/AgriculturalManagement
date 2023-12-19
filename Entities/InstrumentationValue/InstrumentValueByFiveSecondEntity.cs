@@ -10,6 +10,8 @@ namespace Entities
         public string? Id { get; set; }
         [BsonElement("DeviceId")]
         public string? DeviceId { get; set; }
+        [BsonElement("DeviceNumber")]
+        public string? DeviceNumber { get; set; }
         [BsonElement("DeviceType")]
         public string? DeviceType { get; set; }
         [BsonElement("PayLoad")]

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Models;
 using Models.Config.Mqtt;
 using Models.DeviceControl;
+using Newtonsoft.Json.Linq;
 using Service;
 using Service.Contracts.Logger;
 using uPLibrary.Networking.M2Mqtt;
@@ -58,7 +59,7 @@ namespace MQTTProcess
                         mqttClient.Subscribe(new[] { mqttTopic }, new[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                         logger.LogInformation("Sub -> " + mqttTopic);
                     }
-                    await Task.Delay(TimeSpan.FromMinutes(5));
+                    await Task.Delay(TimeSpan.FromSeconds(10));
                 }
             }
             catch (Exception ex)
@@ -78,22 +79,37 @@ namespace MQTTProcess
         private void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
             string payload = System.Text.Encoding.Default.GetString(e.Message);
-
             logger.LogInformation($"Received `{payload}` from `{e.Topic}` topic");
-
             string[] topicSplits = e.Topic.Split("/");
             //Create an InstrumentValueByFiveSecondEntity object for the incoming data
 
-            if (topicSplits[1] == "r")
+            if (topicSplits[1] == "r" && topicSplits[3] == "ND_DA")
             {
-                var entity = new InstrumentValueByFiveSecondEntity()
+                JObject jsonData = JObject.Parse(payload);
+                // Truy cập các trường trong đối tượng JSON
+                string temperature = (string)jsonData["ND"]!;
+                string humidity = (string)jsonData["DA"]!;
+
+                var entity1 = new InstrumentValueByFiveSecondEntity()
                 {
-                    PayLoad = payload,
+                    PayLoad = temperature,
                     DeviceId = topicSplits[2],
                     DeviceType = topicSplits[3] ?? null,
-                    ValueDate = DateTime.UtcNow.AddHours(+7)
+                    ValueDate = DateTime.UtcNow.AddHours(+7),
+                    DeviceNumber = "ND",
                 };
-                Task.Run(async () => await ProcessAndSaveDataAsync(entity));
+
+                Task.Run(async () => await ProcessAndSaveDataAsync(entity1));
+                var entity2 = new InstrumentValueByFiveSecondEntity()
+                {
+                    PayLoad = humidity,
+                    DeviceId = topicSplits[2],
+                    DeviceType = topicSplits[3] ?? null,
+                    ValueDate = DateTime.UtcNow.AddHours(+7),
+                    DeviceNumber = "DA",
+                };
+                Task.Run(async () => await ProcessAndSaveDataAsync(entity2));
+
             }
             if (topicSplits[1] == "w")
             {

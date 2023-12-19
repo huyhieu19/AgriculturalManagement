@@ -56,14 +56,17 @@ namespace JobBackground.DeviceAuto
             {
                 foreach (var entity in entitiesTurnOn)
                 {
+                    logger.LogInformation($"On Device {entity.DeviceId}");
                     var model = new OnOffDeviceQueryModel()
                     {
+                        ModuleId = entity.ModuleId,
                         DeviceId = entity.DeviceId,
                         DeviceType = entity.DeviceType,
                         DeviceNameNumber = entity.NameRef,
                         RequestOn = true,
                     };
                     var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
+                    logger.LogInformation($"On Device {IsComplete}");
                     if (IsComplete)
                     {
                         await deviceControlService.SuccessJobTurnOnDeviceTimer(entity.Id, entity.DeviceId);
@@ -74,14 +77,17 @@ namespace JobBackground.DeviceAuto
             {
                 foreach (var entity in entitiesTurnOff)
                 {
+                    logger.LogInformation($"Off Device {entity.DeviceId}");
                     var model = new OnOffDeviceQueryModel()
                     {
+                        ModuleId = entity.ModuleId,
                         DeviceId = entity.DeviceId,
                         DeviceType = entity.DeviceType,
                         DeviceNameNumber = entity.NameRef,
                         RequestOn = false,
                     };
                     var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
+                    logger.LogInformation($"On Device {IsComplete}");
                     if (IsComplete)
                     {
                         await deviceControlService.SuccessJobTurnOffDeviceTimer(entity.Id, entity.DeviceId);
