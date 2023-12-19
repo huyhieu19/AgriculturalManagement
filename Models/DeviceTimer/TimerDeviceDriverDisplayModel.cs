@@ -22,6 +22,7 @@ namespace Models.DeviceTimer
         public DeviceType DeviceType { get; set; }
         public string NameRef { get; set; } = null!;
         public Guid DeviceId { get; set; }
+        public Guid ModuleId { get; set; }
         public DeviceDisplayModel? DeviceModel { get; set; }
     }
 }

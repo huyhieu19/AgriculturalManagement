@@ -64,8 +64,8 @@
 		        D.IsAction,
 				D.IsAuto,
 				D.DeviceType,
-				D.NameRef
-
+				D.NameRef,
+                D.ModuleId
             FROM 
                 TimerDeviceDriver TDD
             INNER JOIN

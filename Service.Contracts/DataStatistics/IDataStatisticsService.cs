@@ -2,6 +2,7 @@
 using Models;
 using Models.DeviceData;
 using Models.LoggerProcess;
+using Models.Statistic;
 
 namespace Service
 {
@@ -12,9 +13,10 @@ namespace Service
         Task<BaseResModel<InstrumentValueByFiveSecondEntity>> PullData(DeviceDataQueryModel queryModel);
         Task<BaseResModel<LogProcessEntity>> LoggerProcess(LoggerProcessQueryModel queryModel);
         Task WriteLog(LogProcessEntity model);
-        Task StatisticsWeek();
-        Task StatisticsMonth();
-        Task StatisticsDay();
-        Task StatisticsHour();
+
+        // Date
+        Task<List<StatisticDisplayModel>> StatisticsByDateDataDevices(Guid DeviceId);
+        // Hour
+        Task<List<StatisticDisplayModel>> StatisticsByHourDataDevices(Guid DeviceId);
     }
 }
