@@ -36,7 +36,7 @@
                           ,[IsAuto]
                           ,[ShutDownTimer]
                           ,[OpenTimer]
-                          ,[DeviceDriverId]
+                          ,[DeviceId]
                       FROM [AgriculturalManagement].[dbo].[TimerDeviceDriver]";
 
         public const string GetTimerAvailableOfUserSQL =
@@ -78,12 +78,12 @@
 
         public const string GetAllHistorySQL = @"SELECT * FROM TimerDeviceDriver WHERE IsRemove = 0";
 
-        public const string GetAllHistoryByDeviceIdSQL = @"SELECT * FROM TimerDeviceDriver WHERE IsRemove = 0 AND DeviceDriverId = @DeviceDriverId";
+        public const string GetAllHistoryByDeviceIdSQL = @"SELECT * FROM TimerDeviceDriver WHERE IsRemove = 0 AND [DeviceId] = @DeviceDriverId";
 
-        public const string RemoveTimerSQL = @"UPDATE TimerDeviceDriver SET IsRemove = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
+        public const string RemoveTimerSQL = @"UPDATE TimerDeviceDriver SET IsRemove = 1 WHERE Id = @Id AND [DeviceId] = @DeviceId";
 
-        public const string SuccessJobTurnOnDeviceTimerSQL = @"UPDATE TimerDeviceDriver SET IsSuccessON = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
-        public const string SuccessJobTurnOffDeviceTimerSQL = @"UPDATE TimerDeviceDriver SET IsSuccessOFF = 1 WHERE Id = @Id AND DeviceDriverId = @DeviceId";
+        public const string SuccessJobTurnOnDeviceTimerSQL = @"UPDATE TimerDeviceDriver SET IsSuccessON = 1 WHERE Id = @Id AND [DeviceId] = @DeviceId";
+        public const string SuccessJobTurnOffDeviceTimerSQL = @"UPDATE TimerDeviceDriver SET IsSuccessOFF = 1 WHERE Id = @Id AND [DeviceId] = @DeviceId";
 
         public const string UpdateTimerSQL = @"UPDATE TimerDeviceDriver SET IsDaily = @IsDaily,IsAuto = @IsAuto, ShutDownTimer = @ShutDownTimer, OpenTimer = @OpenTimer  WHERE Id = @Id";
 
@@ -98,7 +98,7 @@
                                             Where Id = @Id";
 
 
-        public const string AsyncDeviceIsActionSQL = @"SELECT ModuleId, Id, IsAction, IsUsed FROM [Device] WHERE IsUsed = 1";
+        public const string AsyncDeviceIsActionSQL = @"SELECT ModuleId, Id, IsAction, IsUsed FROM [Device] WHERE IsUsed = 1 AND [DeviceType] = 'W'";
 
     }
 }

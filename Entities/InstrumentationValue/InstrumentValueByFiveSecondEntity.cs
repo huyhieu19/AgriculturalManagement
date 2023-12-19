@@ -12,8 +12,6 @@ namespace Entities
         public string? DeviceId { get; set; }
         [BsonElement("DeviceType")]
         public string? DeviceType { get; set; }
-        [BsonElement("DeviceNumber")]
-        public string? DeviceNameType { get; set; }
         [BsonElement("PayLoad")]
         public string? PayLoad { get; set; }
         [BsonElement("ValueDate")]

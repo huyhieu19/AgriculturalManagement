@@ -12,11 +12,6 @@ namespace Repository.DeviceThreshold
         {
         }
 
-        public async Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOff()
-        {
-            return await FindAll(false).ToListAsync();
-        }
-
         public async Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id)
         {
             return await FindByCondition(p => p.DeviceDriverId == Id && !p.IsDelete, false).ToListAsync();
