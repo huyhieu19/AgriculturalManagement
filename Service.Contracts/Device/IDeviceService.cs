@@ -19,5 +19,7 @@ namespace Service.Contracts.Device
         Task<bool> AddDeviceToZone(Guid deviceId, int zoneId);
         Task<bool> RemoveDeviceFromZone(Guid deviceId, int zoneId);
         Task<bool> SetAutoDevice(Guid deviceId, bool IsAuto);
+
+        Task<DeviceInformationDisplayModel> GetInforDevice(Guid deviceId);
     }
 }

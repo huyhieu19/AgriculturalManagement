@@ -18,45 +18,46 @@ namespace AgriculturalManagement.Controllers.Device
         }
         [HttpPost, Route("g/all-available")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerAvailableOfUser()
+        public async Task<List<TimerDeviceDriverDisplayModel>> GetAllTimerAvailableOfUser()
         {
             var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
             return await _service.DeviceTimer.GetTimerAvailableOfUser(userId);
         }
-        //[HttpPost, Route("get-by-device")]
-        //public async Task<List<TimerDeviceDriverDisplayModel>> GetAllTimerByDeviceId(int Id)
-        //{
-        //    return await service.DeviceDriver.GetAllTimerByDeviceId(Id);
-        //}
+
         [HttpPost, Route("c")]
         [Authorize(Roles = "Administrator")]
         public async Task<bool> CreateTimer(TimerDeviceDriverCreateModel model)
         {
             return await _service.DeviceTimer.CreateTimer(model);
         }
+
         [HttpPost, Route("u")]
         [Authorize(Roles = "Administrator")]
         public async Task<bool> UpdateTimer(TimerDeviceDriverUpdateModel model)
         {
             return await _service.DeviceTimer.UpdateTimer(model);
         }
+
         [HttpPost, Route("r")]
         [Authorize(Roles = "Administrator")]
         public async Task<bool> RemoveTimer(int Id, Guid deviceId)
         {
             return await _service.DeviceTimer.RemoveTimer(Id, deviceId);
         }
+
         [HttpPost, Route("g/histories-by-device")]
         [Authorize(Roles = "Administrator")]
         public async Task<List<TimerDeviceDriverDisplayModel>> GetAllTimerHistoryByDeviceId(Guid Id)
         {
             return await _service.DeviceTimer.GetAllTimerHistoryByDeviceId(Id);
         }
+
         [HttpPost, Route("g/histories")]
         [Authorize(Roles = "Administrator")]
-        public async Task<List<TimerDeviceDriverDisplayModel>> GetAllTimerHistory()
+        public async Task<List<TimerDeviceDriverDisplayModel>> GetAllTimerHistoryByUser()
         {
-            return await _service.DeviceTimer.GetAllTimerHistory();
+            var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
+            return await _service.DeviceTimer.GetAllTimerHistoryByUser(userId);
         }
     }
 }

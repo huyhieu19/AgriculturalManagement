@@ -9,6 +9,6 @@ namespace Repository.Contracts.DeviceTimer
         void CreateTimer(TimerDeviceEntity entity);
         Task<bool> UpdateTimer(TimerDeviceDriverUpdateModel entity);
         Task<List<TimerDeviceEntity>> GetAllTimerHistoryByDeviceId(Guid deviceId);
-        Task<List<TimerDeviceEntity>> GetAllTimerHistory();
+        //Task<List<TimerDeviceEntity>> GetAllTimerHistory();
     }
 }
