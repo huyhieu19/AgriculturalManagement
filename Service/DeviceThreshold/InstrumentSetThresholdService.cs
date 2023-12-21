@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
+using Common.Queries;
+using Dapper;
+using Database;
 using Entities;
 using Models;
 using Repository.Contracts;
 using Service.Contracts.DeviceThreshold;
+using Service.Contracts.Logger;
 
 namespace Service.DeviceThreshold
 {
@@ -10,17 +14,27 @@ namespace Service.DeviceThreshold
     {
         private readonly IRepositoryManager repositoryManager;
         private readonly IMapper mapper;
+        private readonly DapperContext dapperContext;
+        private readonly ILoggerManager logger;
 
-        public InstrumentSetThresholdService(IRepositoryManager repositoryManager, IMapper mapper)
+        public InstrumentSetThresholdService(IRepositoryManager repositoryManager, IMapper mapper, DapperContext dapperContext, ILoggerManager logger)
         {
             this.repositoryManager = repositoryManager;
             this.mapper = mapper;
+            this.dapperContext = dapperContext;
+            this.logger = logger;
         }
 
-        public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOff()
+        public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOff(string userId)
         {
-            var result = await repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOff();
-            return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);
+            var query = InstrumentationSetThresholdQuery.GetThreshold;
+            using (var connection = dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<InstrumentSetThresholdDisplayModel>(query, new { UserId = userId });
+                connection.Close();
+                return result;
+            }
         }
 
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id)

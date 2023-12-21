@@ -44,7 +44,7 @@ namespace Service
             this.deviceDriver = new Lazy<IDeviceTimerService>(() => new DeviceTimerService(repositoryManager, mapper, dapperContext, logger));
             this.authentication = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, factDbContext, userManager, logger, configuration));
             this.valueType = new Lazy<IValueTypeService>(() => new ValueTypeService(repositoryManager, logger, mapper));
-            this.instrumentSetThreshold = new Lazy<IInstrumentSetThresholdService>(() => new InstrumentSetThresholdService(repositoryManager, mapper));
+            this.instrumentSetThreshold = new Lazy<IInstrumentSetThresholdService>(() => new InstrumentSetThresholdService(repositoryManager, mapper, dapperContext, logger));
             this.user = new Lazy<IUserService>(() => new UserService(repositoryManager, mapper, userManager));
             this.esp = new Lazy<IModuleService>(() => new ModuleService(repositoryManager, mapper));
             this.device = new Lazy<IDeviceService>(() => new DeviceService(repositoryManager, mapper, dapperContext));

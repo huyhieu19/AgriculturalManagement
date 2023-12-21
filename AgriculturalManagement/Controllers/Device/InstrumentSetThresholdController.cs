@@ -11,11 +11,13 @@ namespace AgriculturalManagement.Controllers.Device
     {
         private readonly IServiceManager serviceManager;
         private readonly IDeviceControlService deviceAutoService;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public InstrumentSetThresholdController(IServiceManager serviceManager, IDeviceControlService deviceAutoService)
+        public InstrumentSetThresholdController(IServiceManager serviceManager, IDeviceControlService deviceAutoService, IHttpContextAccessor _contextAccessor)
         {
             this.serviceManager = serviceManager;
             this.deviceAutoService = deviceAutoService;
+            this._contextAccessor = _contextAccessor;
         }
         //[HttpGet, Route("NotDelete")]
         //public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete()
@@ -32,7 +34,8 @@ namespace AgriculturalManagement.Controllers.Device
         [Authorize(Roles = "Administrator")]
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOff()
         {
-            return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOff();
+            var userId = _contextAccessor.HttpContext!.User.FindFirst("Id")!.Value;
+            return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOff(userId);
         }
         [HttpGet, Route("DatatableByIdDeviceDrive")]
         [Authorize(Roles = "Administrator")]

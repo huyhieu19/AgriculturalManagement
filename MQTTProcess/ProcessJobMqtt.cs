@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Models;
 using Models.Config.Mqtt;
 using Models.DeviceControl;
+using Newtonsoft.Json.Linq;
 using Service;
 using Service.Contracts.Logger;
 using uPLibrary.Networking.M2Mqtt;
@@ -51,14 +52,14 @@ namespace MQTTProcess
                         mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
 
                         logger.LogInformation("Connected to MQTT Broker");
-                        string mqttTopic = $"{connection.SystemId}/#";
+                        string mqttTopic = $"{connection.SystemId}/r/#";
 
                         mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
 
                         mqttClient.Subscribe(new[] { mqttTopic }, new[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                         logger.LogInformation("Sub -> " + mqttTopic);
                     }
-                    await Task.Delay(TimeSpan.FromMinutes(5));
+                    await Task.Delay(TimeSpan.FromSeconds(10));
                 }
             }
             catch (Exception ex)
@@ -78,21 +79,42 @@ namespace MQTTProcess
         private void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
             string payload = System.Text.Encoding.Default.GetString(e.Message);
-
             logger.LogInformation($"Received `{payload}` from `{e.Topic}` topic");
-
             string[] topicSplits = e.Topic.Split("/");
             //Create an InstrumentValueByFiveSecondEntity object for the incoming data
 
-            var entity = new InstrumentValueByFiveSecondEntity()
+            if (topicSplits[1] == "r" && topicSplits[3] == "ND_DA")
             {
-                PayLoad = payload,
-                DeviceId = topicSplits[2] ?? null,
-                DeviceNameType = topicSplits[4] ?? null,
-                DeviceType = topicSplits[3] ?? null,
-                ValueDate = DateTime.UtcNow.AddHours(+7)
-            };
-            Task.Run(async () => await ProcessAndSaveDataAsync(entity));
+                JObject jsonData = JObject.Parse(payload);
+                // Truy cập các trường trong đối tượng JSON
+                string temperature = (string)jsonData["ND"]!;
+                string humidity = (string)jsonData["DA"]!;
+
+                var entity1 = new InstrumentValueByFiveSecondEntity()
+                {
+                    PayLoad = temperature,
+                    DeviceId = topicSplits[2],
+                    DeviceType = topicSplits[3] ?? null,
+                    ValueDate = DateTime.UtcNow.AddHours(+7),
+                    DeviceNumber = "ND",
+                };
+
+                Task.Run(async () => await ProcessAndSaveDataAsync(entity1));
+                var entity2 = new InstrumentValueByFiveSecondEntity()
+                {
+                    PayLoad = humidity,
+                    DeviceId = topicSplits[2],
+                    DeviceType = topicSplits[3] ?? null,
+                    ValueDate = DateTime.UtcNow.AddHours(+7),
+                    DeviceNumber = "DA",
+                };
+                Task.Run(async () => await ProcessAndSaveDataAsync(entity2));
+
+            }
+            if (topicSplits[1] == "w")
+            {
+                // code đóng mở trạng thái thiết bị ở đây
+            }
 
         }
         // Receive data and push data to Mongodb
@@ -151,7 +173,8 @@ namespace MQTTProcess
                 {
                     mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
                 }
-                string topic = $"{connection.SystemId}/{model.ModuleId.ToString().ToUpper()}/{model.DeviceId.ToString().ToUpper()}/control";
+                string topicSub = $"{connection.SystemId}/w/#";
+                string topicPub = $"{connection.SystemId}/{model.ModuleId.ToString().ToUpper()}/w/{model.DeviceId.ToString().ToUpper()}/control";
 
                 // Define a TaskCompletionSource to signal completion
                 var tcs = new TaskCompletionSource<bool>();
@@ -164,7 +187,7 @@ namespace MQTTProcess
                     {
                         string[] topicSplits = e.Topic.Split('/');
                         string payload = System.Text.Encoding.Default.GetString(e.Message);
-                        if (topicSplits.Length == 5 && topicSplits[2] == model.DeviceId.ToString() && payload.ToLower() == "c")
+                        if (topicSplits[2].ToLower() == model.DeviceId.ToString().ToLower() && topicSplits[1].ToLower() == "w" && payload.ToLower() == "c")
                         {
                             // Signal completion
                             logger.LogInformation("Receive turn on device from mqtt");
@@ -175,16 +198,17 @@ namespace MQTTProcess
                 }
 
                 // Subscribe to topic
-                Subscribe(mqttClient, topic);
+                Subscribe(mqttClient, topicSub);
 
+                logger.LogInformation($"Subscribing topic {topicSub}");
                 // Publish the message
                 if (model.RequestOn)
                 {
-                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("1"));
+                    mqttClient.Publish(topicPub, System.Text.Encoding.UTF8.GetBytes("1"));
                 }
                 else if (!model.RequestOn)
                 {
-                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("0"));
+                    mqttClient.Publish(topicPub, System.Text.Encoding.UTF8.GetBytes("0"));
                 }
 
                 logger.LogInformation("finished publish");
@@ -196,13 +220,13 @@ namespace MQTTProcess
                 if (completedTask == tcs.Task)
                 {
                     // The task completed successfully
-                    mqttClient.Unsubscribe(new[] { topic });
+                    mqttClient.Unsubscribe(new[] { topicSub });
                     return tcs.Task.Result;
                 }
                 else
                 {
                     // Timeout occurred
-                    mqttClient.Unsubscribe(new[] { topic });
+                    mqttClient.Unsubscribe(new[] { topicSub });
                     return false;
                 }
             }
@@ -227,7 +251,7 @@ namespace MQTTProcess
             }
             for (int i = 0; i < models.Count(); i++)
             {
-                string topic = $"{connection.SystemId}/{models[i].ModuleId.ToString().ToUpper()}/{models[i].Id.ToString().ToUpper()}/control";
+                string topic = $"{connection.SystemId}/{models[i].ModuleId.ToString().ToUpper()}/w/{models[i].Id.ToString().ToUpper()}/control";
                 if (models[i].IsAction == true)
                 {
                     mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("1"));

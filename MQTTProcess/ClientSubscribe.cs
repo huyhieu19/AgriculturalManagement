@@ -132,7 +132,6 @@
 //                    .Build();
 
 //                var response = await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
-
 //                Console.WriteLine("MQTT client subscribed to topics.");
 
 //                // The response contains additional data sent by the server after subscribing.

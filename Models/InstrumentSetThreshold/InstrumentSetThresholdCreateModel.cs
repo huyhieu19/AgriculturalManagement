@@ -7,7 +7,7 @@ namespace Models
 
         public int? DeviceDriverId { get; set; }
         public int? InstrumentationId { get; set; }
-
+        public string TypeDevice { get; set; } = null!;
         // Case: Device return value
         [Required]
         public double? ThresholdValueOn { get; set; }

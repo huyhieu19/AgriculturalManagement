@@ -1,4 +1,6 @@
-﻿namespace Entities.Module
+﻿using Common.Enum;
+
+namespace Entities.Module
 {
     public class DeviceEntity
     {
@@ -18,6 +20,8 @@
         public string? Unit { get; set; }
         public string? Gate { get; set; }
         public string DeviceType { get; set; } = null!;
+        public int NumberDeviceOfDevices { get; set; } = 1; // bao gồm những loại thiết bị nào
+        public StatisticType TypeStatis { get; set; }
         public ZoneEntity? Zone { get; set; }
         public ModuleEntity? Module { get; set; }
         public ICollection<TimerDeviceEntity>? TimerDevices { get; set; }
