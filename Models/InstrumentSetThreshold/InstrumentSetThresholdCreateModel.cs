@@ -5,8 +5,8 @@ namespace Models
     public class InstrumentSetThresholdCreateModel
     {
 
-        public int? DeviceDriverId { get; set; }
-        public int? InstrumentationId { get; set; }
+        public Guid DeviceDriverId { get; set; }
+        public Guid InstrumentationId { get; set; }
         public string TypeDevice { get; set; } = null!;
         // Case: Device return value
         [Required]

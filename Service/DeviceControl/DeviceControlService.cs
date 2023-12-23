@@ -13,13 +13,14 @@ namespace Service
     {
         private readonly DapperContext dapperContext;
         private readonly ILoggerManager logger;
-        private readonly IDeviceJobMqtt deviceJobMqtt;
+        //private readonly IDeviceJobMqtt deviceJobMqtt;
+        private readonly IProcessJobControlDevice processJobControlDevice;
 
-        public DeviceControlService(DapperContext dapperContext, ILoggerManager logger, IDeviceJobMqtt deviceJobMqtt)
+        public DeviceControlService(DapperContext dapperContext, ILoggerManager logger, IProcessJobControlDevice processJobControlDevice)
         {
             this.dapperContext = dapperContext;
             this.logger = logger;
-            this.deviceJobMqtt = deviceJobMqtt;
+            this.processJobControlDevice = processJobControlDevice;
         }
 
         #region Open or Close Device
@@ -31,7 +32,8 @@ namespace Service
             logger.LogInformation($"DeviceDriver: Turn off or on --> DeviceDriverId: {model.DeviceId}");
 
             string OnOffSQL = DeviceQuery.UpdateTurnOnOffSQL;
-            var turnOffByMqtt = await deviceJobMqtt.OnOffDevice(model);
+            //var turnOffByMqtt = await deviceJobMqtt.OnOffDevice(model);
+            var turnOffByMqtt = await processJobControlDevice.OnOffDevice(model);
             int ChangeStageDB = 0;
             if (turnOffByMqtt)
             {
@@ -104,7 +106,7 @@ namespace Service
                 connection.Close();
             }
             var result1 = result.ToList();
-            return await deviceJobMqtt.AsyncStatusDeviceControl(result1);
+            return await processJobControlDevice.AsyncStatusDeviceControl(result1);
         }
         #endregion
     }
