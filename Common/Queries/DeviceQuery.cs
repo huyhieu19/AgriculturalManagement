@@ -43,7 +43,8 @@
         @"SELECT 
                 TDD.*,
 		        Ex.IsActionDevice,
-				Ex.DeviceName As DeviceName
+				Ex.DeviceName As DeviceName,
+				Ex.ModuleId
             FROM 
                 TimerDeviceDriver TDD
             INNER JOIN
@@ -56,7 +57,7 @@
             ON 
                 Ex.DeviceId = TDD.DeviceId
 
-            WHERE (TDD.IsSuccessON = 0 OR TDD.IsSuccessON = 0) AND IsRemove = 0";
+            WHERE (TDD.IsSuccessON = 0 OR TDD.IsSuccessOFF = 0) AND IsRemove = 0";
 
         public const string GetAllTimerAvailable =
             @"SELECT 
@@ -73,8 +74,25 @@
             ON 
                 D.Id = TDD.DeviceId
 
-            WHERE (TDD.IsSuccessON = 0 OR TDD.IsSuccessON = 0) AND IsRemove = 0";
+            WHERE (TDD.IsSuccessON = 0 OR TDD.IsSuccessOFF = 0) AND IsRemove = 0";
 
+        public const string GetTimerHistoryOfUserSQL =
+        @"SELECT 
+                TDD.*,
+		        Ex.IsActionDevice,
+				Ex.DeviceName As DeviceName,
+				Ex.ModuleId
+            FROM 
+                TimerDeviceDriver TDD
+            INNER JOIN
+               (Select ModuleId, M.UserId, D.IsAction AS IsActionDevice, D.Id AS DeviceId, D.Name AS DeviceName From Device AS D
+			   INNER JOIN
+			   Module AS M
+			   ON M.Id = D.ModuleId
+			   WHERE UserId = @UserId
+			   ) AS Ex
+            ON 
+                Ex.DeviceId = TDD.DeviceId";
 
         public const string GetAllHistorySQL = @"SELECT * FROM TimerDeviceDriver WHERE IsRemove = 0";
 
@@ -99,6 +117,17 @@
 
 
         public const string AsyncDeviceIsActionSQL = @"SELECT ModuleId, Id, IsAction, IsUsed FROM [Device] WHERE IsUsed = 1 AND [DeviceType] = 'W'";
+
+        // Information of Device
+        public const string InformationDeviceSQL = @"Select D.Name AS DeviceName, Z.ZoneName, F.Name AS FarmName
+            From Device AS D
+            INNER JOIN
+            Zone AS Z
+            ON Z.Id = D.ZoneId
+            INNER JOIN
+            Farms AS F
+            ON F.Id = Z.FarmId
+            WHERE D.Id = @Id";
 
     }
 }

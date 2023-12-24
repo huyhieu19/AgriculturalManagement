@@ -19,11 +19,6 @@ namespace AgriculturalManagement.Controllers.Device
             this.deviceAutoService = deviceAutoService;
             this._contextAccessor = _contextAccessor;
         }
-        //[HttpGet, Route("NotDelete")]
-        //public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete()
-        //{
-        //    return await deviceAutoService.DeviceInstrumentOnOffNotDelete();
-        //}
         [HttpGet, Route("Delete")]
         [Authorize(Roles = "Administrator")]
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffDelete()

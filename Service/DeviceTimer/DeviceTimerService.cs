@@ -48,6 +48,7 @@ namespace Service.DeviceTimer
             return await repositoryManager.SaveAsync() > 0;
         }
 
+        // Update information Timer
         public async Task<bool> UpdateTimer(TimerDeviceDriverUpdateModel model)
         {
             return await repositoryManager.DeviceDriver.UpdateTimer(model);
@@ -60,12 +61,7 @@ namespace Service.DeviceTimer
             return models;
         }
 
-        public async Task<List<TimerDeviceDriverDisplayModel>> GetAllTimerHistory()
-        {
-            var entities = await repositoryManager.DeviceDriver.GetAllTimerHistory();
-            var models = mapper.Map<List<TimerDeviceDriverDisplayModel>>(entities);
-            return models;
-        }
+
         public async Task<List<TimerDeviceDriverDisplayModel>> GetTimerAvailableOfUserForUI(string userId)
         {
             var entities = await repositoryManager.DeviceDriver.GetTimerAvailableOfUserForUI(userId);
@@ -75,16 +71,17 @@ namespace Service.DeviceTimer
         #endregion
 
         #region using Dapper
-        public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetTimerAvailableOfUser(string userId)
+        public async Task<List<TimerDeviceDriverDisplayModel>> GetTimerAvailableOfUser(string userId)
         {
             var query = DeviceQuery.GetTimerAvailableOfUserSQL;
+            IEnumerable<TimerDeviceDriverDisplayModel> result;
             using (var connection = dapperContext.CreateConnection())
             {
                 connection.Open();
-                var result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query, new { UserId = userId });
+                result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query, new { UserId = userId });
                 connection.Close();
-                return result;
             }
+            return result.Where(p => p.OpenTimer >= DateTime.UtcNow || p.ShutDownTimer >= DateTime.UtcNow).ToList();
         }
 
         // Hàm này dùng để set cho trạng thái của IsRemve = true
@@ -102,6 +99,19 @@ namespace Service.DeviceTimer
             }
             connection.Close();
             return execute > 0;
+        }
+
+        public async Task<List<TimerDeviceDriverDisplayModel>> GetAllTimerHistoryByUser(string userId)
+        {
+            var query = DeviceQuery.GetTimerHistoryOfUserSQL;
+            IEnumerable<TimerDeviceDriverDisplayModel> result;
+            using (var connection = dapperContext.CreateConnection())
+            {
+                connection.Open();
+                result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query, new { UserId = userId });
+                connection.Close();
+            }
+            return result.Where(p => p.OpenTimer <= DateTime.UtcNow && p.ShutDownTimer <= DateTime.UtcNow).ToList();
         }
 
         #endregion
