@@ -6,11 +6,11 @@ namespace AgriculturalManagement.Controllers.Statistic
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SatisticController : ControllerBase
+    public class StatisticController : ControllerBase
     {
         private readonly IDataStatisticsService service;
 
-        public SatisticController(IDataStatisticsService service)
+        public StatisticController(IDataStatisticsService service)
         {
             this.service = service;
         }

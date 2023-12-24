@@ -10,7 +10,7 @@
         public string TypeDevice { get; set; } = null!;
         public bool? OnInUpperThreshold { get; set; }
         // Case: Device return value
-        public double? ThresholdValueOn { get; set; }
-        public double? ThresholdValueOff { get; set; }
+        public int? ThresholdValueOn { get; set; }
+        public int? ThresholdValueOff { get; set; }
     }
 }

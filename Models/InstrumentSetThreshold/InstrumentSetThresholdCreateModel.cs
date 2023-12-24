@@ -10,9 +10,9 @@ namespace Models
         public string TypeDevice { get; set; } = null!;
         // Case: Device return value
         [Required]
-        public double? ThresholdValueOn { get; set; }
+        public int? ThresholdValueOn { get; set; }
         [Required]
-        public double? ThresholdValueOff { get; set; }
+        public int? ThresholdValueOff { get; set; }
         [Required]
         public bool? OnInUpperThreshold { get; set; }
     }
