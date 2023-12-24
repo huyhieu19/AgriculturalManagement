@@ -18,14 +18,14 @@ namespace Repository.DeviceTimer
             Create(entity);
         }
 
-        public async Task<List<TimerDeviceEntity>> GetAllTimerHistory()
-        {
-            return await FindByCondition(prop => prop.IsSuccessON || prop.IsSuccessOFF || prop.IsRemove, false).ToListAsync();
-        }
+        //public async Task<List<TimerDeviceEntity>> GetAllTimerHistory()
+        //{
+        //    return await FindByCondition(prop => prop.IsSuccessON || prop.IsSuccessOFF || prop.IsRemove || (prop.OpenTimer < DateTime.UtcNow && prop.ShutDownTimer < DateTime.UtcNow), false).ToListAsync();
+        //}
 
         public async Task<List<TimerDeviceEntity>> GetAllTimerHistoryByDeviceId(Guid deviceId)
         {
-            return await FindByCondition(prop => prop.DeviceId == deviceId && (prop.IsSuccessON || prop.IsSuccessOFF || prop.IsRemove), false).ToListAsync();
+            return await FindByCondition(prop => prop.DeviceId == deviceId && (prop.IsSuccessON || prop.IsSuccessOFF || prop.IsRemove || (prop.OpenTimer < DateTime.UtcNow && prop.ShutDownTimer < DateTime.UtcNow)), false).ToListAsync();
         }
 
         public Task<List<TimerDeviceDriverDisplayModel>> GetTimerAvailableOfUserForUI(string userId)

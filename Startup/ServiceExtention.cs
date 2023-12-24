@@ -11,7 +11,9 @@ using Repository;
 using Repository.Contracts;
 using Service;
 using Service.Contracts;
+using Service.Contracts.DeviceThreshold;
 using Service.Contracts.Logger;
+using Service.DeviceThreshold;
 using Service.Extensions;
 using Service.Logger;
 
@@ -29,7 +31,8 @@ namespace Startup
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
             builder.Services.AddSingleton<IDeviceControlService, DeviceControlService>();
             builder.Services.AddSingleton<IDeviceJobMqtt, ProcessJobMqtt>();
-
+            builder.Services.AddSingleton<IDeviceJobInstrumentationService, DeviceJobInstrumentationService>();
+            builder.Services.AddSingleton<IProcessJobControlDevice, ProcessJobControlDevice>();
 
             builder.Services.AddHostedService<ProcessJobMqtt>();
             builder.Services.AddHostedService<TimerJobDevice>();

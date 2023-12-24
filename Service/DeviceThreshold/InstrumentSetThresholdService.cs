@@ -27,7 +27,7 @@ namespace Service.DeviceThreshold
 
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOff(string userId)
         {
-            var query = InstrumentationSetThresholdQuery.GetThreshold;
+            var query = InstrumentationSetThresholdQuery.GetThresholdForUser;
             using (var connection = dapperContext.CreateConnection())
             {
                 connection.Open();
@@ -61,12 +61,6 @@ namespace Service.DeviceThreshold
             var result = await repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffDelete();
             return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);
         }
-
-        //public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffNotDelete()
-        //{
-        //    var result = await repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffNotDelete();
-        //    return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);
-        //}
 
         public async Task DeviceInstrumentOnOffUpdate(InstrumentSetThresholdUpdateModel updateModel)
         {

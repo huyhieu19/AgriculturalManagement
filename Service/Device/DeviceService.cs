@@ -67,5 +67,18 @@ namespace Service.Device
             connection.Close();
             return execute > 0;
         }
+
+        public async Task<DeviceInformationDisplayModel> GetInforDevice(Guid deviceId)
+        {
+            var query = DeviceQuery.InformationDeviceSQL;
+            using (var connection = dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var result = await connection.QueryFirstAsync<DeviceInformationDisplayModel>(query, new { Id = deviceId });
+                connection.Close();
+                return result;
+            }
+        }
+
     }
 }

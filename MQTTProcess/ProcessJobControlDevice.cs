@@ -1,158 +1,31 @@
-﻿// Ignore Spelling: Mqtt
-
-using Common.Enum;
-using Entities;
+﻿using Common.Enum;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Models;
 using Models.Config.Mqtt;
 using Models.DeviceControl;
-using Newtonsoft.Json.Linq;
-using Service;
-using Service.Contracts.DeviceThreshold;
 using Service.Contracts.Logger;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace MQTTProcess
 {
-    public interface IDeviceJobMqtt
+    public interface IProcessJobControlDevice
     {
         Task<bool> OnOffDevice(OnOffDeviceQueryModel model);
         Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models);
     }
-    public class ProcessJobMqtt : BackgroundService, IDeviceJobMqtt
+    public class ProcessJobControlDevice : IProcessJobControlDevice
     {
         private readonly ILoggerManager logger;
         private readonly IConfiguration configuration;
-        private static List<InstrumentValueByFiveSecondEntity> _messageList = new List<InstrumentValueByFiveSecondEntity>();
-        private static int _messageCount = 0;
-        private const int MaxMessageCount = 50;
-        private readonly IDataStatisticsService dataStatisticsService;
-        private readonly IDeviceJobInstrumentationService deviceJobInstrumentation;
-
         private static MqttClient? mqttClient = null;
 
-        public ProcessJobMqtt(ILoggerManager logger, IConfiguration configuration,
-            IDataStatisticsService dataStatisticsService,
-            IDeviceJobInstrumentationService deviceJobInstrumentation)
+        public ProcessJobControlDevice(ILoggerManager logger, IConfiguration configuration)
         {
             this.logger = logger;
-            this.dataStatisticsService = dataStatisticsService;
             this.configuration = configuration;
-            this.deviceJobInstrumentation = deviceJobInstrumentation;
         }
 
-        protected async override Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            try
-            {
-                var connection = GetConnection();
-
-                while (!stoppingToken.IsCancellationRequested)
-                {
-                    logger.LogInformation("Check Connection to MQTT Broker");
-                    if (mqttClient == null || !mqttClient.IsConnected)
-                    {
-                        mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
-
-                        logger.LogInformation("Connected to MQTT Broker");
-                        string mqttTopic = $"{connection.SystemId}/r/#";
-
-                        mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
-
-                        mqttClient.Subscribe(new[] { mqttTopic }, new[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                        logger.LogInformation("Sub -> " + mqttTopic);
-                    }
-                    await Task.Delay(TimeSpan.FromSeconds(10));
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message, new LogProcessModel()
-                {
-                    LoggerProcessType = LoggerProcessType.DeviceStatistic,
-                    LogMessageDetail = ex.ToString(),
-                    ServiceName = $"{nameof(ProcessJobMqtt)} -> {nameof(ExecuteAsync)}",
-                    User = "Auto"
-                });
-                throw;
-            }
-        }
-
-        // Receive data and call data processing functions
-        private void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
-        {
-            string payload = System.Text.Encoding.Default.GetString(e.Message);
-            logger.LogInformation($"Received `{payload}` from `{e.Topic}` topic");
-            string[] topicSplits = e.Topic.Split("/");
-            //Create an InstrumentValueByFiveSecondEntity object for the incoming data
-            string deviceId = topicSplits[2];
-            string deviceType = topicSplits[3];
-            if (topicSplits[1] == "r" && topicSplits[3] == "ND_DA")
-            {
-                JObject jsonData = JObject.Parse(payload);
-                // Truy cập các trường trong đối tượng JSON
-                string temperature = (string)jsonData["ND"]!; // 1
-                string humidity = (string)jsonData["DA"]!; // 2
-
-                Task.Run(async () => await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), temperature, "ND"));
-                Task.Run(async () => await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), humidity, "DA"));
-
-                var entity1 = new InstrumentValueByFiveSecondEntity()
-                {
-                    PayLoad = temperature,
-                    DeviceId = deviceId,
-                    DeviceType = deviceType ?? null,
-                    ValueDate = DateTime.UtcNow.AddHours(+7),
-                    DeviceNumber = "ND",
-                };
-
-                Task.Run(async () => await ProcessAndSaveDataAsync(entity1));
-                var entity2 = new InstrumentValueByFiveSecondEntity()
-                {
-                    PayLoad = humidity,
-                    DeviceId = deviceId,
-                    DeviceType = deviceType ?? null,
-                    ValueDate = DateTime.UtcNow.AddHours(+7),
-                    DeviceNumber = "DA",
-                };
-                Task.Run(async () => await ProcessAndSaveDataAsync(entity2));
-
-            }
-            if (topicSplits[1] == "w")
-            {
-                // code đóng mở trạng thái thiết bị ở đây
-            }
-
-        }
-        // Receive data and push data to Mongodb
-        private async Task ProcessAndSaveDataAsync(InstrumentValueByFiveSecondEntity entity)
-        {
-            // Add the entity to the list
-            _messageList.Add(entity);
-
-            // Increment the message count
-            SetMessageCountPlusOne();
-
-            if (_messageCount >= MaxMessageCount)
-            {
-                // If the message count reaches the maximum, process and save the data
-                await dataStatisticsService.PushMultipleDataToDB(_messageList);
-                // Clear the list and reset the message count
-                _messageList.Clear();
-                SetMessageCountToZero();
-            }
-            await Task.CompletedTask;
-        }
-        private static void SetMessageCountPlusOne()
-        {
-            ProcessJobMqtt._messageCount++;
-        }
-        private static void SetMessageCountToZero()
-        {
-            ProcessJobMqtt._messageCount = 0;
-        }
         private MqttConnectionConfigModel GetConnection()
         {
             var systemId = configuration["MqttConfig:SystemId"];
@@ -249,8 +122,8 @@ namespace MQTTProcess
                 });
                 throw;
             }
-        }
 
+        }
         public async Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models)
         {
             var connection = GetConnection();

@@ -12,6 +12,8 @@ namespace Service.Contracts
 
         Task<bool> SuccessJobTurnOnDeviceTimer(int timerId, Guid deviceId);
         Task<bool> SuccessJobTurnOffDeviceTimer(int timerId, Guid deviceId);
+
+        // Lấy tất cả giá trị chưa hoàn thành khi hẹn giờ
         Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerAvailable();
         #endregion
     }

@@ -13,8 +13,8 @@
         public string? DeviceInstrumentationName { get; set; }
         public string? DeviceDriverName { get; set; }
         // Case: Device return value
-        public double? ThresholdValueOn { get; set; }
-        public double? ThresholdValueOff { get; set; }
+        public int? ThresholdValueOn { get; set; }
+        public int? ThresholdValueOff { get; set; }
         public bool IsDelete { get; set; } = false;
     }
 }
