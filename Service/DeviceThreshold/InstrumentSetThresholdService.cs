@@ -43,17 +43,17 @@ namespace Service.DeviceThreshold
             return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);
         }
 
-        public async Task DeviceInstrumentOnOffCreate(InstrumentSetThresholdCreateModel model)
+        public async Task<bool> DeviceInstrumentOnOffCreate(InstrumentSetThresholdCreateModel model)
         {
             var create = mapper.Map<ThresholdDeviceEntity>(model);
             repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffCreate(create);
-            await repositoryManager.SaveAsync();
+            return await repositoryManager.SaveAsync() > 0;
         }
 
-        public async Task DeviceInstrumentOnOffDeleteById(int Id)
+        public async Task<bool> DeviceInstrumentOnOffDeleteById(int Id)
         {
             repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffDeleteById(Id);
-            await repositoryManager.SaveAsync();
+            return await repositoryManager.SaveAsync() > 0;
         }
 
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffDelete()
@@ -62,11 +62,11 @@ namespace Service.DeviceThreshold
             return mapper.Map<IEnumerable<InstrumentSetThresholdDisplayModel>>(result);
         }
 
-        public async Task DeviceInstrumentOnOffUpdate(InstrumentSetThresholdUpdateModel updateModel)
+        public async Task<bool> DeviceInstrumentOnOffUpdate(InstrumentSetThresholdUpdateModel updateModel)
         {
             var update = mapper.Map<ThresholdDeviceEntity>(updateModel);
             repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffUpdate(update);
-            await repositoryManager.SaveAsync();
+            return await repositoryManager.SaveAsync() > 0;
         }
     }
 }

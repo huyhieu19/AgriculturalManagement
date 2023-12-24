@@ -17,9 +17,13 @@ namespace Repository.DeviceThreshold
             return await FindByCondition(p => p.DeviceDriverId == Id && !p.IsDelete, false).ToListAsync();
         }
 
-        public void DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model)
+        public async void DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model)
         {
-            Create(model);
+            var record = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId, false).ToListAsync();
+            if (record == null)
+            {
+                Create(model);
+            }
         }
 
         public void DeviceInstrumentOnOffDeleteById(int Id)

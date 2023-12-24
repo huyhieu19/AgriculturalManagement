@@ -9,7 +9,7 @@ namespace Database.ModelCreateConfiguration
         public void Configure(EntityTypeBuilder<ThresholdDeviceEntity> builder)
         {
             builder.ToTable("DeviceInstrumentThreshold");
-            builder.HasKey(x => new { x.DeviceDriverId, x.InstrumentationId });
+            builder.HasKey(x => new { x.DeviceDriverId, x.InstrumentationId, x.TypeDevice });
 
             builder.HasOne(p => p.DeviceDriver).WithMany().HasForeignKey(p => p.DeviceDriverId).OnDelete(DeleteBehavior.ClientSetNull);
 
