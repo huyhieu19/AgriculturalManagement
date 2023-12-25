@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.InstrumentSetThreshold;
 using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers.Device
@@ -48,11 +49,11 @@ namespace AgriculturalManagement.Controllers.Device
         {
             return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffCreate(model);
         }
-        [HttpDelete, Route("DeleteById")]
+        [HttpPost, Route("DeleteById")]
         [Authorize(Roles = "Administrator")]
-        public async Task<bool> DeviceInstrumentOnOffDeleteById(int Id)
+        public async Task<bool> DeviceInstrumentOnOffDeleteById(ThresholdRemoveModel model)
         {
-            return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffDeleteById(Id);
+            return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffDeleteById(model);
         }
     }
 }

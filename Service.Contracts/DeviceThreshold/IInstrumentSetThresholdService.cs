@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.InstrumentSetThreshold;
 
 namespace Service.Contracts.DeviceThreshold
 {
@@ -9,6 +10,6 @@ namespace Service.Contracts.DeviceThreshold
         Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id);
         Task<bool> DeviceInstrumentOnOffUpdate(InstrumentSetThresholdUpdateModel updateModel);
         Task<bool> DeviceInstrumentOnOffCreate(InstrumentSetThresholdCreateModel model);
-        Task<bool> DeviceInstrumentOnOffDeleteById(int Id);
+        Task<bool> DeviceInstrumentOnOffDeleteById(ThresholdRemoveModel model);
     }
 }

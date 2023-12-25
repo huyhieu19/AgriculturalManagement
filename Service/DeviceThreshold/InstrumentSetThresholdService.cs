@@ -4,6 +4,7 @@ using Dapper;
 using Database;
 using Entities;
 using Models;
+using Models.InstrumentSetThreshold;
 using Repository.Contracts;
 using Service.Contracts.DeviceThreshold;
 using Service.Contracts.Logger;
@@ -25,6 +26,7 @@ namespace Service.DeviceThreshold
             this.logger = logger;
         }
 
+        // sử dụng cho việc lấy dữ liệu hiển thị cho người dùng
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOff(string userId)
         {
             var query = InstrumentationSetThresholdQuery.GetThresholdForUser;
@@ -46,14 +48,13 @@ namespace Service.DeviceThreshold
         public async Task<bool> DeviceInstrumentOnOffCreate(InstrumentSetThresholdCreateModel model)
         {
             var create = mapper.Map<ThresholdDeviceEntity>(model);
-            repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffCreate(create);
+            await repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffCreate(create);
             return await repositoryManager.SaveAsync() > 0;
         }
 
-        public async Task<bool> DeviceInstrumentOnOffDeleteById(int Id)
+        public async Task<bool> DeviceInstrumentOnOffDeleteById(ThresholdRemoveModel model)
         {
-            repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffDeleteById(Id);
-            return await repositoryManager.SaveAsync() > 0;
+            return await repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffDeleteById(model);
         }
 
         public async Task<IEnumerable<InstrumentSetThresholdDisplayModel>> DeviceInstrumentOnOffDelete()
@@ -65,7 +66,7 @@ namespace Service.DeviceThreshold
         public async Task<bool> DeviceInstrumentOnOffUpdate(InstrumentSetThresholdUpdateModel updateModel)
         {
             var update = mapper.Map<ThresholdDeviceEntity>(updateModel);
-            repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffUpdate(update);
+            await repositoryManager.InstrumentSetThreshold.DeviceInstrumentOnOffUpdate(update);
             return await repositoryManager.SaveAsync() > 0;
         }
     }
