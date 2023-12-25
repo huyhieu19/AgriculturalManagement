@@ -30,12 +30,12 @@ namespace MQTTProcess
         private const int MaxMessageCount = 50;
         private readonly IDataStatisticsService dataStatisticsService;
         private readonly IDeviceJobInstrumentationService deviceJobInstrumentation;
-
         private static MqttClient? mqttClient = null;
 
         public ProcessJobMqtt(ILoggerManager logger, IConfiguration configuration,
-            IDataStatisticsService dataStatisticsService,
-            IDeviceJobInstrumentationService deviceJobInstrumentation)
+            IDataStatisticsService dataStatisticsService
+            , IDeviceJobInstrumentationService deviceJobInstrumentation
+            )
         {
             this.logger = logger;
             this.dataStatisticsService = dataStatisticsService;
@@ -85,7 +85,13 @@ namespace MQTTProcess
         {
             string payload = System.Text.Encoding.Default.GetString(e.Message);
             logger.LogInformation($"Received `{payload}` from `{e.Topic}` topic");
-            string[] topicSplits = e.Topic.Split("/");
+
+            Task.Run(async () => await ProcessJobReceivedPayload(payload, e.Topic));
+        }
+
+        private async Task ProcessJobReceivedPayload(string payload, string Topic)
+        {
+            string[] topicSplits = Topic.Split("/");
             //Create an InstrumentValueByFiveSecondEntity object for the incoming data
             string deviceId = topicSplits[2];
             string deviceType = topicSplits[3];
@@ -96,8 +102,8 @@ namespace MQTTProcess
                 string temperature = (string)jsonData["ND"]!; // 1
                 string humidity = (string)jsonData["DA"]!; // 2
 
-                Task.Run(async () => await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), temperature, "ND"));
-                Task.Run(async () => await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), humidity, "DA"));
+                await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), temperature, "ND");
+                await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), humidity, "DA");
 
                 var entity1 = new InstrumentValueByFiveSecondEntity()
                 {
@@ -108,7 +114,7 @@ namespace MQTTProcess
                     DeviceNumber = "ND",
                 };
 
-                Task.Run(async () => await ProcessAndSaveDataAsync(entity1));
+                await ProcessAndSaveDataAsync(entity1);
                 var entity2 = new InstrumentValueByFiveSecondEntity()
                 {
                     PayLoad = humidity,
@@ -117,15 +123,16 @@ namespace MQTTProcess
                     ValueDate = DateTime.UtcNow.AddHours(+7),
                     DeviceNumber = "DA",
                 };
-                Task.Run(async () => await ProcessAndSaveDataAsync(entity2));
+                await ProcessAndSaveDataAsync(entity2);
 
             }
             if (topicSplits[1] == "w")
             {
                 // code đóng mở trạng thái thiết bị ở đây
             }
-
         }
+
+
         // Receive data and push data to Mongodb
         private async Task ProcessAndSaveDataAsync(InstrumentValueByFiveSecondEntity entity)
         {

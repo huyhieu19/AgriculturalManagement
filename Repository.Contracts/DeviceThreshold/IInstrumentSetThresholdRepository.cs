@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Models.InstrumentSetThreshold;
 
 namespace Repository.Contracts.DeviceThreshold
 {
@@ -7,8 +8,8 @@ namespace Repository.Contracts.DeviceThreshold
         Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffNotDelete();
         Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffDelete();
         Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffByIdDeviceDriver(Guid Id);
-        void DeviceInstrumentOnOffUpdate(ThresholdDeviceEntity updateModel);
-        void DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model);
-        void DeviceInstrumentOnOffDeleteById(int Id);
+        Task DeviceInstrumentOnOffUpdate(ThresholdDeviceEntity model);
+        Task DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model);
+        Task<bool> DeviceInstrumentOnOffDeleteById(ThresholdRemoveModel model);
     }
 }
