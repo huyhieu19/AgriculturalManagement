@@ -1,6 +1,7 @@
 ﻿using Database;
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using Models.InstrumentSetThreshold;
 using Repository.Contracts.DeviceThreshold;
 
 namespace Repository.DeviceThreshold
@@ -17,14 +18,24 @@ namespace Repository.DeviceThreshold
             return await FindByCondition(p => p.DeviceDriverId == Id && !p.IsDelete, false).ToListAsync();
         }
 
-        public void DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model)
+        public async Task DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model)
         {
-            Create(model);
+            var records = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId && !p.IsDelete, false).ToListAsync();
+            if (!records.Any())
+            {
+                Create(model);
+            }
         }
 
-        public void DeviceInstrumentOnOffDeleteById(int Id)
+        public async Task<bool> DeviceInstrumentOnOffDeleteById(ThresholdRemoveModel model)
         {
-            Update(new ThresholdDeviceEntity() { Id = Id, IsDelete = true });
+            var record = await FindByCondition(p => p.Id == model.Id && !p.IsDelete, false).FirstOrDefaultAsync();
+            if (record != null)
+            {
+                record.IsDelete = true;
+                Update(record);
+            }
+            return await FactDbContext.SaveChangesAsync() > 0;
         }
 
         public async Task<IEnumerable<ThresholdDeviceEntity>> DeviceInstrumentOnOffDelete()
@@ -37,9 +48,13 @@ namespace Repository.DeviceThreshold
             return await FindByCondition(p => !p.IsDelete, false).ToListAsync();
         }
 
-        public void DeviceInstrumentOnOffUpdate(ThresholdDeviceEntity updateModel)
+        public async Task DeviceInstrumentOnOffUpdate(ThresholdDeviceEntity model)
         {
-            Update(updateModel);
+            var record = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId && !p.IsDelete, false).FirstOrDefaultAsync();
+            if (record != null)
+            {
+                Update(model);
+            }
         }
     }
 }

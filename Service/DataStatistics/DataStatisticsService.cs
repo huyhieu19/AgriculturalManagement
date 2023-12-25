@@ -111,6 +111,9 @@ namespace Service
             public StatisticType TypeStatis { get; set; }
         }
 
+
+
+
         // By Date
         public async Task<List<StatisticDisplayModel>> StatisticsByDateDataDevices(Guid DeviceId)
         {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.InstrumentSetThreshold;
 using Service.Contracts;
 
 namespace AgriculturalManagement.Controllers.Device
@@ -10,13 +11,11 @@ namespace AgriculturalManagement.Controllers.Device
     public class InstrumentSetThresholdController : ControllerBase
     {
         private readonly IServiceManager serviceManager;
-        private readonly IDeviceControlService deviceAutoService;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public InstrumentSetThresholdController(IServiceManager serviceManager, IDeviceControlService deviceAutoService, IHttpContextAccessor _contextAccessor)
+        public InstrumentSetThresholdController(IServiceManager serviceManager, IHttpContextAccessor _contextAccessor)
         {
             this.serviceManager = serviceManager;
-            this.deviceAutoService = deviceAutoService;
             this._contextAccessor = _contextAccessor;
         }
         [HttpGet, Route("Delete")]
@@ -40,24 +39,21 @@ namespace AgriculturalManagement.Controllers.Device
         }
         [HttpPost, Route("Update")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeviceInstrumentOnOffUpdate(InstrumentSetThresholdUpdateModel updateModel)
+        public async Task<bool> DeviceInstrumentOnOffUpdate(InstrumentSetThresholdUpdateModel updateModel)
         {
-            await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffUpdate(updateModel);
-            return Ok(true);
+            return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffUpdate(updateModel);
         }
         [HttpPost, Route("Create")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeviceInstrumentOnOffCreate(InstrumentSetThresholdCreateModel model)
+        public async Task<bool> DeviceInstrumentOnOffCreate(InstrumentSetThresholdCreateModel model)
         {
-            await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffCreate(model);
-            return Ok(true);
+            return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffCreate(model);
         }
-        [HttpDelete, Route("DeleteById")]
+        [HttpPost, Route("DeleteById")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeviceInstrumentOnOffDeleteById(int Id)
+        public async Task<bool> DeviceInstrumentOnOffDeleteById(ThresholdRemoveModel model)
         {
-            await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffDeleteById(Id);
-            return Ok(true);
+            return await serviceManager.InstrumentSetThreshold.DeviceInstrumentOnOffDeleteById(model);
         }
     }
 }
