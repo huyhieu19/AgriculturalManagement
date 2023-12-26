@@ -15,10 +15,10 @@ namespace AgriculturalManagement.Controllers.Statistic
             this.service = service;
         }
 
-        [HttpGet("devicesByHour")]
-        public async Task<List<StatisticDisplayModel>> StatisticsByDateDataDevices(Guid DeviceId)
+        [HttpPost("devicesByHour")]
+        public async Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevices(StatisticQueryModel model)
         {
-            return await service.StatisticsByDateDataDevices(DeviceId);
+            return await service.StatisticsByDateDataDevices(model);
         }
     }
 }

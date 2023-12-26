@@ -15,8 +15,8 @@ namespace Service
         Task WriteLog(LogProcessEntity model);
 
         // Date
-        Task<List<StatisticDisplayModel>> StatisticsByDateDataDevices(Guid DeviceId);
+        Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevices(StatisticQueryModel model);
         // Hour
-        Task<List<StatisticDisplayModel>> StatisticsByHourDataDevices(Guid DeviceId);
+        //Task<List<StatisticByDateDisplayModel>> StatisticsByHourDataDevices(Guid DeviceId);
     }
 }
