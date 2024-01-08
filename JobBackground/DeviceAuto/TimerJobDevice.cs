@@ -1,7 +1,9 @@
 ﻿using Common.Enum;
+using Entities.LogProcess;
 using Microsoft.Extensions.Hosting;
 using Models;
 using Models.DeviceControl;
+using Service;
 using Service.Contracts;
 using Service.Contracts.Logger;
 
@@ -11,11 +13,14 @@ namespace JobBackground.DeviceAuto
     {
         private readonly ILoggerManager logger;
         private readonly IDeviceControlService deviceControlService;
+        private readonly IDataStatisticsService dataStatisticsService;
+        private static List<LogDeviceStatusEntity> logDeviceStatusEntities = new List<LogDeviceStatusEntity>();
 
-        public TimerJobDevice(ILoggerManager logger, IDeviceControlService deviceControlService)
+        public TimerJobDevice(ILoggerManager logger, IDeviceControlService deviceControlService, IDataStatisticsService dataStatisticsService)
         {
             this.logger = logger;
             this.deviceControlService = deviceControlService;
+            this.dataStatisticsService = dataStatisticsService;
         }
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -71,6 +76,14 @@ namespace JobBackground.DeviceAuto
                     {
                         await deviceControlService.SuccessJobTurnOnDeviceTimer(entity.Id, entity.DeviceId);
                     }
+                    logDeviceStatusEntities.Add(new LogDeviceStatusEntity()
+                    {
+                        DeviceName = entity.NameDeviceDriver,
+                        RequestOn = true,
+                        TypeOnOff = ((int)TypeOnOff.Timer),
+                        ValueDate = DateTime.UtcNow,
+                        TimerId = entity.Id,
+                    });
                 }
             }
             if (entitiesTurnOff.Any())
@@ -92,7 +105,20 @@ namespace JobBackground.DeviceAuto
                     {
                         await deviceControlService.SuccessJobTurnOffDeviceTimer(entity.Id, entity.DeviceId);
                     }
+                    logDeviceStatusEntities.Add(new LogDeviceStatusEntity()
+                    {
+                        DeviceName = entity.NameDeviceDriver,
+                        RequestOn = false,
+                        TypeOnOff = ((int)TypeOnOff.Timer),
+                        ValueDate = DateTime.UtcNow,
+                        TimerId = entity.Id,
+                    });
                 }
+            }
+            if (logDeviceStatusEntities.Any())
+            {
+                await dataStatisticsService.PushDataLogDeviceOnOff(logDeviceStatusEntities);
+                logDeviceStatusEntities.Clear();
             }
         }
     }

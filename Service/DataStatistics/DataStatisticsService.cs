@@ -2,6 +2,7 @@
 using Dapper;
 using Database;
 using Entities;
+using Entities.LogProcess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Models;
@@ -20,6 +21,7 @@ namespace Service
     {
         private readonly IMongoCollection<InstrumentValueByFiveSecondEntity> instrumentValue;
         private readonly IMongoCollection<LogProcessEntity> logProcess;
+        private readonly IMongoCollection<LogDeviceStatusEntity> logDevice;
         private readonly MongoClient client;
         private readonly ILoggerManager logger;
         private readonly DapperContext dapperContext;
@@ -31,6 +33,7 @@ namespace Service
             var database = this.client.GetDatabase(mongoDbConfig.Value.DatabaseName);
             instrumentValue = database.GetCollection<InstrumentValueByFiveSecondEntity>(mongoDbConfig.Value.CollectionName);
             logProcess = database.GetCollection<LogProcessEntity>(mongoDbConfig.Value.CollectionLog);
+            logDevice = database.GetCollection<LogDeviceStatusEntity>(mongoDbConfig.Value.CollectionLogDevice);
             this.logger = logger;
             this.dapperContext = dapper;
         }
@@ -327,5 +330,16 @@ namespace Service
 
             return data;
         }
+        #region Log Device ONOFF
+        public async Task PushDataLogDeviceOnOff(List<LogDeviceStatusEntity> addModels)
+        {
+            await logDevice.InsertManyAsync(addModels);
+        }
+
+        public Task<List<LogDeviceStatusEntity>> PushDataLogDeviceOnOff(DeviceDataQueryModel queryModel)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

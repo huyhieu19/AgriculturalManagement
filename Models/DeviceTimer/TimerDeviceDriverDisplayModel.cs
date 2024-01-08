@@ -6,7 +6,7 @@ namespace Models.DeviceTimer
     public class TimerDeviceDriverDisplayModel
     {
         public int Id { get; set; }
-        public string? DeviceName { get; set; }
+        public string? NameDeviceDriver { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
         public string? Note { get; set; }

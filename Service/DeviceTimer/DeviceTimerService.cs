@@ -111,7 +111,7 @@ namespace Service.DeviceTimer
                 result = await connection.QueryAsync<TimerDeviceDriverDisplayModel>(query, new { UserId = userId });
                 connection.Close();
             }
-            return result.Where(p => p.OpenTimer <= DateTime.UtcNow && p.ShutDownTimer <= DateTime.UtcNow).ToList();
+            return result.Where(p => p.OpenTimer <= DateTime.UtcNow && p.ShutDownTimer <= DateTime.UtcNow).OrderByDescending(p => p.OpenTimer).ThenByDescending(p => p.ShutDownTimer).ToList();
         }
 
         #endregion

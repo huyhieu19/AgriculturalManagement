@@ -20,7 +20,7 @@ namespace Repository.DeviceThreshold
 
         public async Task DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model)
         {
-            var records = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId && !p.IsDelete, false).ToListAsync();
+            var records = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId && p.TypeDevice.ToLower() == model.TypeDevice.ToLower(), false).ToListAsync();
             if (!records.Any())
             {
                 Create(model);
@@ -29,11 +29,10 @@ namespace Repository.DeviceThreshold
 
         public async Task<bool> DeviceInstrumentOnOffDeleteById(ThresholdRemoveModel model)
         {
-            var record = await FindByCondition(p => p.Id == model.Id && !p.IsDelete, false).FirstOrDefaultAsync();
+            var record = await FindByCondition(p => p.Id == model.Id, false).FirstOrDefaultAsync();
             if (record != null)
             {
-                record.IsDelete = true;
-                Update(record);
+                Delete(record);
             }
             return await FactDbContext.SaveChangesAsync() > 0;
         }
@@ -50,7 +49,7 @@ namespace Repository.DeviceThreshold
 
         public async Task DeviceInstrumentOnOffUpdate(ThresholdDeviceEntity model)
         {
-            var record = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId && !p.IsDelete, false).FirstOrDefaultAsync();
+            var record = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId, false).FirstOrDefaultAsync();
             if (record != null)
             {
                 Update(model);

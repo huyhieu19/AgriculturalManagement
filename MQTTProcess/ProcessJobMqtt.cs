@@ -230,7 +230,7 @@ namespace MQTTProcess
                 logger.LogInformation("finished publish");
 
                 // Wait for completion or timeout (adjust timeout value as needed)
-                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(10)); // Adjust timeout as needed
+                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(3)); // Adjust timeout as needed
                 var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
 
                 if (completedTask == tcs.Task)

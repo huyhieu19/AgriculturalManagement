@@ -46,6 +46,7 @@ namespace Service
                 }
                 connection.Close();
             }
+
             return ChangeStageDB > 0;
         }
         // Hàm này dùng để set cho trạng thái của IsRemove = true và IsSuccess = true
