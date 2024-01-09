@@ -54,8 +54,8 @@ namespace JobBackground.DeviceAuto
 
             var listTimeCheckAuto = listTime.Where(t => t.IsAuto);
 
-            var entitiesTurnOn = listTimeCheckAuto.Where(p => p!.OpenTimer!.Value.Minute == DateTime.UtcNow.Minute && !p.IsSuccessON)!.ToList();
-            var entitiesTurnOff = listTimeCheckAuto.Where(p => p!.ShutDownTimer!.Value.Minute == DateTime.UtcNow.Minute && !p.IsSuccessOFF)!.ToList();
+            var entitiesTurnOn = listTimeCheckAuto.Where(p => p!.OpenTimer!.Value.Minute <= DateTime.UtcNow.Minute && !p.IsSuccessON)!.ToList();
+            var entitiesTurnOff = listTimeCheckAuto.Where(p => p!.ShutDownTimer!.Value.Minute <= DateTime.UtcNow.Minute && !p.IsSuccessOFF)!.ToList();
 
             if (entitiesTurnOn.Any())
             {

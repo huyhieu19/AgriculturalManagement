@@ -68,7 +68,7 @@ namespace Service
         public async Task<bool> SuccessJobTurnOffDeviceTimer(int timerId, Guid deviceId)
         {
             logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {timerId}");
-            var query = DeviceQuery.SuccessJobTurnOnDeviceTimerSQL;
+            var query = DeviceQuery.SuccessJobTurnOffDeviceTimerSQL;
             var connection = dapperContext.CreateConnection();
             connection.Open();
             int execute;

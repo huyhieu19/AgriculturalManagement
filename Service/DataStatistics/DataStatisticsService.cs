@@ -336,9 +336,22 @@ namespace Service
             await logDevice.InsertManyAsync(addModels);
         }
 
-        public Task<List<LogDeviceStatusEntity>> PushDataLogDeviceOnOff(DeviceDataQueryModel queryModel)
+        public async Task<BaseResModel<LogDeviceStatusEntity>> GetDataLogDeviceOnOff(LogDeviceDataQueryModel queryModel)
         {
-            throw new NotImplementedException();
+            var result =  await logDevice.Find(_ => true).ToListAsync();
+            if (queryModel.ValueDate != null)
+            {
+                result = result.Where(prop => prop.ValueDate!.Value.Date == queryModel.ValueDate.Value.Date && prop.TypeOnOff == (int)queryModel.TypeOnOff).ToList();
+            }
+            var response = new BaseResModel<LogDeviceStatusEntity>()
+            {
+                Data = result.OrderByDescending(p => p.ValueDate).Skip(queryModel.PageSize * (queryModel.PageNumber - 1)).Take(queryModel.PageSize).ToList(),
+                PageNumber = queryModel.PageNumber,
+                PageSize = queryModel.PageSize,
+                TotalCount = result.Count,
+                TotalPage = result.Count / queryModel.PageSize,
+            };
+            return response;
         }
         #endregion
     }

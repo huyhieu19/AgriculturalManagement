@@ -24,7 +24,7 @@ namespace Service
         #region Loging for auto
 
         Task PushDataLogDeviceOnOff(List<LogDeviceStatusEntity> addModels);
-        Task<List<LogDeviceStatusEntity>> PushDataLogDeviceOnOff(DeviceDataQueryModel queryModel);
+        Task<BaseResModel<LogDeviceStatusEntity>> GetDataLogDeviceOnOff(LogDeviceDataQueryModel queryModel);
 
         #endregion
     }
