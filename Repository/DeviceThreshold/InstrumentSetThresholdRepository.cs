@@ -20,7 +20,7 @@ namespace Repository.DeviceThreshold
 
         public async Task DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model)
         {
-            var records = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId && p.TypeDevice.ToLower() == model.TypeDevice.ToLower(), false).ToListAsync();
+            var records = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId, false).ToListAsync();
             if (!records.Any())
             {
                 Create(model);

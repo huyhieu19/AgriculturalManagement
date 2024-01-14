@@ -3,11 +3,14 @@ using Dapper;
 using Database;
 using Entities;
 using Entities.LogProcess;
+using EnumsNET;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Models;
 using Models.Config.Mongo;
+using Models.DeviceControl;
 using Models.DeviceData;
+using Models.InstrumentSetThreshold;
 using Models.LoggerProcess;
 using Models.Statistic;
 using MongoDB.Driver;
@@ -43,7 +46,7 @@ namespace Service
             var result = await instrumentValue.Find(_ => true).ToListAsync();
             if (queryModel.ValueDate != null)
             {
-                result = result.Where(prop => prop.ValueDate!.Value.Date == queryModel.ValueDate.Value.Date).ToList();
+                result = result.Where(prop => prop.ValueDate!.Date == queryModel.ValueDate.Value.Date).ToList();
             }
             var response = new BaseResModel<InstrumentValueByFiveSecondEntity>()
             {
@@ -111,7 +114,7 @@ namespace Service
         }
         private class DeviceTypeGet
         {
-            public string NameRef { get; set; } = string.Empty;
+            public FunctionDeviceType NameRef { get; set; }
             public string DeviceType { get; set; } = string.Empty;
             public StatisticType TypeStatis { get; set; }
         }
@@ -120,7 +123,7 @@ namespace Service
         public async Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevices(StatisticQueryModel model)
         {
             StatisticType type;
-            string nameRef = "";
+            FunctionDeviceType nameRef = FunctionDeviceType.None;
             string deviceType = "";
 
             using (var connection = dapperContext.CreateConnection())
@@ -158,43 +161,41 @@ namespace Service
             }
             return await StatisticsByDateDataDevicesValueDouble(model.DeviceId, nameRef, deviceType, model.ValueDate);
         }
-        private async Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevicesValueDouble(Guid DeviceId, string NameRef, string DeviceType, DateTime ValueDate)
+        private async Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevicesValueDouble(Guid DeviceId, FunctionDeviceType NameRef, string DeviceType, DateTime ValueDate)
         {
-            var result = await instrumentValue.Find(p => p.DeviceId!.Equals(DeviceId.ToString(), StringComparison.OrdinalIgnoreCase) && p.DeviceType == NameRef && p.ValueDate!.Value.Date == ValueDate.Date && p.PayLoad != "nan")
+            string Nameref = ((FunctionDeviceType)NameRef).AsString(EnumFormat.Description)!;
+            var result = await instrumentValue.Find(p => p.DeviceId!.Equals(DeviceId.ToString(), StringComparison.OrdinalIgnoreCase) && p.DeviceType == Nameref && p.ValueDate.Date == ValueDate.Date && p.PayLoad != "nan")
             .ToListAsync();
             List<StatisticByDateDisplayModel> data = new List<StatisticByDateDisplayModel>();
-            var nameParts = NameRef.Split('_');
 
-            for (int i = 0; i < nameParts.Length; i++)
-            {
-                var result1 = result.Where(p => p.DeviceNumber == nameParts[i]).ToList();
-                var data1 = Enumerable.Range(0, 24)
-               .GroupJoin(result1,
-                   hour => hour,
-                   item => item.ValueDate?.Hour ?? 0,
-                   (hour, group) => new
-                   {
-                       Hour = hour,
-                       Values = group.Select(item => double.TryParse(item.PayLoad, out double payloadValue) ? payloadValue : 0).ToList()
-                   })
-               .Select(group =>
+            var result1 = result.Where(p => p.DeviceNumber == Nameref).ToList();
+            var data1 = Enumerable.Range(0, 24)
+           .GroupJoin(result1,
+               hour => hour,
+               item => item.ValueDate.Hour,
+               (hour, group) => new
                {
-                   var values = group.Values;
-                   return new StatisticByDateDisplayModel
-                   {
-                       NameDevice = DeviceId.ToString(),
-                       Type = StatisticType.ValueDouble,
-                       ValueAVG = values.Any() ? values.Average() : 0,
-                       ValueMAX = values.Any() ? values.Max() : 0,
-                       ValueMIN = values.Any() ? values.Min() : 0,
-                       CountTotal = values.Count,
-                       ValueDate = ValueDate.AddHours(group.Hour)
-                   };
+                   Hour = hour,
+                   Values = group.Select(item => double.TryParse(item.PayLoad, out double payloadValue) ? payloadValue : 0).ToList()
                })
-               .OrderBy(item => item.ValueDate)
-               .ToList();
-                data.AddRange(data1);
-            }
+           .Select(group =>
+           {
+               var values = group.Values;
+               return new StatisticByDateDisplayModel
+               {
+                   NameDevice = DeviceId.ToString(),
+                   Type = StatisticType.ValueDouble,
+                   ValueAVG = values.Any() ? values.Average() : 0,
+                   ValueMAX = values.Any() ? values.Max() : 0,
+                   ValueMIN = values.Any() ? values.Min() : 0,
+                   CountTotal = values.Count,
+                   ValueDate = ValueDate.AddHours(group.Hour)
+               };
+           })
+           .OrderBy(item => item.ValueDate)
+           .ToList();
+            data.AddRange(data1);
+
             // Sử dụng JsonNumberHandling.AllowNamedFloatingPointLiterals
             var jsonSerializerOptions = new JsonSerializerOptions
             {
@@ -207,12 +208,13 @@ namespace Service
             return data;
         }
 
-        private async Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevicesValueOnOff(Guid DeviceId, string NameRef, string DeviceType)
+        private async Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevicesValueOnOff(Guid DeviceId, FunctionDeviceType NameRef, string DeviceType)
         {
-            var result = await instrumentValue.Find(p => p.DeviceId == DeviceId.ToString() && p.DeviceNumber == NameRef && p.DeviceType == DeviceType).ToListAsync();
+            string Nameref = ((FunctionDeviceType)NameRef).AsString(EnumFormat.Description)!;
+            var result = await instrumentValue.Find(p => p.DeviceId == DeviceId.ToString() && p.DeviceNumber == Nameref && p.DeviceType == DeviceType).ToListAsync();
 
             var data = result
-           .GroupBy(item => new { item.DeviceId, item.ValueDate?.Date })
+           .GroupBy(item => new { item.DeviceId, item.ValueDate.Date })
            .Select(group =>
            {
                var values = group.Select(item => double.Parse(item.PayLoad ?? "_")).ToList();
@@ -223,7 +225,7 @@ namespace Service
                    CountOn = group.Count(e => e.PayLoad == "1"),
                    CountOff = group.Count(e => e.PayLoad == "0"),
                    CountTotal = group.Count(),
-                   ValueDate = group.Key.Date.Value
+                   ValueDate = group.Key.Date
                };
            })
            .ToList();
@@ -231,48 +233,6 @@ namespace Service
             return data;
         }
 
-        // Statistic By Hour
-        //public async Task<List<StatisticByDateDisplayModel>> StatisticsByHourDataDevices(Guid DeviceId)
-        //{
-        //    StatisticType type;
-        //    string nameRef = "";
-        //    string deviceType = "";
-
-        //    using (var connection = dapperContext.CreateConnection())
-        //    {
-        //        connection.Open();
-
-        //        // Replace "YourQueryHere" with your SQL query or stored procedure
-        //        string query = "SELECT TypeStatis FROM [Device] WHERE Id = @DeviceId";
-
-        //        // Replace YourModelType with the actual type of your model
-        //        var result = await connection.QueryAsync<DeviceTypeGet>(query, new { DeviceId = DeviceId });
-
-        //        var typeObject = result.FirstOrDefault();
-
-        //        if (typeObject != null)
-        //        {
-        //            type = typeObject.TypeStatis;
-        //            nameRef = typeObject.NameRef;
-        //            deviceType = typeObject.DeviceType;
-        //        }
-        //        else
-        //        {
-        //            // Handle the case where no result is found, set a default value or throw an exception as needed
-        //            type = StatisticType.ValueDouble; // Replace Default with your actual default value
-        //        }
-        //    }
-        //    switch (type)
-        //    {
-        //        case StatisticType.ValueDouble:
-        //            return await StatisticsByHourDataDevicesValueDouble(DeviceId, nameRef, deviceType);
-        //        case StatisticType.ValueOnOff:
-        //            return await StatisticsByHourDataDevicesValueOnOff(DeviceId, nameRef, deviceType);
-        //        case StatisticType.ValueDetect:
-        //            return await StatisticsByDateDataDevicesValueDouble(DeviceId, nameRef, deviceType);
-        //    }
-        //    return await StatisticsByHourDataDevicesValueDouble(DeviceId, nameRef, deviceType);
-        //}
 
         private async Task<List<StatisticByDateDisplayModel>> StatisticsByHourDataDevicesValueDouble(Guid DeviceId, string NameRef, string DeviceType)
         {
@@ -282,7 +242,7 @@ namespace Service
             var data = Enumerable.Range(0, 24)
                 .GroupJoin(result,
                     hour => hour,
-                    item => item.ValueDate?.Hour ?? 0,
+                    item => item.ValueDate.Hour,
                     (hour, group) => new
                     {
                         Hour = hour,
@@ -312,7 +272,7 @@ namespace Service
             var result = await instrumentValue.Find(p => p.DeviceId == DeviceId.ToString() && p.DeviceNumber == NameRef && p.DeviceType == DeviceType).ToListAsync();
 
             var data = result
-           .GroupBy(item => new { item.DeviceId, item.ValueDate?.Hour, item.ValueDate?.Date })
+           .GroupBy(item => new { item.DeviceId, item.ValueDate.Hour, item.ValueDate.Date })
            .Select(group =>
            {
                var values = group.Select(item => double.Parse(item.PayLoad ?? "_")).ToList();
@@ -323,7 +283,7 @@ namespace Service
                    CountOn = group.Count(e => e.PayLoad == "1"),
                    CountOff = group.Count(e => e.PayLoad == "0"),
                    CountTotal = group.Count(),
-                   ValueDate = new DateTime(group.Key.Date.Value.Year, group.Key.Date.Value.Month, group.Key.Date.Value.Day, group.Key.Hour.Value, 0, 0),
+                   ValueDate = new DateTime(group.Key.Date.Year, group.Key.Date.Month, group.Key.Date.Day, group.Key.Hour, 0, 0),
                };
            })
            .ToList();
@@ -338,7 +298,7 @@ namespace Service
 
         public async Task<BaseResModel<LogDeviceStatusEntity>> GetDataLogDeviceOnOff(LogDeviceDataQueryModel queryModel)
         {
-            var result =  await logDevice.Find(_ => true).ToListAsync();
+            var result = await logDevice.Find(_ => true).ToListAsync();
             if (queryModel.ValueDate != null)
             {
                 result = result.Where(prop => prop.ValueDate!.Value.Date == queryModel.ValueDate.Value.Date && prop.TypeOnOff == (int)queryModel.TypeOnOff).ToList();
@@ -354,5 +314,84 @@ namespace Service
             return response;
         }
         #endregion
+
+        public async Task<List<OnOffDeviceQueryModel>> GetValueDeviceForThreshold(IEnumerable<InstrumentationGetForSystem> model)
+        {
+            var result = new List<OnOffDeviceQueryModel>();
+            foreach (var item in model)
+            {
+                var Value = await instrumentValue.Find(p => p.DeviceId!.ToLower() == item.InstrumentationId.ToString().ToLower()
+                && DateTime.UtcNow.AddHours(+7).Date == p.ValueDate.Date && DateTime.UtcNow.AddHours(+7).Hour == p.ValueDate.Hour
+                && Math.Abs(DateTime.UtcNow.AddHours(+7).Minute - p.ValueDate.Minute) < 2).SortByDescending(p => p.ValueDate).FirstOrDefaultAsync();
+                if (Value != null)
+                {
+                    int value;
+                    bool successT = int.TryParse(Value.PayLoad, out value);
+                    if (successT)
+                    {
+                        if (item.OnInUpperThreshold)
+                        {
+                            if (item.ThresholdValueOn < value && !item.DeviceDriverAction)
+                            {
+
+                                // Logic mở thiết bị điều khiển
+                                var OnOff = new OnOffDeviceQueryModel()
+                                {
+                                    DeviceId = item.DeviceDriverId,
+                                    DeviceNameNumber = "",
+                                    DeviceType = DeviceType.W,
+                                    ModuleId = item.ModuleDeviceDrId,
+                                    RequestOn = true,
+                                };
+                                result.Add(OnOff);
+                            }
+                            else if (item.ThresholdValueOff > value && item.DeviceDriverAction)
+                            {
+                                // Logic đóng thiết bị điều khiển
+                                var OnOff = new OnOffDeviceQueryModel()
+                                {
+                                    DeviceId = item.DeviceDriverId,
+                                    DeviceNameNumber = "",
+                                    DeviceType = DeviceType.W,
+                                    ModuleId = item.ModuleDeviceDrId,
+                                    RequestOn = false,
+                                };
+                                result.Add(OnOff);
+                            }
+                        }
+                        else
+                        {
+                            if (item.ThresholdValueOn < value && item.DeviceDriverAction)
+                            {
+                                // Logic đóng thiết bị điều khiển 
+                                var OnOff = new OnOffDeviceQueryModel()
+                                {
+                                    DeviceId = item.DeviceDriverId,
+                                    DeviceNameNumber = item.NameDeviceDriver ?? "",
+                                    DeviceType = DeviceType.W,
+                                    ModuleId = item.ModuleDeviceDrId,
+                                    RequestOn = false,
+                                };
+                                result.Add(OnOff);
+                            }
+                            else if (item.ThresholdValueOff > value && !item.DeviceDriverAction)
+                            {
+                                // Logic mở thiết bị điều khiển
+                                var OnOff = new OnOffDeviceQueryModel()
+                                {
+                                    DeviceId = item.DeviceDriverId,
+                                    DeviceNameNumber = "",
+                                    DeviceType = DeviceType.W,
+                                    ModuleId = item.ModuleDeviceDrId,
+                                    RequestOn = true,
+                                };
+                                result.Add(OnOff);
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
     }
 }

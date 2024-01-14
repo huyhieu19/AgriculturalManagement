@@ -62,7 +62,7 @@
         public const string GetAllTimerAvailable =
             @"SELECT 
                 TDD.*,
-				D.Name AS NameDeviceDriver,
+				D.Name AS DeviceName,
 		        D.IsAction,
 				D.IsAuto,
 				D.DeviceType,

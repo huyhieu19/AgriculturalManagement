@@ -37,6 +37,10 @@ namespace Startup
             builder.Services.AddHostedService<ProcessJobMqtt>();
             builder.Services.AddHostedService<TimerJobDevice>();
 
+            // Async 30s/1time
+            builder.Services.AddHostedService<AsyncStatusDeviceService>();
+            builder.Services.AddHostedService<ThresholdJobService>();
+
 
             // Inject background service
             //builder.Services.AddHostedService<ProcessDataReceivedFromMQTT>();

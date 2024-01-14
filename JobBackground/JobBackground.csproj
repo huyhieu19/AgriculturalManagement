@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.15" />
+    <PackageReference Include="Enums.NET" Version="4.0.1" />
     <PackageReference Include="M2MqttDotnetCore" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />

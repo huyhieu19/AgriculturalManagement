@@ -1,5 +1,4 @@
-﻿using Common.Enum;
-using Common.Queries;
+﻿using Common.Queries;
 using Dapper;
 using Database;
 using Entities.LogProcess;
@@ -29,58 +28,31 @@ namespace Service.DeviceThreshold
             this.dataStatisticsService = dataStatisticsService;
         }
 
-        public async Task<bool> RunningJobThreshold(Guid deviceId, string valueString, string typeDevice)
+        public async Task<bool> RunningJobThreshold()
         {
             loggerManager.LogInformation("Start running job threshold");
             var query = InstrumentationSetThresholdQuery.GetThresholdByInstrumentationId;
 
             IEnumerable<InstrumentationGetForSystem> result;
-            int value = -1000;
             using (var connection = dapperContext.CreateConnection())
             {
                 connection.Open();
-                result = await connection.QueryAsync<InstrumentationGetForSystem>(query, new { InstrumentationId = deviceId, TypeDevice = typeDevice });
+                result = await connection.QueryAsync<InstrumentationGetForSystem>(query);
                 connection.Close();
             }
-            bool successT = int.TryParse(valueString, out value);
-            bool success = false;
-            if (result.Any() && successT)
+            // thiết bị phải là tự động
+            var dic = await dataStatisticsService.GetValueDeviceForThreshold(result.Where(p => p.AutoDevice));
+
+            foreach (var entity in dic)
             {
-                foreach (var item in result)
-                {
-                    if (item.OnInUpperThreshold)
-                    {
-                        if (item.ThresholdValueOn < value && !item.DeviceDriverAction)
-                        {
-                            // Logic mở thiết bị điều khiển
-                            success = await TurnOnOffDevice(item.ModuleDeviceDrId, item.DeviceDriverId, true, DeviceName: item.NameDeviceDriver, thresholdId: item.Id);
-                        }
-                        else if (item.ThresholdValueOff > value && item.DeviceDriverAction)
-                        {
-                            // Logic đóng thiết bị điều khiển
-                            success = await TurnOnOffDevice(item.ModuleDeviceDrId, item.DeviceDriverId, false, DeviceName: item.NameDeviceDriver, thresholdId: item.Id);
-                        }
-                    }
-                    else
-                    {
-                        if (item.ThresholdValueOn < value && item.DeviceDriverAction)
-                        {
-                            // Logic đóng thiết bị điều khiển 
-                            success = await TurnOnOffDevice(item.ModuleDeviceDrId, item.DeviceDriverId, false, DeviceName: item.NameDeviceDriver, thresholdId: item.Id);
-                        }
-                        else if (item.ThresholdValueOff > value && !item.DeviceDriverAction)
-                        {
-                            // Logic mở thiết bị điều khiển
-                            success = await TurnOnOffDevice(item.ModuleDeviceDrId, item.DeviceDriverId, true, DeviceName: item.NameDeviceDriver, thresholdId: item.Id);
-                        }
-                    }
-                }
+                loggerManager.LogInformation("On/Off");
+                await TurnOnOffDevice(entity.ModuleId, entity.DeviceId, entity.RequestOn, DeviceName: entity.DeviceNameNumber);
             }
-            await dataStatisticsService.PushDataLogDeviceOnOff(logDeviceStatusEntities);
+
             loggerManager.LogInformation("End running job threshold");
-            return await Task.FromResult(success);
+            return await Task.FromResult(true);
         }
-        private async Task<bool> TurnOnOffDevice(Guid ModuleId, Guid DeviceId, bool isTurnOn, string? DeviceName, int? thresholdId)
+        private async Task<bool> TurnOnOffDevice(Guid ModuleId, Guid DeviceId, bool isTurnOn, string? DeviceName)
         {
             loggerManager.LogInformation($"Off Device {DeviceId}");
             var model = new OnOffDeviceQueryModel()
@@ -92,14 +64,14 @@ namespace Service.DeviceThreshold
             var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
             // ghi log đóng thiết bị tự động theo threshold
 
-            logDeviceStatusEntities.Add(new LogDeviceStatusEntity()
-            {
-                DeviceName = DeviceName,
-                RequestOn = isTurnOn,
-                TypeOnOff = ((int)TypeOnOff.Threshold),
-                ValueDate = DateTime.UtcNow,
-                ThresholdId = thresholdId,
-            });
+            //logDeviceStatusEntities.Add(new LogDeviceStatusEntity()
+            //{
+            //    DeviceName = DeviceName,
+            //    RequestOn = isTurnOn,
+            //    TypeOnOff = ((int)TypeOnOff.Threshold),
+            //    ValueDate = DateTime.UtcNow,
+            //    ThresholdId = thresholdId,
+            //});
 
             return IsComplete;
         }

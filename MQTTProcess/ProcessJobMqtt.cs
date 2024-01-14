@@ -9,7 +9,6 @@ using Models.Config.Mqtt;
 using Models.DeviceControl;
 using Newtonsoft.Json.Linq;
 using Service;
-using Service.Contracts.DeviceThreshold;
 using Service.Contracts.Logger;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
@@ -27,20 +26,17 @@ namespace MQTTProcess
         private readonly IConfiguration configuration;
         private static List<InstrumentValueByFiveSecondEntity> _messageList = new List<InstrumentValueByFiveSecondEntity>();
         private static int _messageCount = 0;
-        private const int MaxMessageCount = 50;
+        private const int MaxMessageCount = 5;
         private readonly IDataStatisticsService dataStatisticsService;
-        private readonly IDeviceJobInstrumentationService deviceJobInstrumentation;
         private static MqttClient? mqttClient = null;
 
         public ProcessJobMqtt(ILoggerManager logger, IConfiguration configuration,
             IDataStatisticsService dataStatisticsService
-            , IDeviceJobInstrumentationService deviceJobInstrumentation
             )
         {
             this.logger = logger;
             this.dataStatisticsService = dataStatisticsService;
             this.configuration = configuration;
-            this.deviceJobInstrumentation = deviceJobInstrumentation;
         }
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -94,32 +90,32 @@ namespace MQTTProcess
             string[] topicSplits = Topic.Split("/");
             //Create an InstrumentValueByFiveSecondEntity object for the incoming data
             string deviceId = topicSplits[2];
-            string deviceType = topicSplits[3];
+
+
             if (topicSplits[1] == "r" && topicSplits[3] == "ND_DA")
             {
                 JObject jsonData = JObject.Parse(payload);
                 // Truy cập các trường trong đối tượng JSON
                 string temperature = (string)jsonData["ND"]!; // 1
                 string humidity = (string)jsonData["DA"]!; // 2
+                logger.LogInformation($"Receiver Humidity: {humidity}");
 
-                await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), temperature, "ND");
-                await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), humidity, "DA");
+                //await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), temperature);
 
-                var entity1 = new InstrumentValueByFiveSecondEntity()
-                {
-                    PayLoad = temperature,
-                    DeviceId = deviceId,
-                    DeviceType = deviceType ?? null,
-                    ValueDate = DateTime.UtcNow.AddHours(+7),
-                    DeviceNumber = "ND",
-                };
 
-                await ProcessAndSaveDataAsync(entity1);
+                //var entity1 = new InstrumentValueByFiveSecondEntity()
+                //{
+                //    PayLoad = temperature,
+                //    DeviceId = deviceId,
+                //    ValueDate = DateTime.UtcNow.AddHours(+7),
+                //    DeviceNumber = "ND",
+                //};
+
+                //await ProcessAndSaveDataAsync(entity1);
                 var entity2 = new InstrumentValueByFiveSecondEntity()
                 {
                     PayLoad = humidity,
                     DeviceId = deviceId,
-                    DeviceType = deviceType ?? null,
                     ValueDate = DateTime.UtcNow.AddHours(+7),
                     DeviceNumber = "DA",
                 };

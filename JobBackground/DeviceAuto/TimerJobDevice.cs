@@ -1,5 +1,6 @@
 ﻿using Common.Enum;
 using Entities.LogProcess;
+using EnumsNET;
 using Microsoft.Extensions.Hosting;
 using Models;
 using Models.DeviceControl;
@@ -54,8 +55,8 @@ namespace JobBackground.DeviceAuto
 
             var listTimeCheckAuto = listTime.Where(t => t.IsAuto);
 
-            var entitiesTurnOn = listTimeCheckAuto.Where(p => p!.OpenTimer!.Value.Minute <= DateTime.UtcNow.Minute && !p.IsSuccessON)!.ToList();
-            var entitiesTurnOff = listTimeCheckAuto.Where(p => p!.ShutDownTimer!.Value.Minute <= DateTime.UtcNow.Minute && !p.IsSuccessOFF)!.ToList();
+            var entitiesTurnOn = listTimeCheckAuto.Where(p => p.OpenTimer != null && p!.OpenTimer!.Value.Minute == DateTime.UtcNow.Minute && !p.IsSuccessON)!.ToList();
+            var entitiesTurnOff = listTimeCheckAuto.Where(p => p.ShutDownTimer != null && p!.ShutDownTimer!.Value.Minute == DateTime.UtcNow.Minute && !p.IsSuccessOFF)!.ToList();
 
             if (entitiesTurnOn.Any())
             {
@@ -67,7 +68,7 @@ namespace JobBackground.DeviceAuto
                         ModuleId = entity.ModuleId,
                         DeviceId = entity.DeviceId,
                         DeviceType = entity.DeviceType,
-                        DeviceNameNumber = entity.NameRef,
+                        DeviceNameNumber = ((FunctionDeviceType)entity.NameRef).AsString(EnumFormat.Description)!,
                         RequestOn = true,
                     };
                     var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
@@ -78,7 +79,7 @@ namespace JobBackground.DeviceAuto
                     }
                     logDeviceStatusEntities.Add(new LogDeviceStatusEntity()
                     {
-                        DeviceName = entity.NameDeviceDriver,
+                        DeviceName = entity.DeviceName,
                         RequestOn = true,
                         TypeOnOff = ((int)TypeOnOff.Timer),
                         ValueDate = DateTime.UtcNow,
@@ -96,7 +97,7 @@ namespace JobBackground.DeviceAuto
                         ModuleId = entity.ModuleId,
                         DeviceId = entity.DeviceId,
                         DeviceType = entity.DeviceType,
-                        DeviceNameNumber = entity.NameRef,
+                        DeviceNameNumber = entity.NameRef.ToString(),
                         RequestOn = false,
                     };
                     var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
@@ -107,7 +108,7 @@ namespace JobBackground.DeviceAuto
                     }
                     logDeviceStatusEntities.Add(new LogDeviceStatusEntity()
                     {
-                        DeviceName = entity.NameDeviceDriver,
+                        DeviceName = entity.DeviceName,
                         RequestOn = false,
                         TypeOnOff = ((int)TypeOnOff.Timer),
                         ValueDate = DateTime.UtcNow,

@@ -1,7 +1,9 @@
 ﻿using Entities;
 using Entities.LogProcess;
 using Models;
+using Models.DeviceControl;
 using Models.DeviceData;
+using Models.InstrumentSetThreshold;
 using Models.LoggerProcess;
 using Models.Statistic;
 
@@ -15,6 +17,7 @@ namespace Service
         Task<BaseResModel<LogProcessEntity>> LoggerProcess(LoggerProcessQueryModel queryModel);
         Task WriteLog(LogProcessEntity model);
 
+        Task<List<OnOffDeviceQueryModel>> GetValueDeviceForThreshold(IEnumerable<InstrumentationGetForSystem> model);
         // Date
         Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevices(StatisticQueryModel model);
         // Hour

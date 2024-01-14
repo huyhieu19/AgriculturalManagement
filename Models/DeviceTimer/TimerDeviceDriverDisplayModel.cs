@@ -6,13 +6,13 @@ namespace Models.DeviceTimer
     public class TimerDeviceDriverDisplayModel
     {
         public int Id { get; set; }
-        public string? NameDeviceDriver { get; set; }
-        public DateTime? DateCreated { get; set; }
-        public DateTime? DateUpdated { get; set; }
+        public string? DeviceName { get; set; }
+        public DateTime? DateCreated { get; set; } = null;
+        public DateTime? DateUpdated { get; set; } = null;
         public string? Note { get; set; }
 
-        public DateTime? ShutDownTimer { get; set; }
-        public DateTime? OpenTimer { get; set; }
+        public DateTime? ShutDownTimer { get; set; } = null;
+        public DateTime? OpenTimer { get; set; } = null;
 
         public bool? IsAffected { get; set; }
         public bool IsSuccessON { get; set; } = false;
@@ -20,7 +20,7 @@ namespace Models.DeviceTimer
         public bool IsRemove { get; set; } = false;
         public bool IsAuto { get; set; }
         public DeviceType DeviceType { get; set; }
-        public string NameRef { get; set; } = null!;
+        public FunctionDeviceType NameRef { get; set; }
         public Guid DeviceId { get; set; }
         public Guid ModuleId { get; set; }
         public DeviceDisplayModel? DeviceModel { get; set; }
