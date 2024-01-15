@@ -21,8 +21,15 @@ namespace Repository.DeviceThreshold
         public async Task DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model)
         {
             var records = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId, false).ToListAsync();
+            var device = await FactDbContext.DeviceEntities.FirstOrDefaultAsync(p => p.Id == model.DeviceDriverId);
+
             if (!records.Any())
             {
+                if (device != null && device.IsAuto == false)
+                {
+                    device.IsAuto = true;
+                    await FactDbContext.SaveChangesAsync();
+                }
                 Create(model);
             }
         }
@@ -50,8 +57,14 @@ namespace Repository.DeviceThreshold
         public async Task DeviceInstrumentOnOffUpdate(ThresholdDeviceEntity model)
         {
             var record = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId, false).FirstOrDefaultAsync();
+            var device = await FactDbContext.DeviceEntities.FirstOrDefaultAsync(p => p.Id == model.DeviceDriverId);
             if (record != null)
             {
+                if (device != null && device.IsAuto == false)
+                {
+                    device.IsAuto = true;
+                    await FactDbContext.SaveChangesAsync();
+                }
                 Update(model);
             }
         }

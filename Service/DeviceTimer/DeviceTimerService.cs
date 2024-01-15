@@ -44,7 +44,7 @@ namespace Service.DeviceTimer
                 ShutDownTimer = model.ShutDownTimer,
             };
 
-            repositoryManager.DeviceDriver.CreateTimer(entity);
+            await repositoryManager.DeviceDriver.CreateTimer(entity);
             return await repositoryManager.SaveAsync() > 0;
         }
 

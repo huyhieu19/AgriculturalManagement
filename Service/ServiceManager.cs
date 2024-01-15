@@ -3,7 +3,6 @@ using Database;
 using Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using MQTTProcess;
 using Repository.Contracts;
 using Service.Contracts;
 using Service.Contracts.Device;
@@ -36,7 +35,7 @@ namespace Service
 
         public ServiceManager(IRepositoryManager repositoryManager,
             ILoggerManager logger,
-            IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration, DapperContext dapperContext, FactDbContext factDbContext, IDeviceJobMqtt deviceJobMqtt)
+            IMapper mapper, UserManager<UserEntity> userManager, IConfiguration configuration, DapperContext dapperContext, FactDbContext factDbContext)
         {
             this.farm = new Lazy<IFarmService>(() => new FarmService(repositoryManager, logger, mapper));
             this.zone = new Lazy<IZoneService>(() => new ZoneService(repositoryManager, mapper));
