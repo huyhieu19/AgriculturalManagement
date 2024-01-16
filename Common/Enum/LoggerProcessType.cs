@@ -11,5 +11,7 @@
         DeviceCalc = 6,
         Authentication = 7,
         DeviceControl = 8,
+        AsyncStatusDevice = 9,
+        ThresholdDevice = 10,
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Common.Enum;
 using Entities;
+using Entities.LogProcess;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Models;
@@ -14,6 +15,7 @@ namespace Service.Logger
     {
         private static ILogger logger = LogManager.GetCurrentClassLogger();
         private readonly IMongoCollection<LogProcessEntity> logProcess;
+        private readonly IMongoCollection<LogDeviceStatusEntity> logOnOff;
         private readonly MongoClient client;
         private readonly IHttpContextAccessor _contextAccessor;
 
@@ -22,6 +24,7 @@ namespace Service.Logger
             this.client = new MongoClient(mongoDbConfig.Value.ConnectionString);
             var database = this.client.GetDatabase(mongoDbConfig.Value.DatabaseName);
             logProcess = database.GetCollection<LogProcessEntity>(mongoDbConfig.Value.CollectionLog);
+            logOnOff = database.GetCollection<LogDeviceStatusEntity>(mongoDbConfig.Value.CollectionLogDevice);
             this._contextAccessor = _contextAccessor;
         }
 
@@ -87,6 +90,26 @@ namespace Service.Logger
                     });
                 });
             }
+        }
+
+        // ghi laij đóng mở thiết bị trong thời gian nào
+        public void LogMultipleOnOffDevice(List<LogDeviceStatusEntity> model)
+        {
+            if (model.Any())
+            {
+                Task.Run(async () =>
+                {
+                    await logOnOff.InsertManyAsync(model);
+                });
+            }
+        }
+
+        public void LogOnOffDevice(LogDeviceStatusEntity model)
+        {
+            Task.Run(async () =>
+            {
+                await logOnOff.InsertOneAsync(model);
+            });
         }
 
         public void LogWarning(string message, LogProcessModel? logProcessModel = null)

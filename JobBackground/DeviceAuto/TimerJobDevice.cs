@@ -1,4 +1,7 @@
-﻿using Common.Enum;
+﻿using Common.DateTimeHelper;
+using Common.Enum;
+using Entities.LogProcess;
+using EnumsNET;
 using Microsoft.Extensions.Hosting;
 using Models;
 using Models.DeviceControl;
@@ -11,6 +14,7 @@ namespace JobBackground.DeviceAuto
     {
         private readonly ILoggerManager logger;
         private readonly IDeviceControlService deviceControlService;
+        private static List<LogDeviceStatusEntity> logDeviceStatusEntities = new List<LogDeviceStatusEntity>();
 
         public TimerJobDevice(ILoggerManager logger, IDeviceControlService deviceControlService)
         {
@@ -20,37 +24,40 @@ namespace JobBackground.DeviceAuto
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            try
+            // Run every 10 seconds
+            while (true)
             {
-                // Run every 5 seconds
-                while (!stoppingToken.IsCancellationRequested)
+                try
                 {
                     logger.LogInformation("Start Timer Job service");
-                    await ToDoAsyncIsAuto(); // Simulate work.
+                    await ToDoAsyncIsAutoTimer(); // Simulate work.
                     logger.LogInformation("End Timer Job service");
                     await Task.Delay(TimeSpan.FromSeconds(10));
                 }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message, new LogProcessModel()
+                catch (Exception ex)
                 {
-                    LoggerProcessType = LoggerProcessType.DeviceTimer,
-                    LogMessageDetail = ex.ToString(),
-                    ServiceName = $"{nameof(TimerJobDevice)} -> {nameof(ExecuteAsync)}",
-                });
-                throw;
+                    // ghi lại log lỗi của job
+                    logger.LogError(ex.Message, new LogProcessModel()
+                    {
+                        LoggerProcessType = LoggerProcessType.DeviceTimer,
+                        LogMessageDetail = ex.ToString(),
+                        ServiceName = $"{nameof(TimerJobDevice)} -> {nameof(ExecuteAsync)}",
+                    });
+                    await Task.Delay(TimeSpan.FromSeconds(30));
+                    throw;
+                }
             }
+
         }
 
-        private async Task ToDoAsyncIsAuto()
+        private async Task ToDoAsyncIsAutoTimer()
         {
             var listTime = await deviceControlService.GetAllTimerAvailable();
 
             var listTimeCheckAuto = listTime.Where(t => t.IsAuto);
 
-            var entitiesTurnOn = listTimeCheckAuto.Where(p => p!.OpenTimer!.Value.Minute == DateTime.UtcNow.Minute && !p.IsSuccessON)!.ToList();
-            var entitiesTurnOff = listTimeCheckAuto.Where(p => p!.ShutDownTimer!.Value.Minute == DateTime.UtcNow.Minute && !p.IsSuccessOFF)!.ToList();
+            var entitiesTurnOn = listTimeCheckAuto.Where(p => p.OpenTimer != null && p!.OpenTimer!.Value.Round(TimeSpan.FromMinutes(1)) == DateTime.UtcNow.Round(TimeSpan.FromMinutes(1)) && !p.IsSuccessON)!.ToList();
+            var entitiesTurnOff = listTimeCheckAuto.Where(p => p.ShutDownTimer != null && p!.ShutDownTimer!.Value.Round(TimeSpan.FromMinutes(1)) == DateTime.UtcNow.Round(TimeSpan.FromMinutes(1)) && !p.IsSuccessOFF)!.ToList();
 
             if (entitiesTurnOn.Any())
             {
@@ -61,16 +68,28 @@ namespace JobBackground.DeviceAuto
                     {
                         ModuleId = entity.ModuleId,
                         DeviceId = entity.DeviceId,
+                        DeviceName = entity.DeviceName,
                         DeviceType = entity.DeviceType,
-                        DeviceNameNumber = entity.NameRef,
+                        DeviceNameNumber = ((FunctionDeviceType)entity.NameRef).AsString(EnumFormat.Description)!,
                         RequestOn = true,
                     };
+                    // thực hiện hành động đóng/mở
                     var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
                     logger.LogInformation($"On Device {IsComplete}");
                     if (IsComplete)
                     {
-                        await deviceControlService.SuccessJobTurnOnDeviceTimer(entity.Id, entity.DeviceId);
+                        IsComplete = IsComplete && await deviceControlService.SuccessJobTurnOnOffDeviceTimer(entity.Id, entity.DeviceId, model.RequestOn);
                     }
+                    // ghi log đã hoàn thành/chưa hoàn thành thời gian hẹn hiện tại
+                    logDeviceStatusEntities.Add(new LogDeviceStatusEntity()
+                    {
+                        DeviceName = entity.DeviceName,
+                        RequestOn = model.RequestOn,
+                        TypeOnOff = ((int)TypeOnOff.Timer),
+                        ValueDate = DateTime.UtcNow,
+                        TimerId = entity.Id,
+                        IsSuccess = IsComplete
+                    });
                 }
             }
             if (entitiesTurnOff.Any())
@@ -81,18 +100,37 @@ namespace JobBackground.DeviceAuto
                     var model = new OnOffDeviceQueryModel()
                     {
                         ModuleId = entity.ModuleId,
+                        DeviceName = entity.DeviceName,
                         DeviceId = entity.DeviceId,
                         DeviceType = entity.DeviceType,
-                        DeviceNameNumber = entity.NameRef,
+                        DeviceNameNumber = entity.NameRef.ToString(),
                         RequestOn = false,
                     };
+                    // thực hiện hành động đóng/mở
                     var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
                     logger.LogInformation($"On Device {IsComplete}");
+
                     if (IsComplete)
                     {
-                        await deviceControlService.SuccessJobTurnOffDeviceTimer(entity.Id, entity.DeviceId);
+                        IsComplete = IsComplete && await deviceControlService.SuccessJobTurnOnOffDeviceTimer(entity.Id, entity.DeviceId, false);
                     }
+                    // ghi log đã hoàn thành/ chưa hoàn thành thời gian hẹn hiện tại
+                    logDeviceStatusEntities.Add(new LogDeviceStatusEntity()
+                    {
+                        DeviceName = entity.DeviceName,
+                        RequestOn = false,
+                        TypeOnOff = ((int)TypeOnOff.Timer),
+                        ValueDate = DateTime.UtcNow,
+                        TimerId = entity.Id,
+                        IsSuccess = IsComplete
+                    });
                 }
+            }
+            // ghi log đã đóng mở thiết bị nào!
+            if (logDeviceStatusEntities.Any())
+            {
+                logger.LogMultipleOnOffDevice(logDeviceStatusEntities);
+                logDeviceStatusEntities.Clear();
             }
         }
     }

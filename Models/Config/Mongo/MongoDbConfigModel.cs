@@ -8,5 +8,6 @@
 
         public string CollectionName { get; set; } = null!;
         public string CollectionLog { get; set; } = null!;
+        public string CollectionLogDevice { get; set; } = null!;
     }
 }

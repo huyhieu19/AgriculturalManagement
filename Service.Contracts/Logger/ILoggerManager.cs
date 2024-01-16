@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Entities.LogProcess;
+using Models;
 
 namespace Service.Contracts.Logger
 {
@@ -8,5 +9,7 @@ namespace Service.Contracts.Logger
         void LogWarning(string message, LogProcessModel? logProcessModel = null);
         void LogDebug(string message, LogProcessModel? logProcessModel = null);
         void LogError(string message, LogProcessModel? logProcessModel = null);
+        void LogOnOffDevice(LogDeviceStatusEntity model);
+        void LogMultipleOnOffDevice(List<LogDeviceStatusEntity> model);
     }
 }

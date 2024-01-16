@@ -59,9 +59,11 @@
 
             WHERE (TDD.IsSuccessON = 0 OR TDD.IsSuccessOFF = 0) AND IsRemove = 0";
 
+        // Dùng cho hệ thống nên để IsAuto = 1
         public const string GetAllTimerAvailable =
             @"SELECT 
                 TDD.*,
+				D.Name AS DeviceName,
 		        D.IsAction,
 				D.IsAuto,
 				D.DeviceType,
@@ -74,7 +76,7 @@
             ON 
                 D.Id = TDD.DeviceId
 
-            WHERE (TDD.IsSuccessON = 0 OR TDD.IsSuccessOFF = 0) AND IsRemove = 0";
+            WHERE (TDD.IsSuccessON = 0 OR TDD.IsSuccessOFF = 0) AND IsRemove = 0 AND D.IsAuto = 1";
 
         public const string GetTimerHistoryOfUserSQL =
         @"SELECT 
@@ -115,7 +117,7 @@
                                             Set IsAuto = @IsAuto
                                             Where Id = @Id";
 
-
+        // lấy tất cả các thiết bị đang được sử dụng đê thực hiện viẹc async
         public const string AsyncDeviceIsActionSQL = @"SELECT ModuleId, Id, IsAction, IsUsed FROM [Device] WHERE IsUsed = 1 AND [DeviceType] = 'W'";
 
         // Information of Device

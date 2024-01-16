@@ -1,8 +1,8 @@
 ﻿using Common.Enum;
 
-namespace Models.DeviceControl
+namespace Models.InstrumentSetThreshold
 {
-    public class OnOffDeviceQueryModel
+    public class OnOffDeviceByThresholdModel
     {
         public Guid ModuleId { get; set; }
         public Guid DeviceId { get; set; }
@@ -10,5 +10,6 @@ namespace Models.DeviceControl
         public DeviceType DeviceType { get; set; }
         public string DeviceNameNumber { get; set; } = null!;
         public bool RequestOn { get; set; }
+        public int ThresholdId { get; set; }
     }
 }

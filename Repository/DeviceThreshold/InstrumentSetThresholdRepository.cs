@@ -20,20 +20,26 @@ namespace Repository.DeviceThreshold
 
         public async Task DeviceInstrumentOnOffCreate(ThresholdDeviceEntity model)
         {
-            var records = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId && !p.IsDelete, false).ToListAsync();
+            var records = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId, false).ToListAsync();
+            var device = await FactDbContext.DeviceEntities.FirstOrDefaultAsync(p => p.Id == model.DeviceDriverId);
+
             if (!records.Any())
             {
+                if (device != null && device.IsAuto == false)
+                {
+                    device.IsAuto = true;
+                    await FactDbContext.SaveChangesAsync();
+                }
                 Create(model);
             }
         }
 
         public async Task<bool> DeviceInstrumentOnOffDeleteById(ThresholdRemoveModel model)
         {
-            var record = await FindByCondition(p => p.Id == model.Id && !p.IsDelete, false).FirstOrDefaultAsync();
+            var record = await FindByCondition(p => p.Id == model.Id, false).FirstOrDefaultAsync();
             if (record != null)
             {
-                record.IsDelete = true;
-                Update(record);
+                Delete(record);
             }
             return await FactDbContext.SaveChangesAsync() > 0;
         }
@@ -50,9 +56,15 @@ namespace Repository.DeviceThreshold
 
         public async Task DeviceInstrumentOnOffUpdate(ThresholdDeviceEntity model)
         {
-            var record = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId && !p.IsDelete, false).FirstOrDefaultAsync();
+            var record = await FindByCondition(p => p.DeviceDriverId == model.DeviceDriverId && p.InstrumentationId == model.InstrumentationId, false).FirstOrDefaultAsync();
+            var device = await FactDbContext.DeviceEntities.FirstOrDefaultAsync(p => p.Id == model.DeviceDriverId);
             if (record != null)
             {
+                if (device != null && device.IsAuto == false)
+                {
+                    device.IsAuto = true;
+                    await FactDbContext.SaveChangesAsync();
+                }
                 Update(model);
             }
         }

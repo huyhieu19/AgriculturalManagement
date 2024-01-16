@@ -30,12 +30,16 @@ namespace Startup
             builder.Services.AddSingleton<DapperContext>();
             builder.Services.AddSingleton<IDataStatisticsService, DataStatisticsService>();
             builder.Services.AddSingleton<IDeviceControlService, DeviceControlService>();
-            builder.Services.AddSingleton<IDeviceJobMqtt, ProcessJobMqtt>();
+            //builder.Services.AddSingleton<IDeviceJobMqtt, ProcessJobMqtt>();
             builder.Services.AddSingleton<IDeviceJobInstrumentationService, DeviceJobInstrumentationService>();
             builder.Services.AddSingleton<IProcessJobControlDevice, ProcessJobControlDevice>();
 
             builder.Services.AddHostedService<ProcessJobMqtt>();
             builder.Services.AddHostedService<TimerJobDevice>();
+
+            // Async 30s/1time
+            builder.Services.AddHostedService<AsyncStatusDeviceService>();
+            builder.Services.AddHostedService<ThresholdJobService>();
 
 
             // Inject background service

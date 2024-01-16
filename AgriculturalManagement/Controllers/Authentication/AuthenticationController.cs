@@ -37,7 +37,7 @@ namespace AgriculturalManagement.Controllers.Authentication
             return result;
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Authenticate([FromBody] LoginModel loginModel)
+        public async Task<LoginResModel> Authenticate([FromBody] LoginModel loginModel)
         {
             _logger.LogInformation(message: "AuthenticationService - Login", new LogProcessModel()
             {
@@ -47,12 +47,12 @@ namespace AgriculturalManagement.Controllers.Authentication
                 User = loginModel.Email
             });
             if (!await _service.Authentication.ValidateUser(loginModel))
-                return BadRequest("Email or Password incorrect");
+                return new LoginResModel(IsSuccessed: false);
 
             var tokenModel = await _service.Authentication.CreateToken(populateExp: true);
             var profile = _service.Authentication.GetProfilebyToken(tokenModel.AccessToken);
 
-            return Ok(new { profile, tokenModel });
+            return new LoginResModel(Profile: profile, Token: tokenModel);
         }
         [HttpGet("roles")]
         public async Task<List<IdentityRole>> GetRoles() => await _service.Authentication.GetRoles();

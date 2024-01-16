@@ -12,16 +12,16 @@ namespace Repository.DeviceTimer
         {
         }
 
-
-        public void CreateTimer(TimerDeviceEntity entity)
+        public async Task CreateTimer(TimerDeviceEntity entity)
         {
+            var device = await FactDbContext.DeviceEntities.FirstOrDefaultAsync(p => p.Id == entity.DeviceId);
+            if (device != null && device.IsAuto == false)
+            {
+                device.IsAuto = true;
+                await FactDbContext.SaveChangesAsync();
+            }
             Create(entity);
         }
-
-        //public async Task<List<TimerDeviceEntity>> GetAllTimerHistory()
-        //{
-        //    return await FindByCondition(prop => prop.IsSuccessON || prop.IsSuccessOFF || prop.IsRemove || (prop.OpenTimer < DateTime.UtcNow && prop.ShutDownTimer < DateTime.UtcNow), false).ToListAsync();
-        //}
 
         public async Task<List<TimerDeviceEntity>> GetAllTimerHistoryByDeviceId(Guid deviceId)
         {
@@ -35,6 +35,8 @@ namespace Repository.DeviceTimer
 
         public async Task<bool> UpdateTimer(TimerDeviceDriverUpdateModel model)
         {
+
+            var result = true;
             var entity = await FactDbContext.TimerDeviceDriverEntities.FindAsync(model.Id);
             if (entity != null)
             {
@@ -42,8 +44,16 @@ namespace Repository.DeviceTimer
                 entity.ShutDownTimer = model.ShutDownTimer;
                 entity.DateUpdated = DateTime.UtcNow;
                 entity.OpenTimer = model.OpenTimer;
+                result = result && await FactDbContext.SaveChangesAsync() > 0;
+
+                var device = await FactDbContext.DeviceEntities.FirstOrDefaultAsync(p => p.Id == entity.DeviceId);
+                if (device != null && device.IsAuto == false)
+                {
+                    device.IsAuto = true;
+                    result = result && await FactDbContext.SaveChangesAsync() > 0;
+                }
             }
-            return await FactDbContext.SaveChangesAsync() > 0;
+            return result;
         }
     }
 }

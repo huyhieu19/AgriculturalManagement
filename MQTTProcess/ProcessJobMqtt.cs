@@ -6,55 +6,47 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Models;
 using Models.Config.Mqtt;
-using Models.DeviceControl;
 using Newtonsoft.Json.Linq;
 using Service;
-using Service.Contracts.DeviceThreshold;
 using Service.Contracts.Logger;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace MQTTProcess
 {
-    public interface IDeviceJobMqtt
-    {
-        Task<bool> OnOffDevice(OnOffDeviceQueryModel model);
-        Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models);
-    }
-    public class ProcessJobMqtt : BackgroundService, IDeviceJobMqtt
+
+    public class ProcessJobMqtt : BackgroundService
     {
         private readonly ILoggerManager logger;
         private readonly IConfiguration configuration;
         private static List<InstrumentValueByFiveSecondEntity> _messageList = new List<InstrumentValueByFiveSecondEntity>();
         private static int _messageCount = 0;
-        private const int MaxMessageCount = 50;
+        private const int MaxMessageCount = 5;
         private readonly IDataStatisticsService dataStatisticsService;
-        private readonly IDeviceJobInstrumentationService deviceJobInstrumentation;
         private static MqttClient? mqttClient = null;
 
         public ProcessJobMqtt(ILoggerManager logger, IConfiguration configuration,
             IDataStatisticsService dataStatisticsService
-            , IDeviceJobInstrumentationService deviceJobInstrumentation
             )
         {
             this.logger = logger;
             this.dataStatisticsService = dataStatisticsService;
             this.configuration = configuration;
-            this.deviceJobInstrumentation = deviceJobInstrumentation;
         }
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            try
+            int maxRetries = 5;
+            int retryCount = 0;
+            while (true)
             {
-                var connection = GetConnection();
-
-                while (!stoppingToken.IsCancellationRequested)
+                try
                 {
                     logger.LogInformation("Check Connection to MQTT Broker");
                     if (mqttClient == null || !mqttClient.IsConnected)
                     {
-                        mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                        var connection = GetConnection();
+                        mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
 
                         logger.LogInformation("Connected to MQTT Broker");
                         string mqttTopic = $"{connection.SystemId}/r/#";
@@ -66,17 +58,22 @@ namespace MQTTProcess
                     }
                     await Task.Delay(TimeSpan.FromSeconds(10));
                 }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message, new LogProcessModel()
+                catch (Exception ex)
                 {
-                    LoggerProcessType = LoggerProcessType.DeviceStatistic,
-                    LogMessageDetail = ex.ToString(),
-                    ServiceName = $"{nameof(ProcessJobMqtt)} -> {nameof(ExecuteAsync)}",
-                    User = "Auto"
-                });
-                throw;
+                    logger.LogError(ex.Message, new LogProcessModel()
+                    {
+                        LoggerProcessType = LoggerProcessType.DeviceStatistic,
+                        LogMessageDetail = ex.ToString(),
+                        ServiceName = $"{nameof(ProcessJobMqtt)} -> {nameof(ExecuteAsync)}",
+                        User = "Auto"
+                    });
+                    // Check if maximum retries reached
+                    if (retryCount >= maxRetries)
+                        throw;
+
+                    // Wait before retrying
+                    await Task.Delay(TimeSpan.FromSeconds(30));
+                }
             }
         }
 
@@ -94,32 +91,32 @@ namespace MQTTProcess
             string[] topicSplits = Topic.Split("/");
             //Create an InstrumentValueByFiveSecondEntity object for the incoming data
             string deviceId = topicSplits[2];
-            string deviceType = topicSplits[3];
+
+
             if (topicSplits[1] == "r" && topicSplits[3] == "ND_DA")
             {
                 JObject jsonData = JObject.Parse(payload);
                 // Truy cập các trường trong đối tượng JSON
                 string temperature = (string)jsonData["ND"]!; // 1
                 string humidity = (string)jsonData["DA"]!; // 2
+                logger.LogInformation($"Receiver Humidity: {humidity}");
 
-                await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), temperature, "ND");
-                await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), humidity, "DA");
+                //await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), temperature);
 
-                var entity1 = new InstrumentValueByFiveSecondEntity()
-                {
-                    PayLoad = temperature,
-                    DeviceId = deviceId,
-                    DeviceType = deviceType ?? null,
-                    ValueDate = DateTime.UtcNow.AddHours(+7),
-                    DeviceNumber = "ND",
-                };
 
-                await ProcessAndSaveDataAsync(entity1);
+                //var entity1 = new InstrumentValueByFiveSecondEntity()
+                //{
+                //    PayLoad = temperature,
+                //    DeviceId = deviceId,
+                //    ValueDate = DateTime.UtcNow.AddHours(+7),
+                //    DeviceNumber = "ND",
+                //};
+
+                //await ProcessAndSaveDataAsync(entity1);
                 var entity2 = new InstrumentValueByFiveSecondEntity()
                 {
                     PayLoad = humidity,
                     DeviceId = deviceId,
-                    DeviceType = deviceType ?? null,
                     ValueDate = DateTime.UtcNow.AddHours(+7),
                     DeviceNumber = "DA",
                 };
@@ -179,105 +176,11 @@ namespace MQTTProcess
             };
             return connection;
         }
-
-        public async Task<bool> OnOffDevice(OnOffDeviceQueryModel model)
+        private MqttClient ConnectMQTT(string broker, int port, string clientId, string username, string password)
         {
-            try
-            {
-                var connection = GetConnection();
-                if (mqttClient == null || !mqttClient.IsConnected)
-                {
-                    mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
-                }
-                string topicSub = $"{connection.SystemId}/w/#";
-                string topicPub = $"{connection.SystemId}/{model.ModuleId.ToString().ToUpper()}/w/{model.DeviceId.ToString().ToUpper()}/control";
-
-                // Define a TaskCompletionSource to signal completion
-                var tcs = new TaskCompletionSource<bool>();
-
-                void Subscribe(MqttClient client, string subscribeTopic)
-                {
-                    //Set up event handler
-
-                    client.MqttMsgPublishReceived += (sender, e) =>
-                    {
-                        string[] topicSplits = e.Topic.Split('/');
-                        string payload = System.Text.Encoding.Default.GetString(e.Message);
-                        if (topicSplits[2].ToLower() == model.DeviceId.ToString().ToLower() && topicSplits[1].ToLower() == "w" && payload.ToLower() == "c")
-                        {
-                            // Signal completion
-                            logger.LogInformation("Receive turn on device from mqtt");
-                            tcs.TrySetResult(true);
-                        };
-                    };
-                    client.Subscribe(new string[] { subscribeTopic }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                }
-
-                // Subscribe to topic
-                Subscribe(mqttClient, topicSub);
-
-                logger.LogInformation($"Subscribing topic {topicSub}");
-                // Publish the message
-                if (model.RequestOn)
-                {
-                    mqttClient.Publish(topicPub, System.Text.Encoding.UTF8.GetBytes("1"));
-                }
-                else if (!model.RequestOn)
-                {
-                    mqttClient.Publish(topicPub, System.Text.Encoding.UTF8.GetBytes("0"));
-                }
-
-                logger.LogInformation("finished publish");
-
-                // Wait for completion or timeout (adjust timeout value as needed)
-                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(10)); // Adjust timeout as needed
-                var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
-
-                if (completedTask == tcs.Task)
-                {
-                    // The task completed successfully
-                    mqttClient.Unsubscribe(new[] { topicSub });
-                    return tcs.Task.Result;
-                }
-                else
-                {
-                    // Timeout occurred
-                    mqttClient.Unsubscribe(new[] { topicSub });
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message, new LogProcessModel()
-                {
-                    LoggerProcessType = LoggerProcessType.DeviceControl,
-                    LogMessageDetail = ex.ToString(),
-                    ServiceName = $"{nameof(ProcessJobMqtt)} -> {nameof(OnOffDevice)}",
-                });
-                throw;
-            }
-        }
-
-        public async Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models)
-        {
-            var connection = GetConnection();
-            if (mqttClient == null || !mqttClient.IsConnected)
-            {
-                mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
-            }
-            for (int i = 0; i < models.Count(); i++)
-            {
-                string topic = $"{connection.SystemId}/{models[i].ModuleId.ToString().ToUpper()}/w/{models[i].Id.ToString().ToUpper()}/control";
-                if (models[i].IsAction == true)
-                {
-                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("1"));
-                }
-                else if (models[i].IsAction == false)
-                {
-                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("0"));
-                }
-            }
-            return await Task.FromResult(true);
+            MqttClient client = new MqttClient(broker, port, false, MqttSslProtocols.None, null, null);
+            client.Connect(clientId, username, password);
+            return client;
         }
     }
 }

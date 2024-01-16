@@ -1,6 +1,8 @@
 ﻿using Entities;
+using Entities.LogProcess;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.DeviceData;
 using Models.LoggerProcess;
 using Service;
 
@@ -17,10 +19,15 @@ namespace AgriculturalManagement.Controllers.Logger
             this.service = service;
         }
 
-        [HttpPost]
-        public Task<BaseResModel<LogProcessEntity>> LogProcess([FromBody] LoggerProcessQueryModel model)
+        [HttpPost("logsystem")]
+        public async Task<BaseResModel<LogProcessEntity>> LogProcess([FromBody] LoggerProcessQueryModel model)
         {
-            return service.LoggerProcess(model);
+            return await service.LoggerProcess(model);
+        }
+        [HttpPost("datadevices")]
+        public async Task<BaseResModel<LogDeviceStatusEntity>> LogDevices([FromBody] LogDeviceDataQueryModel model)
+        {
+            return await service.GetDataLogDeviceOnOff(model);
         }
     }
 }

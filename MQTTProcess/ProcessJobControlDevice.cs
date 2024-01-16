@@ -5,7 +5,6 @@ using Models.Config.Mqtt;
 using Models.DeviceControl;
 using Service.Contracts.Logger;
 using uPLibrary.Networking.M2Mqtt;
-using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace MQTTProcess
 {
@@ -53,34 +52,34 @@ namespace MQTTProcess
                 var connection = GetConnection();
                 if (mqttClient == null || !mqttClient.IsConnected)
                 {
-                    mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                    mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
                 }
                 string topicSub = $"{connection.SystemId}/w/#";
                 string topicPub = $"{connection.SystemId}/{model.ModuleId.ToString().ToUpper()}/w/{model.DeviceId.ToString().ToUpper()}/control";
 
                 // Define a TaskCompletionSource to signal completion
-                var tcs = new TaskCompletionSource<bool>();
+                //var tcs = new TaskCompletionSource<bool>();
 
-                void Subscribe(MqttClient client, string subscribeTopic)
-                {
-                    //Set up event handler
+                //void Subscribe(MqttClient client, string subscribeTopic)
+                //{
+                //    //Set up event handler
 
-                    client.MqttMsgPublishReceived += (sender, e) =>
-                    {
-                        string[] topicSplits = e.Topic.Split('/');
-                        string payload = System.Text.Encoding.Default.GetString(e.Message);
-                        if (topicSplits[2].ToLower() == model.DeviceId.ToString().ToLower() && topicSplits[1].ToLower() == "w" && payload.ToLower() == "c")
-                        {
-                            // Signal completion
-                            logger.LogInformation("Receive turn on device from mqtt");
-                            tcs.TrySetResult(true);
-                        };
-                    };
-                    client.Subscribe(new string[] { subscribeTopic }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                }
+                //    client.MqttMsgPublishReceived += (sender, e) =>
+                //    {
+                //        string[] topicSplits = e.Topic.Split('/');
+                //        string payload = System.Text.Encoding.Default.GetString(e.Message);
+                //        if (topicSplits[2].ToLower() == model.DeviceId.ToString().ToLower() && topicSplits[1].ToLower() == "w" && payload.ToLower() == "c")
+                //        {
+                //            // Signal completion
+                //            logger.LogInformation("Receive turn on device from mqtt");
+                //            tcs.TrySetResult(true);
+                //        };
+                //    };
+                //    client.Subscribe(new string[] { subscribeTopic }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
+                //}
 
                 // Subscribe to topic
-                Subscribe(mqttClient, topicSub);
+                //Subscribe(mqttClient, topicSub);
 
                 logger.LogInformation($"Subscribing topic {topicSub}");
                 // Publish the message
@@ -96,21 +95,22 @@ namespace MQTTProcess
                 logger.LogInformation("finished publish");
 
                 // Wait for completion or timeout (adjust timeout value as needed)
-                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(10)); // Adjust timeout as needed
-                var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
+                //var timeoutTask = Task.Delay(TimeSpan.FromSeconds(10)); // Adjust timeout as needed
+                //var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
 
-                if (completedTask == tcs.Task)
-                {
-                    // The task completed successfully
-                    mqttClient.Unsubscribe(new[] { topicSub });
-                    return tcs.Task.Result;
-                }
-                else
-                {
-                    // Timeout occurred
-                    mqttClient.Unsubscribe(new[] { topicSub });
-                    return false;
-                }
+                //if (completedTask == tcs.Task)
+                //{
+                //    // The task completed successfully
+                //    mqttClient.Unsubscribe(new[] { topicSub });
+                //    return tcs.Task.Result;
+                //}
+                //else
+                //{
+                //    // Timeout occurred
+                //    mqttClient.Unsubscribe(new[] { topicSub });
+                //    return false;
+                //}
+                return await Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -124,12 +124,13 @@ namespace MQTTProcess
             }
 
         }
+        // Đồng bộ trạng thái thiết bị mới nhất
         public async Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models)
         {
             var connection = GetConnection();
             if (mqttClient == null || !mqttClient.IsConnected)
             {
-                mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
             }
             for (int i = 0; i < models.Count(); i++)
             {
@@ -144,6 +145,12 @@ namespace MQTTProcess
                 }
             }
             return await Task.FromResult(true);
+        }
+        private MqttClient ConnectMQTT(string broker, int port, string clientId, string username, string password)
+        {
+            MqttClient client = new MqttClient(broker, port, false, MqttSslProtocols.None, null, null);
+            client.Connect(clientId, username, password);
+            return client;
         }
     }
 }
