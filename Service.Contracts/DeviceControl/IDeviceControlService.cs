@@ -8,10 +8,7 @@ namespace Service.Contracts
         #region Đóng Mở thiết bị
         Task<bool> DeviceDriverOnOff(OnOffDeviceQueryModel model);
         Task<bool> AsyncStatusDeviceControl();
-
-
-        Task<bool> SuccessJobTurnOnDeviceTimer(int timerId, Guid deviceId);
-        Task<bool> SuccessJobTurnOffDeviceTimer(int timerId, Guid deviceId);
+        Task<bool> SuccessJobTurnOnOffDeviceTimer(int timerId, Guid deviceId, bool IsTurnOn);
 
         // Lấy tất cả giá trị chưa hoàn thành khi hẹn giờ
         Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerAvailable();

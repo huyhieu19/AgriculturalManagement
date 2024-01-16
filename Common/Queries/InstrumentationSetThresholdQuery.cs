@@ -86,10 +86,11 @@ GROUP BY
 	A.IsAuto";
 
         public const string GetThresholdByInstrumentationId = @"
-                                                                SELECT
+            SELECT
 		A.DeviceName AS NameDeviceDriver,
     A.DeviceDriverId,
     A.Id,
+	A.ModuleId AS ModuleDriverId,
     A.OnInUpperThreshold,
     A.InstrumentationId,
     A.DeviceName AS DeviceDriverName,
@@ -106,7 +107,8 @@ FROM
             DTT.*,
             Ex.IsActionDevice,
             Ex.DeviceName AS DeviceName,
-			Ex.IsAuto
+			Ex.IsAuto,
+			Ex.ModuleId
         FROM
             [DeviceInstrumentThreshold] DTT
         INNER JOIN
@@ -120,6 +122,7 @@ FROM
 					D.IsAuTo
                 FROM
                     Device AS D
+				
                 INNER JOIN
                     Module AS M ON M.Id = D.ModuleId
             ) AS Ex ON Ex.DeviceId = DTT.DeviceDriverId
@@ -147,7 +150,7 @@ INNER JOIN
             ) AS Ex ON Ex.DeviceId = DTT.InstrumentationId
     ) AS B ON A.DeviceDriverId = B.DeviceDriverId AND A.InstrumentationId = B.InstrumentationId
 WHERE
-    A.IsDelete = 0
+    A.IsDelete = 0 AND A.IsAuto = 1
 GROUP BY
     A.Id,
     A.DeviceDriverId,
@@ -158,6 +161,7 @@ GROUP BY
     B.DeviceName,
     A.ThresholdValueOff,
     A.ThresholdValueOn,
-	A.IsAuto";
+	A.IsAuto,
+	A.ModuleId";
     }
 }

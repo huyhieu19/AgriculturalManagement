@@ -1,4 +1,5 @@
-﻿using Common.Enum;
+﻿using Common.DateTimeHelper;
+using Common.Enum;
 using Dapper;
 using Database;
 using Entities;
@@ -8,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Models;
 using Models.Config.Mongo;
-using Models.DeviceControl;
 using Models.DeviceData;
 using Models.InstrumentSetThreshold;
 using Models.LoggerProcess;
@@ -301,7 +301,11 @@ namespace Service
             var result = await logDevice.Find(_ => true).ToListAsync();
             if (queryModel.ValueDate != null)
             {
-                result = result.Where(prop => prop.ValueDate!.Value.Date == queryModel.ValueDate.Value.Date && prop.TypeOnOff == (int)queryModel.TypeOnOff).ToList();
+                result = result.Where(prop => prop.ValueDate!.Value.Date == queryModel.ValueDate.Value.Date).ToList();
+            }
+            if (queryModel.TypeOnOff != null)
+            {
+                result = result.Where(prop => prop.TypeOnOff == (int)queryModel.TypeOnOff).ToList();
             }
             var response = new BaseResModel<LogDeviceStatusEntity>()
             {
@@ -315,14 +319,17 @@ namespace Service
         }
         #endregion
 
-        public async Task<List<OnOffDeviceQueryModel>> GetValueDeviceForThreshold(IEnumerable<InstrumentationGetForSystem> model)
+        public async Task<List<OnOffDeviceByThresholdModel>> GetValueDeviceForThreshold(IEnumerable<InstrumentationGetForSystem> model)
         {
-            var result = new List<OnOffDeviceQueryModel>();
+            var result = new List<OnOffDeviceByThresholdModel>();
             foreach (var item in model)
             {
+                logger.LogInformation("Time: " + DateTime.UtcNow.AddHours(+7).Round(TimeSpan.FromMinutes(1)));
+
                 var Value = await instrumentValue.Find(p => p.DeviceId!.ToLower() == item.InstrumentationId.ToString().ToLower()
-                && DateTime.UtcNow.AddHours(+7).Date == p.ValueDate.Date && DateTime.UtcNow.AddHours(+7).Hour == p.ValueDate.Hour
-                && Math.Abs(DateTime.UtcNow.AddHours(+7).Minute - p.ValueDate.Minute) < 2).SortByDescending(p => p.ValueDate).FirstOrDefaultAsync();
+                //&& DateTime.UtcNow.AddHours(+7).Round(TimeSpan.FromMinutes(1)) == p.ValueDate.Date.Round(TimeSpan.FromMinutes(1))
+                ).SortByDescending(p => p.ValueDate).FirstOrDefaultAsync();
+
                 if (Value != null)
                 {
                     int value;
@@ -335,26 +342,28 @@ namespace Service
                             {
 
                                 // Logic mở thiết bị điều khiển
-                                var OnOff = new OnOffDeviceQueryModel()
+                                var OnOff = new OnOffDeviceByThresholdModel()
                                 {
                                     DeviceId = item.DeviceDriverId,
-                                    DeviceNameNumber = "",
+                                    DeviceName = item.NameDeviceDriver,
                                     DeviceType = DeviceType.W,
-                                    ModuleId = item.ModuleDeviceDrId,
+                                    ModuleId = item.ModuleDriverId,
                                     RequestOn = true,
+                                    ThresholdId = item.Id,
                                 };
                                 result.Add(OnOff);
                             }
                             else if (item.ThresholdValueOff > value && item.DeviceDriverAction)
                             {
                                 // Logic đóng thiết bị điều khiển
-                                var OnOff = new OnOffDeviceQueryModel()
+                                var OnOff = new OnOffDeviceByThresholdModel()
                                 {
                                     DeviceId = item.DeviceDriverId,
-                                    DeviceNameNumber = "",
+                                    DeviceName = item.NameDeviceDriver,
                                     DeviceType = DeviceType.W,
-                                    ModuleId = item.ModuleDeviceDrId,
+                                    ModuleId = item.ModuleDriverId,
                                     RequestOn = false,
+                                    ThresholdId = item.Id,
                                 };
                                 result.Add(OnOff);
                             }
@@ -364,26 +373,28 @@ namespace Service
                             if (item.ThresholdValueOn < value && item.DeviceDriverAction)
                             {
                                 // Logic đóng thiết bị điều khiển 
-                                var OnOff = new OnOffDeviceQueryModel()
+                                var OnOff = new OnOffDeviceByThresholdModel()
                                 {
                                     DeviceId = item.DeviceDriverId,
-                                    DeviceNameNumber = item.NameDeviceDriver ?? "",
+                                    DeviceName = item.NameDeviceDriver,
                                     DeviceType = DeviceType.W,
-                                    ModuleId = item.ModuleDeviceDrId,
+                                    ModuleId = item.ModuleDriverId,
                                     RequestOn = false,
+                                    ThresholdId = item.Id,
                                 };
                                 result.Add(OnOff);
                             }
                             else if (item.ThresholdValueOff > value && !item.DeviceDriverAction)
                             {
                                 // Logic mở thiết bị điều khiển
-                                var OnOff = new OnOffDeviceQueryModel()
+                                var OnOff = new OnOffDeviceByThresholdModel()
                                 {
                                     DeviceId = item.DeviceDriverId,
-                                    DeviceNameNumber = "",
+                                    DeviceName = item.NameDeviceDriver,
                                     DeviceType = DeviceType.W,
-                                    ModuleId = item.ModuleDeviceDrId,
+                                    ModuleId = item.ModuleDriverId,
                                     RequestOn = true,
+                                    ThresholdId = item.Id,
                                 };
                                 result.Add(OnOff);
                             }

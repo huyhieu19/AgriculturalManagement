@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Common.Enum;
+using Microsoft.Extensions.Hosting;
+using Models;
+using MQTTProcess;
 using Service.Contracts.DeviceThreshold;
 using Service.Contracts.Logger;
 
@@ -17,12 +20,27 @@ namespace JobBackground.DeviceAuto
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            while (true)
             {
-                logger.LogInformation("Start threshold");
-                await deviceJobInstrumentation.RunningJobThreshold();
-                await Task.Delay(TimeSpan.FromSeconds(10));
-                logger.LogInformation("End threshold");
+                try
+                {
+                    logger.LogInformation("Start threshold");
+                    await deviceJobInstrumentation.RunningJobThreshold();
+                    await Task.Delay(TimeSpan.FromSeconds(10));
+                    logger.LogInformation("End threshold");
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex.Message, new LogProcessModel()
+                    {
+                        LoggerProcessType = LoggerProcessType.ThresholdDevice,
+                        LogMessageDetail = ex.ToString(),
+                        ServiceName = $"{nameof(ProcessJobMqtt)} -> {nameof(ExecuteAsync)}",
+                        User = "Auto"
+                    });
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                    throw;
+                }
             }
         }
     }

@@ -36,16 +36,17 @@ namespace MQTTProcess
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            try
+            int maxRetries = 5;
+            int retryCount = 0;
+            while (true)
             {
-                var connection = GetConnection();
-
-                while (!stoppingToken.IsCancellationRequested)
+                try
                 {
                     logger.LogInformation("Check Connection to MQTT Broker");
                     if (mqttClient == null || !mqttClient.IsConnected)
                     {
-                        mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                        var connection = GetConnection();
+                        mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
 
                         logger.LogInformation("Connected to MQTT Broker");
                         string mqttTopic = $"{connection.SystemId}/r/#";
@@ -57,17 +58,22 @@ namespace MQTTProcess
                     }
                     await Task.Delay(TimeSpan.FromSeconds(10));
                 }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message, new LogProcessModel()
+                catch (Exception ex)
                 {
-                    LoggerProcessType = LoggerProcessType.DeviceStatistic,
-                    LogMessageDetail = ex.ToString(),
-                    ServiceName = $"{nameof(ProcessJobMqtt)} -> {nameof(ExecuteAsync)}",
-                    User = "Auto"
-                });
-                throw;
+                    logger.LogError(ex.Message, new LogProcessModel()
+                    {
+                        LoggerProcessType = LoggerProcessType.DeviceStatistic,
+                        LogMessageDetail = ex.ToString(),
+                        ServiceName = $"{nameof(ProcessJobMqtt)} -> {nameof(ExecuteAsync)}",
+                        User = "Auto"
+                    });
+                    // Check if maximum retries reached
+                    if (retryCount >= maxRetries)
+                        throw;
+
+                    // Wait before retrying
+                    await Task.Delay(TimeSpan.FromSeconds(30));
+                }
             }
         }
 
@@ -169,6 +175,12 @@ namespace MQTTProcess
                 UserPW = mqttPW!
             };
             return connection;
+        }
+        private MqttClient ConnectMQTT(string broker, int port, string clientId, string username, string password)
+        {
+            MqttClient client = new MqttClient(broker, port, false, MqttSslProtocols.None, null, null);
+            client.Connect(clientId, username, password);
+            return client;
         }
     }
 }

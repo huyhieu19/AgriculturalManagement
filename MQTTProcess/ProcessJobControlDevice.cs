@@ -5,7 +5,6 @@ using Models.Config.Mqtt;
 using Models.DeviceControl;
 using Service.Contracts.Logger;
 using uPLibrary.Networking.M2Mqtt;
-using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace MQTTProcess
 {
@@ -53,7 +52,7 @@ namespace MQTTProcess
                 var connection = GetConnection();
                 if (mqttClient == null || !mqttClient.IsConnected)
                 {
-                    mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                    mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
                 }
                 string topicSub = $"{connection.SystemId}/w/#";
                 string topicPub = $"{connection.SystemId}/{model.ModuleId.ToString().ToUpper()}/w/{model.DeviceId.ToString().ToUpper()}/control";
@@ -125,12 +124,13 @@ namespace MQTTProcess
             }
 
         }
+        // Đồng bộ trạng thái thiết bị mới nhất
         public async Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models)
         {
             var connection = GetConnection();
             if (mqttClient == null || !mqttClient.IsConnected)
             {
-                mqttClient = Mqtt.ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
             }
             for (int i = 0; i < models.Count(); i++)
             {
@@ -145,6 +145,12 @@ namespace MQTTProcess
                 }
             }
             return await Task.FromResult(true);
+        }
+        private MqttClient ConnectMQTT(string broker, int port, string clientId, string username, string password)
+        {
+            MqttClient client = new MqttClient(broker, port, false, MqttSslProtocols.None, null, null);
+            client.Connect(clientId, username, password);
+            return client;
         }
     }
 }

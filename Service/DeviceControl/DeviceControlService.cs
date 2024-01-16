@@ -13,7 +13,6 @@ namespace Service
     {
         private readonly DapperContext dapperContext;
         private readonly ILoggerManager logger;
-        //private readonly IDeviceJobMqtt deviceJobMqtt;
         private readonly IProcessJobControlDevice processJobControlDevice;
 
         public DeviceControlService(DapperContext dapperContext, ILoggerManager logger, IProcessJobControlDevice processJobControlDevice)
@@ -22,17 +21,14 @@ namespace Service
             this.logger = logger;
             this.processJobControlDevice = processJobControlDevice;
         }
-
         #region Open or Close Device
 
-        // Tắt device driver ---> IsAcction = false || mở device IsAcction = true
-        // Vd: Systemid/ModuleId/DeviceId/MB-1
+        // Đóng/mở thiết bị ngoại vi
         public async Task<bool> DeviceDriverOnOff(OnOffDeviceQueryModel model)
         {
             logger.LogInformation($"DeviceDriver: Turn off or on --> DeviceDriverId: {model.DeviceId}");
 
             string OnOffSQL = DeviceQuery.UpdateTurnOnOffSQL;
-            //var turnOffByMqtt = await deviceJobMqtt.OnOffDevice(model);
             var turnOffByMqtt = await processJobControlDevice.OnOffDevice(model);
             int ChangeStageDB = 0;
             if (turnOffByMqtt)
@@ -46,39 +42,41 @@ namespace Service
                 }
                 connection.Close();
             }
-
             return ChangeStageDB > 0;
         }
+
         // Hàm này dùng để set cho trạng thái của IsRemove = true và IsSuccess = true
-        public async Task<bool> SuccessJobTurnOnDeviceTimer(int timerId, Guid deviceId)
+        public async Task<bool> SuccessJobTurnOnOffDeviceTimer(int timerId, Guid deviceId, bool IsTurnOn)
         {
             logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {timerId}");
-            var query = DeviceQuery.SuccessJobTurnOnDeviceTimerSQL;
-            var connection = dapperContext.CreateConnection();
-            connection.Open();
-            int execute;
-            using (var trans = connection.BeginTransaction())
+            if (IsTurnOn)
             {
-                execute = await connection.ExecuteAsync(query, new { Id = timerId, DeviceId = deviceId }, transaction: trans);
-                trans.Commit();
+                var query = DeviceQuery.SuccessJobTurnOnDeviceTimerSQL;
+                var connection = dapperContext.CreateConnection();
+                connection.Open();
+                int execute;
+                using (var trans = connection.BeginTransaction())
+                {
+                    execute = await connection.ExecuteAsync(query, new { Id = timerId, DeviceId = deviceId }, transaction: trans);
+                    trans.Commit();
+                }
+                connection.Close();
+                return execute > 0;
             }
-            connection.Close();
-            return execute > 0;
-        }
-        public async Task<bool> SuccessJobTurnOffDeviceTimer(int timerId, Guid deviceId)
-        {
-            logger.LogInformation($"DeviceDriver: Set status to complete --> DeviceDriverId: {timerId}");
-            var query = DeviceQuery.SuccessJobTurnOffDeviceTimerSQL;
-            var connection = dapperContext.CreateConnection();
-            connection.Open();
-            int execute;
-            using (var trans = connection.BeginTransaction())
+            else
             {
-                execute = await connection.ExecuteAsync(query, new { Id = timerId, DeviceId = deviceId }, transaction: trans);
-                trans.Commit();
+                var query = DeviceQuery.SuccessJobTurnOffDeviceTimerSQL;
+                var connection = dapperContext.CreateConnection();
+                connection.Open();
+                int execute;
+                using (var trans = connection.BeginTransaction())
+                {
+                    execute = await connection.ExecuteAsync(query, new { Id = timerId, DeviceId = deviceId }, transaction: trans);
+                    trans.Commit();
+                }
+                connection.Close();
+                return execute > 0;
             }
-            connection.Close();
-            return execute > 0;
         }
 
         public async Task<IEnumerable<TimerDeviceDriverDisplayModel>> GetAllTimerAvailable()
@@ -98,6 +96,7 @@ namespace Service
         #region Async status
         public async Task<bool> AsyncStatusDeviceControl()
         {
+            // lấy ra thiết bị ngoại vi và trạng thái của thiết bị
             var query = DeviceQuery.AsyncDeviceIsActionSQL;
             IEnumerable<StatusDeviceControlModel> result;
             using (var connection = dapperContext.CreateConnection())

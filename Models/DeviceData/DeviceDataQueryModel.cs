@@ -1,5 +1,4 @@
 ﻿using Common.Enum;
-using System.Diagnostics.Eventing.Reader;
 
 namespace Models.DeviceData
 {
@@ -11,6 +10,6 @@ namespace Models.DeviceData
     public class LogDeviceDataQueryModel : BaseQueryModel
     {
         public DateTime? ValueDate { get; set; }
-        public TypeOnOff TypeOnOff { get; set; }
+        public TypeOnOff? TypeOnOff { get; set; } = null;
     }
 }

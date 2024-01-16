@@ -13,5 +13,6 @@
         public int? ThresholdValueOn { get; set; }
         public int? ThresholdValueOff { get; set; }
         public bool IsDelete { get; set; } = false;
+        public bool? AutoDevice { get; set; } = false;
     }
 }

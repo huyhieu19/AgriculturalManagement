@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Common.Enum;
+using Microsoft.Extensions.Hosting;
+using Models;
+using MQTTProcess;
 using Service.Contracts;
 using Service.Contracts.Logger;
 
@@ -16,12 +19,28 @@ namespace JobBackground.DeviceAuto
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            while (true)
             {
-                logger.LogInformation("Start Async");
-                await deviceControlService.AsyncStatusDeviceControl(); // Simulate work.
-                await Task.Delay(TimeSpan.FromSeconds(30));
-                logger.LogInformation("End Async");
+                try
+                {
+                    logger.LogInformation("Start Async");
+                    await deviceControlService.AsyncStatusDeviceControl(); // Simulate work.
+                    await Task.Delay(TimeSpan.FromSeconds(30));
+                    logger.LogInformation("End Async");
+                }
+                catch (Exception ex)
+                {
+                    // thưc hiện ghi log
+                    logger.LogError(ex.Message, new LogProcessModel()
+                    {
+                        LoggerProcessType = LoggerProcessType.AsyncStatusDevice,
+                        LogMessageDetail = ex.ToString(),
+                        ServiceName = $"{nameof(ProcessJobMqtt)} -> {nameof(ExecuteAsync)}",
+                        User = "Auto"
+                    });
+                    await Task.Delay(TimeSpan.FromSeconds(30));
+                    throw;
+                }
             }
         }
     }

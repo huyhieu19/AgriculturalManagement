@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public Guid DeviceDriverId { get; set; }
         public string? NameDeviceDriver { get; set; }
-        public Guid ModuleDeviceDrId { get; set; }
+        public Guid ModuleDriverId { get; set; }
         public Guid InstrumentationId { get; set; }
         public bool OnInUpperThreshold { get; set; }
         public bool DeviceDriverAction { get; set; }
