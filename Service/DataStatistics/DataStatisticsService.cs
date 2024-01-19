@@ -1,5 +1,4 @@
-﻿using Common.DateTimeHelper;
-using Common.Enum;
+﻿using Common.Enum;
 using Dapper;
 using Database;
 using Entities;
@@ -324,7 +323,7 @@ namespace Service
             var result = new List<OnOffDeviceByThresholdModel>();
             foreach (var item in model)
             {
-                logger.LogInformation("Time: " + DateTime.UtcNow.AddHours(+7).Round(TimeSpan.FromMinutes(1)));
+                //logger.LogInformation("Time: " + DateTime.UtcNow.AddHours(+7).Round(TimeSpan.FromMinutes(1)));
 
                 var Value = await instrumentValue.Find(p => p.DeviceId!.ToLower() == item.InstrumentationId.ToString().ToLower()
                 //&& DateTime.UtcNow.AddHours(+7).Round(TimeSpan.FromMinutes(1)) == p.ValueDate.Date.Round(TimeSpan.FromMinutes(1))

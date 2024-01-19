@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Common.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.DeviceTimer;
 using Models.Farm;
 using Service.Contracts;
 using System.Security.Claims;
@@ -59,6 +61,14 @@ namespace AgriculturalManagement.Controllers.Farm
         {
             var id = httpContextAccessor.HttpContext?.User.FindFirstValue("Id");
             return id;
+        }
+
+        // Get Farm, Zone, Device for process add timer to device
+        [HttpPost, Route("DeviceDriverByFarmZone")]
+        public async Task<DeviceDriverByFarmDisplayModel> DeviceDriverByFarmZone([FromQuery] DeviceType deviceType)
+        {
+            var userId = GetUserId();
+            return await serviceManager.Farm.DeviceDriverByFarmZone(userId!, deviceType);
         }
     }
 }
