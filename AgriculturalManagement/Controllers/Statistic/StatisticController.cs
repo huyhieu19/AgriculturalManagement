@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Models.Statistic;
 using Service;
 
 namespace AgriculturalManagement.Controllers.Statistic
@@ -15,10 +14,10 @@ namespace AgriculturalManagement.Controllers.Statistic
             this.service = service;
         }
 
-        [HttpPost("devicesByHour")]
-        public async Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevices(StatisticQueryModel model)
-        {
-            return await service.StatisticsByDateDataDevices(model);
-        }
+        //[HttpPost("devicesByHour")]
+        //public async Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevices(StatisticQueryModel model)
+        //{
+        //    return await service.StatisticsByDateDataDevices(model);
+        //}
     }
 }

@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Models;
 using Models.Config.Mqtt;
-using Newtonsoft.Json.Linq;
 using Service;
 using Service.Contracts.Logger;
 using uPLibrary.Networking.M2Mqtt;
@@ -42,19 +41,19 @@ namespace MQTTProcess
             {
                 try
                 {
-                    logger.LogInformation("Check Connection to MQTT Broker");
+                    logger.LogInformation("0. Check Connection to MQTT Broker");
                     if (mqttClient == null || !mqttClient.IsConnected)
                     {
                         var connection = GetConnection();
                         mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
 
-                        logger.LogInformation("Connected to MQTT Broker");
+                        logger.LogInformation("0. Connected to MQTT Broker");
                         string mqttTopic = $"{connection.SystemId}/r/#";
 
                         mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
 
                         mqttClient.Subscribe(new[] { mqttTopic }, new[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
-                        logger.LogInformation("Sub -> " + mqttTopic);
+                        logger.LogInformation("0. Sub -> " + mqttTopic);
                     }
                     await Task.Delay(TimeSpan.FromSeconds(10));
                 }
@@ -88,44 +87,33 @@ namespace MQTTProcess
 
         private async Task ProcessJobReceivedPayload(string payload, string Topic)
         {
-            string[] topicSplits = Topic.Split("/");
-            //Create an InstrumentValueByFiveSecondEntity object for the incoming data
-            string deviceId = topicSplits[2];
-
-
-            if (topicSplits[1] == "r" && topicSplits[3] == "ND_DA")
+            try
             {
-                JObject jsonData = JObject.Parse(payload);
-                // Truy cập các trường trong đối tượng JSON
-                string temperature = (string)jsonData["ND"]!; // 1
-                string humidity = (string)jsonData["DA"]!; // 2
-                logger.LogInformation($"Receiver Humidity: {humidity}");
+                string[] topicSplits = Topic.Split("/");
+                //Create an InstrumentValueByFiveSecondEntity object for the incoming data
+                string moduleId = topicSplits[2];
 
-                //await deviceJobInstrumentation.RunningJobThreshold(new Guid(deviceId), temperature);
-
-
-                //var entity1 = new InstrumentValueByFiveSecondEntity()
-                //{
-                //    PayLoad = temperature,
-                //    DeviceId = deviceId,
-                //    ValueDate = DateTime.UtcNow.AddHours(+7),
-                //    DeviceNumber = "ND",
-                //};
-
-                //await ProcessAndSaveDataAsync(entity1);
-                var entity2 = new InstrumentValueByFiveSecondEntity()
+                if (topicSplits[1] == "r")
                 {
-                    PayLoad = humidity,
-                    DeviceId = deviceId,
-                    ValueDate = DateTime.UtcNow.AddHours(+7),
-                    DeviceNumber = "DA",
-                };
-                await ProcessAndSaveDataAsync(entity2);
+                    //JObject jsonData = JObject.Parse(payload);
+                    var entity = new InstrumentValueByFiveSecondEntity()
+                    {
+                        PayLoad = payload,
+                        ModuleId = moduleId,
+                        ValueDate = DateTime.UtcNow.AddHours(+7),
+                    };
+                    await ProcessAndSaveDataAsync(entity);
+                    logger.LogInformation($"Receiver: {payload}");
 
+                }
+                if (topicSplits[1] == "w")
+                {
+                    // code đóng mở trạng thái thiết bị ở đây
+                }
             }
-            if (topicSplits[1] == "w")
+            catch
             {
-                // code đóng mở trạng thái thiết bị ở đây
+                Task.CompletedTask.Wait();
             }
         }
 
@@ -133,21 +121,28 @@ namespace MQTTProcess
         // Receive data and push data to Mongodb
         private async Task ProcessAndSaveDataAsync(InstrumentValueByFiveSecondEntity entity)
         {
-            // Add the entity to the list
-            _messageList.Add(entity);
-
-            // Increment the message count
-            SetMessageCountPlusOne();
-
-            if (_messageCount >= MaxMessageCount)
+            try
             {
-                // If the message count reaches the maximum, process and save the data
-                await dataStatisticsService.PushMultipleDataToDB(_messageList);
-                // Clear the list and reset the message count
-                _messageList.Clear();
-                SetMessageCountToZero();
+                // Add the entity to the list
+                _messageList.Add(entity);
+
+                // Increment the message count
+                SetMessageCountPlusOne();
+
+                if (_messageCount >= MaxMessageCount)
+                {
+                    // If the message count reaches the maximum, process and save the data
+                    await dataStatisticsService.PushMultipleDataToDB(_messageList);
+                    // Clear the list and reset the message count
+                    _messageList.Clear();
+                    SetMessageCountToZero();
+                }
+                await Task.CompletedTask;
             }
-            await Task.CompletedTask;
+            catch
+            {
+                throw;
+            }
         }
         private static void SetMessageCountPlusOne()
         {

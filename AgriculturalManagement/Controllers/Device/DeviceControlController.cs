@@ -27,7 +27,7 @@ namespace AgriculturalManagement.Controllers.Device
 
             var result = await _services.DeviceDriverOnOff(model);
             // ghi lại đóng mở thiết bị (thủ công)
-            _logger.LogOnOffDevice(new Entities.LogProcess.LogDeviceStatusEntity()
+            await _logger.LogOnOffDevice(new Entities.LogProcess.LogDeviceStatusEntity()
             {
                 DeviceName = model.DeviceName,
                 RequestOn = model.RequestOn,

@@ -11,5 +11,6 @@ namespace Models.DeviceData
     {
         public DateTime? ValueDate { get; set; }
         public TypeOnOff? TypeOnOff { get; set; } = null;
+        public int? ThresholdId { get; set; }
     }
 }

@@ -50,20 +50,15 @@ namespace MQTTProcess
             try
             {
                 var connection = GetConnection();
-                if (mqttClient == null || !mqttClient.IsConnected)
-                {
-                    mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
-                }
+
                 string topicSub = $"{connection.SystemId}/w/#";
-                string topicPub = $"{connection.SystemId}/{model.ModuleId.ToString().ToUpper()}/w/{model.DeviceId.ToString().ToUpper()}/control";
+                string topicPub = $"{model.ModuleId.ToString().ToUpper()}/w/{model.DeviceId.ToString().ToUpper()}";
 
                 // Define a TaskCompletionSource to signal completion
                 //var tcs = new TaskCompletionSource<bool>();
-
                 //void Subscribe(MqttClient client, string subscribeTopic)
                 //{
                 //    //Set up event handler
-
                 //    client.MqttMsgPublishReceived += (sender, e) =>
                 //    {
                 //        string[] topicSplits = e.Topic.Split('/');
@@ -77,18 +72,25 @@ namespace MQTTProcess
                 //    };
                 //    client.Subscribe(new string[] { subscribeTopic }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE });
                 //}
-
                 // Subscribe to topic
                 //Subscribe(mqttClient, topicSub);
-
-                logger.LogInformation($"Subscribing topic {topicSub}");
+                //logger.LogInformation($"Subscribing topic {topicSub}");
                 // Publish the message
+
                 if (model.RequestOn)
                 {
+                    if (mqttClient == null || !mqttClient.IsConnected)
+                    {
+                        mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                    }
                     mqttClient.Publish(topicPub, System.Text.Encoding.UTF8.GetBytes("1"));
                 }
                 else if (!model.RequestOn)
                 {
+                    if (mqttClient == null || !mqttClient.IsConnected)
+                    {
+                        mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                    }
                     mqttClient.Publish(topicPub, System.Text.Encoding.UTF8.GetBytes("0"));
                 }
 
@@ -127,30 +129,49 @@ namespace MQTTProcess
         // Đồng bộ trạng thái thiết bị mới nhất
         public async Task<bool> AsyncStatusDeviceControl(List<StatusDeviceControlModel> models)
         {
-            var connection = GetConnection();
-            if (mqttClient == null || !mqttClient.IsConnected)
+            try
             {
-                mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                var connection = GetConnection();
+                for (int i = 0; i < models.Count(); i++)
+                {
+                    string topic = $"{connection.SystemId}/{models[i].ModuleId.ToString().ToUpper()}/w/{models[i].Id.ToString().ToUpper()}/control";
+                    if (models[i].IsAction == true)
+                    {
+                        if (mqttClient == null || !mqttClient.IsConnected)
+                        {
+                            mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                        }
+                        mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("1"));
+                    }
+                    else if (models[i].IsAction == false)
+                    {
+                        if (mqttClient == null || !mqttClient.IsConnected)
+                        {
+                            mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                        }
+                        mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("0"));
+                    }
+                }
+                return await Task.FromResult(true);
             }
-            for (int i = 0; i < models.Count(); i++)
+            catch
             {
-                string topic = $"{connection.SystemId}/{models[i].ModuleId.ToString().ToUpper()}/w/{models[i].Id.ToString().ToUpper()}/control";
-                if (models[i].IsAction == true)
-                {
-                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("1"));
-                }
-                else if (models[i].IsAction == false)
-                {
-                    mqttClient.Publish(topic, System.Text.Encoding.UTF8.GetBytes("0"));
-                }
+                logger.LogInformation("Error async status");
+                throw;
             }
-            return await Task.FromResult(true);
         }
         private MqttClient ConnectMQTT(string broker, int port, string clientId, string username, string password)
         {
-            MqttClient client = new MqttClient(broker, port, false, MqttSslProtocols.None, null, null);
-            client.Connect(clientId, username, password);
-            return client;
+            try
+            {
+                MqttClient client = new MqttClient(broker, port, false, MqttSslProtocols.None, null, null);
+                client.Connect(clientId, username, password);
+                return client;
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

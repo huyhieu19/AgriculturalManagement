@@ -4,7 +4,6 @@ using Models;
 using Models.DeviceData;
 using Models.InstrumentSetThreshold;
 using Models.LoggerProcess;
-using Models.Statistic;
 
 namespace Service
 {
@@ -18,7 +17,7 @@ namespace Service
 
         Task<List<OnOffDeviceByThresholdModel>> GetValueDeviceForThreshold(IEnumerable<InstrumentationGetForSystem> model);
         // Date
-        Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevices(StatisticQueryModel model);
+        //Task<List<StatisticByDateDisplayModel>> StatisticsByDateDataDevices(StatisticQueryModel model);
         // Hour
         //Task<List<StatisticByDateDisplayModel>> StatisticsByHourDataDevices(Guid DeviceId);
 

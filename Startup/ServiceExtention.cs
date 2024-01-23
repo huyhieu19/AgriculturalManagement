@@ -34,6 +34,8 @@ namespace Startup
             builder.Services.AddSingleton<IDeviceJobInstrumentationService, DeviceJobInstrumentationService>();
             builder.Services.AddSingleton<IProcessJobControlDevice, ProcessJobControlDevice>();
 
+
+
             builder.Services.AddHostedService<ProcessJobMqtt>();
             builder.Services.AddHostedService<TimerJobDevice>();
 

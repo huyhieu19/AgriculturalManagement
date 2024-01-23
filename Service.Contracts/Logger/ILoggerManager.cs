@@ -9,7 +9,7 @@ namespace Service.Contracts.Logger
         void LogWarning(string message, LogProcessModel? logProcessModel = null);
         void LogDebug(string message, LogProcessModel? logProcessModel = null);
         void LogError(string message, LogProcessModel? logProcessModel = null);
-        void LogOnOffDevice(LogDeviceStatusEntity model);
-        void LogMultipleOnOffDevice(List<LogDeviceStatusEntity> model);
+        Task LogOnOffDevice(LogDeviceStatusEntity model);
+        Task LogMultipleOnOffDevice(List<LogDeviceStatusEntity> model);
     }
 }
