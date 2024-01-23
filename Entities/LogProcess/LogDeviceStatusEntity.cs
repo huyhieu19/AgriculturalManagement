@@ -16,6 +16,8 @@ namespace Entities.LogProcess
         public bool? RequestOn { get; set; }
         [BsonElement("IsSuccess")]
         public bool? IsSuccess { get; set; }
+        [BsonElement("ValueSensor")]
+        public string? ValueSensor { get; set; }
         [BsonElement("TypeOnOff")]
         public int? TypeOnOff { get; set; }
         [BsonElement("TimerId")]

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Common.Enum;
 using Entities.Farm;
 using Models;
+using Models.DeviceTimer;
 using Models.Farm;
 using Repository.Contracts;
 using Service.Contracts.FarmZone;
@@ -104,6 +106,11 @@ namespace Service.Farm
                 logger.LogError($"Farms Service | Exception: {ex}");
                 throw;
             }
+        }
+
+        public async Task<DeviceDriverByFarmDisplayModel> DeviceDriverByFarmZone(string userId, DeviceType deviceType)
+        {
+            return await repositoryManager.Farm.DeviceDriverByFarmZone(userId, deviceType);
         }
     }
 }

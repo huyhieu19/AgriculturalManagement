@@ -93,23 +93,32 @@ namespace Service.Logger
         }
 
         // ghi laij đóng mở thiết bị trong thời gian nào
-        public void LogMultipleOnOffDevice(List<LogDeviceStatusEntity> model)
+        public async Task LogMultipleOnOffDevice(List<LogDeviceStatusEntity> model)
         {
-            if (model.Any())
+            try
             {
-                Task.Run(async () =>
+                if (model.Any())
                 {
+
                     await logOnOff.InsertManyAsync(model);
-                });
+                }
+            }
+            catch
+            {
+                throw;
             }
         }
 
-        public void LogOnOffDevice(LogDeviceStatusEntity model)
+        public async Task LogOnOffDevice(LogDeviceStatusEntity model)
         {
-            Task.Run(async () =>
+            try
             {
                 await logOnOff.InsertOneAsync(model);
-            });
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void LogWarning(string message, LogProcessModel? logProcessModel = null)

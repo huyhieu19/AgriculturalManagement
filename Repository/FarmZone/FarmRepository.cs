@@ -1,7 +1,10 @@
-﻿using Database;
+﻿using Common.Enum;
+using Database;
 using Entities.Farm;
+using EnumsNET;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.DeviceTimer;
 using Repository.Contracts.Farm;
 using Service.Contracts.Logger;
 
@@ -73,5 +76,46 @@ namespace Repository.FarmZone
         {
             Update(entity);
         }
+
+        #region Get Farm, Zone, Device for process add timer to device 
+        public async Task<DeviceDriverByFarmDisplayModel> DeviceDriverByFarmZone(string userId, DeviceType deviceType)
+        {
+            var DeviceDriverByFarm = new DeviceDriverByFarmDisplayModel();
+            var farms = await GetFarms(userId, false);
+            var farmIds = farms.Select(p => p.Id).ToList();
+            var zones = await FactDbContext.ZoneEntityEntities.Where(p => farmIds.Contains(p.FarmId ?? -1)).ToListAsync();
+            var zoneIds = farms.Select(p => p.Id).ToList();
+            var devices = await FactDbContext.DeviceEntities.Where(p => zoneIds.Contains(p.ZoneId ?? -1) && p.DeviceType == deviceType.AsString(EnumFormat.Description)).ToListAsync();
+
+
+            DeviceDriverByFarm.Farms.AddRange(
+                farms.Select(p => new KeyValueForFarm()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                }).ToList()
+            );
+
+            DeviceDriverByFarm.Zone.AddRange(
+                zones.Select(p => new KeyValueForZone()
+                {
+                    Id = p.Id,
+                    Name = p.ZoneName,
+                    FarmId = p.FarmId,
+                }).ToList()
+            );
+            DeviceDriverByFarm.Device.AddRange(
+                devices.Select(p => new KeyValueForDevice()
+                {
+                    Id = p.Id.ToString(),
+                    Name = p.Name,
+                    ZoneId = p.ZoneId,
+                    NameRef = p.NameRef,
+                }).ToList()
+            );
+
+            return DeviceDriverByFarm;
+        }
+        #endregion
     }
 }

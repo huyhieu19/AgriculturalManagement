@@ -1,4 +1,6 @@
-﻿namespace Models
+﻿using Common.Enum;
+
+namespace Models
 {
     public class InstrumentSetThresholdDisplayModel
     {
@@ -14,5 +16,6 @@
         public int? ThresholdValueOff { get; set; }
         public bool IsDelete { get; set; } = false;
         public bool? AutoDevice { get; set; } = false;
+        public FunctionDeviceType? NameRefSensor { get; set; }
     }
 }

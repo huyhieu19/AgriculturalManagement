@@ -23,10 +23,10 @@ namespace JobBackground.DeviceAuto
             {
                 try
                 {
-                    logger.LogInformation("Start Async");
+                    logger.LogInformation("1. Start Async");
                     await deviceControlService.AsyncStatusDeviceControl(); // Simulate work.
+                    logger.LogInformation("1. End Async");
                     await Task.Delay(TimeSpan.FromSeconds(30));
-                    logger.LogInformation("End Async");
                 }
                 catch (Exception ex)
                 {

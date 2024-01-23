@@ -17,7 +17,6 @@ namespace Service.DeviceThreshold
         private readonly ILoggerManager loggerManager;
         private readonly IDeviceControlService deviceControlService;
         private readonly IDataStatisticsService dataStatisticsService;
-        private static List<LogDeviceStatusEntity> logDeviceStatusEntities = new List<LogDeviceStatusEntity>();
 
         public DeviceJobInstrumentationService(DapperContext dapperContext,
             ILoggerManager loggerManager,
@@ -31,54 +30,62 @@ namespace Service.DeviceThreshold
 
         public async Task<bool> RunningJobThreshold()
         {
-            loggerManager.LogInformation("Start running job threshold");
-            var query = InstrumentationSetThresholdQuery.GetThresholdByInstrumentationId;
-
-            IEnumerable<InstrumentationGetForSystem> result;
-            using (var connection = dapperContext.CreateConnection())
+            try
             {
-                connection.Open();
-                result = await connection.QueryAsync<InstrumentationGetForSystem>(query);
-                connection.Close();
+                loggerManager.LogInformation("Start running job threshold");
+                var query = InstrumentationSetThresholdQuery.GetThresholdByInstrumentationId;
+                IEnumerable<InstrumentationGetForSystem> result;
+                using (var connection = dapperContext.CreateConnection())
+                {
+                    connection.Open();
+                    result = await connection.QueryAsync<InstrumentationGetForSystem>(query);
+                    connection.Close();
+                }
+                // thiết bị phải là tự động
+                var dic = await dataStatisticsService.GetValueDeviceForThreshold(result);
+                foreach (var entity in dic)
+                {
+                    loggerManager.LogInformation("On/Off");
+                    await TurnOnOffDevice(entity.ModuleId, entity.DeviceId, entity.RequestOn, DeviceName: entity.DeviceName, ThresholdId: entity.ThresholdId, ValueSensor: entity.ValueSensor);
+                }
+                loggerManager.LogInformation("End running job threshold");
+                return await Task.FromResult(true);
             }
-            // thiết bị phải là tự động
-            var dic = await dataStatisticsService.GetValueDeviceForThreshold(result);
-
-            foreach (var entity in dic)
+            catch
             {
-                loggerManager.LogInformation("On/Off");
-                await TurnOnOffDevice(entity.ModuleId, entity.DeviceId, entity.RequestOn, DeviceName: entity.DeviceName, ThresholdId: entity.ThresholdId);
+                throw;
             }
-
-            loggerManager.LogInformation("End running job threshold");
-            //ghi log đóng thiết bị tự động theo threshold
-
-            return await Task.FromResult(true);
         }
-        private async Task<bool> TurnOnOffDevice(Guid ModuleId, Guid DeviceId, bool isTurnOn, string? DeviceName, int? ThresholdId)
+        private async Task<bool> TurnOnOffDevice(Guid ModuleId, Guid DeviceId, bool isTurnOn, string? DeviceName, int? ThresholdId, string? ValueSensor)
         {
-            loggerManager.LogInformation($"Off Device {DeviceId}");
-            var model = new OnOffDeviceQueryModel()
+            try
             {
-                ModuleId = ModuleId,
-                DeviceId = DeviceId,
-                RequestOn = isTurnOn,
-            };
-            var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
-
-            //thêm log vào list log đóng thiết bị tự động theo threshold
-            logDeviceStatusEntities.Add(new LogDeviceStatusEntity()
+                loggerManager.LogInformation($"Off Device {DeviceId}");
+                var model = new OnOffDeviceQueryModel()
+                {
+                    ModuleId = ModuleId,
+                    DeviceId = DeviceId,
+                    RequestOn = isTurnOn,
+                };
+                var IsComplete = await deviceControlService.DeviceDriverOnOff(model);
+                //ghi log đóng thiết bị tự động theo threshold
+                //thêm log vào list log đóng thiết bị tự động theo threshold
+                await loggerManager.LogOnOffDevice(new LogDeviceStatusEntity()
+                {
+                    DeviceName = DeviceName,
+                    RequestOn = isTurnOn,
+                    TypeOnOff = (int)TypeOnOff.Threshold,
+                    ValueDate = DateTime.UtcNow,
+                    ThresholdId = ThresholdId,
+                    IsSuccess = IsComplete,
+                    ValueSensor = ValueSensor
+                });
+                return IsComplete;
+            }
+            catch
             {
-                DeviceName = DeviceName,
-                RequestOn = isTurnOn,
-                TypeOnOff = ((int)TypeOnOff.Threshold),
-                ValueDate = DateTime.UtcNow,
-                ThresholdId = ThresholdId,
-                IsSuccess = IsComplete,
-
-            });
-
-            return IsComplete;
+                throw;
+            }
         }
     }
 }

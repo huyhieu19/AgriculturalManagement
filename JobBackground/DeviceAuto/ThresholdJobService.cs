@@ -24,10 +24,10 @@ namespace JobBackground.DeviceAuto
             {
                 try
                 {
-                    logger.LogInformation("Start threshold");
+                    logger.LogInformation("2. Start threshold");
                     await deviceJobInstrumentation.RunningJobThreshold();
+                    logger.LogInformation("2. End threshold");
                     await Task.Delay(TimeSpan.FromSeconds(10));
-                    logger.LogInformation("End threshold");
                 }
                 catch (Exception ex)
                 {
