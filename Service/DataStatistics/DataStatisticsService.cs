@@ -1,4 +1,6 @@
 ﻿using Common.Enum;
+using Common.Queries;
+using Dapper;
 using Database;
 using Entities;
 using Entities.LogProcess;
@@ -6,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Models;
 using Models.Config.Mongo;
+using Models.Device;
 using Models.DeviceData;
 using Models.InstrumentSetThreshold;
 using Models.LoggerProcess;
@@ -24,8 +27,7 @@ namespace Service
         private readonly ILoggerManager logger;
         private readonly DapperContext dapperContext;
 
-
-        public DataStatisticsService(IOptions<MongoDbConfigModel> mongoDbConfig, ILoggerManager logger, DapperContext dapper)
+        public DataStatisticsService(IOptions<MongoDbConfigModel> mongoDbConfig, ILoggerManager logger, DapperContext dapperContext)
         {
             this.client = new MongoClient(mongoDbConfig.Value.ConnectionString);
             var database = this.client.GetDatabase(mongoDbConfig.Value.DatabaseName);
@@ -33,7 +35,7 @@ namespace Service
             logProcess = database.GetCollection<LogProcessEntity>(mongoDbConfig.Value.CollectionLog);
             logDevice = database.GetCollection<LogDeviceStatusEntity>(mongoDbConfig.Value.CollectionLogDevice);
             this.logger = logger;
-            this.dapperContext = dapper;
+            this.dapperContext = dapperContext;
         }
 
         public async Task<BaseResModel<InstrumentValueByFiveSecondEntity>> PullData(DeviceDataQueryModel queryModel)
@@ -112,6 +114,76 @@ namespace Service
             public FunctionDeviceType NameRef { get; set; }
             public string DeviceType { get; set; } = string.Empty;
             public StatisticType TypeStatis { get; set; }
+        }
+        public class ValueModel
+        {
+            public string Id { get; set; }
+            public string value { get; set; }
+            public string ValueDate { get; set; }
+        }
+
+        public class Value
+        {
+            public string ModuleId { get; set; } = null!;
+            public List<ValueModel> Values { get; set; } = null!;
+        }
+
+        public async Task<List<ValueDeviceIns>> GetValueDeviceInsAsync(int zoneId)
+        {
+            var query = DeviceQuery.DeviceByZone;
+
+            List<DeviceDisplayModel> devices = new List<DeviceDisplayModel>();
+            using (var connection = dapperContext.CreateConnection())
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<DeviceDisplayModel>(query, new { Id = zoneId });
+                connection.Close();
+                devices.AddRange(result);
+            }
+
+            var moduleIds = devices.Select(p => p.ModuleId).Distinct().ToList();
+
+            List<ValueDeviceIns> kq = new List<ValueDeviceIns> { };
+
+            foreach (var moduleId in moduleIds)
+            {
+                var result = await instrumentValue.Find(p => p.ModuleId == moduleId.ToString()).SortByDescending(p => p.ValueDate).FirstOrDefaultAsync();
+
+                //Payloads.Add(result.PayLoad ?? "");
+                if (result != null)
+                {
+                    JObject json = JObject.Parse(result.PayLoad ?? "{}");
+
+                    var deviceIds = devices.Where(p => p.ModuleId == moduleId).Distinct().ToList();
+
+
+                    foreach (var deviceId in deviceIds)
+                    {
+                        string? value = "";
+                        if (json.ContainsKey(deviceId.Id.ToString()))
+                        {
+                            value = (string?)json[deviceId.Id.ToString()] ?? string.Empty;
+                            // Tiếp tục xử lý giá trị nếu cần
+                        }
+                        else
+                        {
+                            // Xử lý trường hợp khi không tìm thấy khóa
+                        }
+                        var device = new ValueDeviceIns()
+                        {
+                            ModuleId = moduleId,
+                            Id = deviceId.Id,
+                            ValueDevice = value,
+                        };
+                        kq.Add(device);
+                    }
+                }
+                else
+                {
+                    // ....
+                }
+            }
+            return kq;
         }
 
         // By Date

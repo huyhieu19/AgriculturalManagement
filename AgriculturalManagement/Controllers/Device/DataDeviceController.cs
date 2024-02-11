@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Device;
 using Models.DeviceData;
 using Service;
 
@@ -20,6 +21,11 @@ namespace AgriculturalManagement.Controllers.Device
         public async Task<BaseResModel<InstrumentValueByFiveSecondEntity>> PullData([FromBody] DeviceDataQueryModel queryModel)
         {
             return await service.PullData(queryModel);
+        }
+        [HttpPost("valueDevice")]
+        public async Task<List<ValueDeviceIns>> GetValueDeviceInsAsync(int zoneId)
+        {
+            return await service.GetValueDeviceInsAsync(zoneId);
         }
     }
 }

@@ -2,6 +2,9 @@
 {
     public static class DeviceQuery
     {
+        public const string DeviceByZone = @"Select * From Device WHERE ZoneId = @Id AND IsUsed = 1 AND DeviceType = 'R'";
+
+
         public const string GetDeviceDriverByZoneSQL = @"SELECT
                     DD.*,
 

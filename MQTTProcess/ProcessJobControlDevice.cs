@@ -53,6 +53,7 @@ namespace MQTTProcess
 
                 string topicSub = $"{connection.SystemId}/w/#";
                 string topicPub = $"{model.ModuleId.ToString().ToUpper()}/w/{model.DeviceId.ToString().ToUpper()}";
+                mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
 
                 // Define a TaskCompletionSource to signal completion
                 //var tcs = new TaskCompletionSource<bool>();
@@ -76,25 +77,42 @@ namespace MQTTProcess
                 //Subscribe(mqttClient, topicSub);
                 //logger.LogInformation($"Subscribing topic {topicSub}");
                 // Publish the message
-
-                if (model.RequestOn)
+                bool complete = false;
+                int count = 0;
+                while (count < 5)
                 {
-                    if (mqttClient == null || !mqttClient.IsConnected)
+                    if (model.RequestOn)
                     {
-                        mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                        // Chạy 5 lần nếu không được thì return false
+                        if (mqttClient == null || !mqttClient.IsConnected)
+                        {
+                            mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                        }
+                        logger.LogInformation($"Mo thiet bi {topicPub}");
+                        mqttClient.Publish(topicPub, System.Text.Encoding.UTF8.GetBytes("1"));
+                        complete = true;
+                        break;
                     }
-                    mqttClient.Publish(topicPub, System.Text.Encoding.UTF8.GetBytes("1"));
-                }
-                else if (!model.RequestOn)
-                {
-                    if (mqttClient == null || !mqttClient.IsConnected)
+                    else if (!model.RequestOn)
                     {
-                        mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                        if (mqttClient == null || !mqttClient.IsConnected)
+                        {
+                            mqttClient = ConnectMQTT(connection.ServerName, connection.Port, connection.ClientId, connection.UserName, connection.UserPW);
+                        }
+                        mqttClient.Publish(topicPub, System.Text.Encoding.UTF8.GetBytes("0"));
+                        complete = true;
+                        logger.LogInformation($"dong thiet bi {topicPub}");
+                        break;
                     }
-                    mqttClient.Publish(topicPub, System.Text.Encoding.UTF8.GetBytes("0"));
+                    count++;
                 }
-
                 logger.LogInformation("finished publish");
+                if (complete)
+                {
+                    return await Task.FromResult(true);
+                }
+                return await Task.FromResult(false);
+
 
                 // Wait for completion or timeout (adjust timeout value as needed)
                 //var timeoutTask = Task.Delay(TimeSpan.FromSeconds(10)); // Adjust timeout as needed
@@ -112,7 +130,7 @@ namespace MQTTProcess
                 //    mqttClient.Unsubscribe(new[] { topicSub });
                 //    return false;
                 //}
-                return await Task.FromResult(true);
+
             }
             catch (Exception ex)
             {

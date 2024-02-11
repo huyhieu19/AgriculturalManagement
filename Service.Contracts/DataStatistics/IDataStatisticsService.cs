@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Entities.LogProcess;
 using Models;
+using Models.Device;
 using Models.DeviceData;
 using Models.InstrumentSetThreshold;
 using Models.LoggerProcess;
@@ -14,6 +15,8 @@ namespace Service
         Task<BaseResModel<InstrumentValueByFiveSecondEntity>> PullData(DeviceDataQueryModel queryModel);
         Task<BaseResModel<LogProcessEntity>> LoggerProcess(LoggerProcessQueryModel queryModel);
         Task WriteLog(LogProcessEntity model);
+
+        Task<List<ValueDeviceIns>> GetValueDeviceInsAsync(int zoneId);
 
         Task<List<OnOffDeviceByThresholdModel>> GetValueDeviceForThreshold(IEnumerable<InstrumentationGetForSystem> model);
         // Date
