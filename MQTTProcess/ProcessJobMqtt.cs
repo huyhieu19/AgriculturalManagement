@@ -20,7 +20,7 @@ namespace MQTTProcess
         private readonly IConfiguration configuration;
         private static List<InstrumentValueByFiveSecondEntity> _messageList = new List<InstrumentValueByFiveSecondEntity>();
         private static int _messageCount = 0;
-        private const int MaxMessageCount = 5;
+        private const int MaxMessageCount = 1;
         private readonly IDataStatisticsService dataStatisticsService;
         private static MqttClient? mqttClient = null;
 
