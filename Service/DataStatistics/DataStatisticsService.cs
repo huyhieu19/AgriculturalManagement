@@ -147,40 +147,105 @@ namespace Service
 
             foreach (var moduleId in moduleIds)
             {
-                var result = await instrumentValue.Find(p => p.ModuleId == moduleId.ToString()).SortByDescending(p => p.ValueDate).FirstOrDefaultAsync();
+                var resultFromMg = await instrumentValue.Find(p => p.ModuleId!.Equals(moduleId.ToString(), StringComparison.OrdinalIgnoreCase)).SortByDescending(p => p.ValueDate).ToListAsync();
 
                 //Payloads.Add(result.PayLoad ?? "");
-                if (result != null)
+                if (resultFromMg.Any())
                 {
-                    JObject json = JObject.Parse(result.PayLoad ?? "{}");
-
-                    var deviceIds = devices.Where(p => p.ModuleId == moduleId).Distinct().ToList();
-
-
-                    foreach (var deviceId in deviceIds)
+                    int count = 0;
+                    foreach (var itemResultFromMg in resultFromMg)
                     {
-                        string? value = "";
-                        if (json.ContainsKey(deviceId.Id.ToString()))
+                        JObject json = JObject.Parse(itemResultFromMg.PayLoad ?? "{}");
+
+                        var deviceIds = devices.Where(p => p.ModuleId == moduleId).Distinct().ToList();
+
+                        foreach (var deviceId in deviceIds)
                         {
-                            value = (string?)json[deviceId.Id.ToString()] ?? string.Empty;
-                            // Tiếp tục xử lý giá trị nếu cần
+                            if (json.ContainsKey(deviceId.Id.ToString()))
+                            {
+                                var value = (string?)json[deviceId.Id.ToString()] ?? string.Empty;
+                                // Tiếp tục xử lý giá trị nếu cần
+                                kq.Add(new ValueDeviceIns()
+                                {
+                                    ModuleId = moduleId,
+                                    Id = deviceId.Id,
+                                    ValueDevice = value,
+                                    DateValue = itemResultFromMg.ValueDate,
+                                    DateCreated = deviceId.DateCreated,
+                                    Description = deviceId.Description,
+                                    DeviceType = deviceId.DeviceType,
+                                    Gate = deviceId.Gate,
+                                    IsAction = deviceId.IsAction,
+                                    IsAuto = deviceId.IsAuto,
+                                    IsErrored = false,
+                                    IsUsed = deviceId.IsUsed,
+                                    Name = deviceId.Name,
+                                    NameRef = deviceId.NameRef,
+                                    Unit = deviceId.Unit,
+                                    ZoneId = deviceId.ZoneId
+                                });
+                            }
+                            else
+                            {
+                                // Xử lý trường hợp khi không tìm thấy khóa
+                                kq.Add(new ValueDeviceIns()
+                                {
+                                    ModuleId = moduleId,
+                                    Id = deviceId.Id,
+
+                                    ValueDevice = "",
+                                    DateValue = itemResultFromMg.ValueDate,
+
+                                    DateCreated = deviceId.DateCreated,
+                                    Description = deviceId.Description,
+                                    DeviceType = deviceId.DeviceType,
+                                    Gate = deviceId.Gate,
+                                    IsAction = deviceId.IsAction,
+                                    IsAuto = deviceId.IsAuto,
+                                    IsErrored = true,
+
+                                    IsUsed = deviceId.IsUsed,
+                                    Name = deviceId.Name,
+                                    NameRef = deviceId.NameRef,
+                                    Unit = deviceId.Unit,
+                                    ZoneId = deviceId.ZoneId
+                                });
+                            }
+                            count++;
                         }
-                        else
+                        if (count >= deviceIds.Count)
                         {
-                            // Xử lý trường hợp khi không tìm thấy khóa
+                            break;
                         }
-                        var device = new ValueDeviceIns()
-                        {
-                            ModuleId = moduleId,
-                            Id = deviceId.Id,
-                            ValueDevice = value,
-                        };
-                        kq.Add(device);
                     }
                 }
                 else
                 {
-                    // ....
+                    var deviceIds = devices.Where(p => p.ModuleId == moduleId).Distinct().ToList();
+                    foreach (var deviceId in deviceIds)
+                    {
+                        kq.Add(new ValueDeviceIns()
+                        {
+                            ModuleId = moduleId,
+                            Id = deviceId.Id,
+
+                            ValueDevice = "",
+                            DateValue = null,
+
+                            DateCreated = deviceId.DateCreated,
+                            Description = deviceId.Description,
+                            DeviceType = deviceId.DeviceType,
+                            Gate = deviceId.Gate,
+                            IsAction = deviceId.IsAction,
+                            IsAuto = deviceId.IsAuto,
+                            IsErrored = false,
+                            IsUsed = deviceId.IsUsed,
+                            Name = deviceId.Name,
+                            NameRef = deviceId.NameRef,
+                            Unit = deviceId.Unit,
+                            ZoneId = deviceId.ZoneId
+                        });
+                    }
                 }
             }
             return kq;
