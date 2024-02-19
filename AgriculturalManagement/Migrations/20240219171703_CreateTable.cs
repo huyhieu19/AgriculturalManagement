@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgriculturalManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class Create : Migration
+    public partial class CreateTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -324,7 +324,6 @@ namespace AgriculturalManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DeviceDriverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     InstrumentationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TypeDevice = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OnInUpperThreshold = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
                     ThresholdValueOn = table.Column<int>(type: "int", nullable: true),
                     ThresholdValueOff = table.Column<int>(type: "int", nullable: true),

@@ -185,32 +185,33 @@ namespace Service
                                     ZoneId = deviceId.ZoneId
                                 });
                             }
-                            else
-                            {
-                                // Xử lý trường hợp khi không tìm thấy khóa
-                                kq.Add(new ValueDeviceIns()
-                                {
-                                    ModuleId = moduleId,
-                                    Id = deviceId.Id,
+                            //else
+                            //{
+                            //    // Xử lý trường hợp khi không tìm thấy khóa
+                            //    //kq.Add(new ValueDeviceIns()
+                            //    //{
+                            //    //    ModuleId = moduleId,
+                            //    //    Id = deviceId.Id,
 
-                                    ValueDevice = "",
-                                    DateValue = itemResultFromMg.ValueDate,
+                            //    //    ValueDevice = "",
+                            //    //    DateValue = itemResultFromMg.ValueDate,
 
-                                    DateCreated = deviceId.DateCreated,
-                                    Description = deviceId.Description,
-                                    DeviceType = deviceId.DeviceType,
-                                    Gate = deviceId.Gate,
-                                    IsAction = deviceId.IsAction,
-                                    IsAuto = deviceId.IsAuto,
-                                    IsErrored = true,
+                            //    //    DateCreated = deviceId.DateCreated,
+                            //    //    Description = deviceId.Description,
+                            //    //    DeviceType = deviceId.DeviceType,
+                            //    //    Gate = deviceId.Gate,
+                            //    //    IsAction = deviceId.IsAction,
+                            //    //    IsAuto = deviceId.IsAuto,
+                            //    //    IsErrored = true,
 
-                                    IsUsed = deviceId.IsUsed,
-                                    Name = deviceId.Name,
-                                    NameRef = deviceId.NameRef,
-                                    Unit = deviceId.Unit,
-                                    ZoneId = deviceId.ZoneId
-                                });
-                            }
+                            //    //    IsUsed = deviceId.IsUsed,
+                            //    //    Name = deviceId.Name,
+                            //    //    NameRef = deviceId.NameRef,
+                            //    //    Unit = deviceId.Unit,
+                            //    //    ZoneId = deviceId.ZoneId
+                            //    //});
+                            //    continue;
+                            //}
                             count++;
                         }
                         if (count >= deviceIds.Count)
