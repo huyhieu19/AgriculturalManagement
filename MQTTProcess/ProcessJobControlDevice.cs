@@ -145,7 +145,7 @@ namespace MQTTProcess
                 var connection = GetConnection();
                 for (int i = 0; i < models.Count(); i++)
                 {
-                    string topic = $"{connection.SystemId}/{models[i].ModuleId.ToString().ToUpper()}/w/{models[i].Id.ToString().ToUpper()}/control";
+                    string topic = $"{models[i].ModuleId.ToString().ToUpper()}/w/{models[i].Id.ToString().ToUpper()}";
                     if (models[i].IsAction == true)
                     {
                         if (mqttClient == null || !mqttClient.IsConnected)

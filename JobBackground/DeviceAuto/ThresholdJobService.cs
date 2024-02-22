@@ -27,7 +27,7 @@ namespace JobBackground.DeviceAuto
                     logger.LogInformation("2. Start threshold");
                     await deviceJobInstrumentation.RunningJobThreshold();
                     logger.LogInformation("2. End threshold");
-                    await Task.Delay(TimeSpan.FromSeconds(10));
+                    await Task.Delay(TimeSpan.FromSeconds(5));
                 }
                 catch (Exception ex)
                 {
@@ -39,6 +39,7 @@ namespace JobBackground.DeviceAuto
                         User = "Auto"
                     });
                     await Task.Delay(TimeSpan.FromSeconds(5));
+                    continue;
                     throw;
                 }
             }

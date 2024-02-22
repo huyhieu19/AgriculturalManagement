@@ -561,7 +561,7 @@ namespace Service
                             {
                                 if (itemModel.OnInUpperThreshold)
                                 {
-                                    if (!itemModel.DeviceDriverAction && itemModel.ThresholdValueOn == 1)
+                                    if (!itemModel.DeviceDriverAction && value == 1)
                                     {
                                         // Logic mở thiết bị điều khiển
                                         var OnOff = new OnOffDeviceByThresholdModel()
@@ -576,7 +576,7 @@ namespace Service
                                         };
                                         result.Add(OnOff);
                                     }
-                                    else if (itemModel.DeviceDriverAction && itemModel.ThresholdValueOn == 0)
+                                    else if (itemModel.DeviceDriverAction && value == 0)
                                     {
                                         // Logic đóng thiết bị điều khiển 
                                         var OnOff = new OnOffDeviceByThresholdModel()
@@ -594,7 +594,7 @@ namespace Service
                                 }
                                 else
                                 {
-                                    if (itemModel.DeviceDriverAction && itemModel.ThresholdValueOn == 1)
+                                    if (itemModel.DeviceDriverAction && value == 1)
                                     {
                                         // Logic đóng thiết bị điều khiển 
                                         var OnOff = new OnOffDeviceByThresholdModel()
@@ -609,7 +609,7 @@ namespace Service
                                         };
                                         result.Add(OnOff);
                                     }
-                                    else if (!itemModel.DeviceDriverAction && itemModel.ThresholdValueOn == 1)
+                                    else if (!itemModel.DeviceDriverAction && value == 0)
                                     {
                                         // Logic mở thiết bị điều khiển
                                         var OnOff = new OnOffDeviceByThresholdModel()

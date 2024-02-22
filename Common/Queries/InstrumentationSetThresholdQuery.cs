@@ -103,7 +103,7 @@ GROUP BY
     A.ThresholdValueOn,
 	A.IsAuto As AutoDevice,
 	B.NameRef AS NameRefSensor,
-	A.ModuleId AS ModuleSensorId
+	B.ModuleId AS ModuleSensorId
     --A.TypeDevice
     --COUNT(*) AS GroupCount  -- This will count the number of rows in each group
 FROM
@@ -138,7 +138,8 @@ INNER JOIN
             DTT.*,
             Ex.IsActionDevice,
             Ex.DeviceName AS DeviceName,
-			Ex.NameRef
+			Ex.NameRef,
+			Ex.ModuleId
         FROM
             [DeviceInstrumentThreshold] DTT
         INNER JOIN
@@ -171,6 +172,7 @@ GROUP BY
 	A.IsAuto,
 	A.ModuleId,
 	B.NameRef,
-	A.ModuleId";
+	A.ModuleId,
+	B.ModuleId";
     }
 }

@@ -1,5 +1,4 @@
-﻿using Common.DateTimeHelper;
-using Common.Enum;
+﻿using Common.Enum;
 using Entities.LogProcess;
 using EnumsNET;
 using Microsoft.Extensions.Hosting;
@@ -32,7 +31,7 @@ namespace JobBackground.DeviceAuto
                     logger.LogInformation("3. Start Timer Job service");
                     await ToDoAsyncIsAutoTimer(); // Simulate work.
                     logger.LogInformation("3. End Timer Job service");
-                    await Task.Delay(TimeSpan.FromSeconds(10));
+                    await Task.Delay(TimeSpan.FromSeconds(5));
                 }
                 catch (Exception ex)
                 {
@@ -58,8 +57,10 @@ namespace JobBackground.DeviceAuto
 
                 var listTimeCheckAuto = listTime.Where(t => t.IsAuto);
 
-                var entitiesTurnOn = listTimeCheckAuto.Where(p => p.OpenTimer != null && p!.OpenTimer!.Value.Round(TimeSpan.FromMinutes(1)) == DateTime.UtcNow.Round(TimeSpan.FromMinutes(1)) && !p.IsSuccessON)!.ToList();
-                var entitiesTurnOff = listTimeCheckAuto.Where(p => p.ShutDownTimer != null && p!.ShutDownTimer!.Value.Round(TimeSpan.FromMinutes(1)) == DateTime.UtcNow.Round(TimeSpan.FromMinutes(1)) && !p.IsSuccessOFF)!.ToList();
+                //var entitiesTurnOn = listTimeCheckAuto.Where(p => p.OpenTimer != null && p!.OpenTimer!.Value.Ceiling(TimeSpan.FromMinutes(1)) == DateTime.UtcNow.Ceiling(TimeSpan.FromMinutes(1)) && !p.IsSuccessON)!.ToList();
+                //var entitiesTurnOff = listTimeCheckAuto.Where(p => p.ShutDownTimer != null && p!.ShutDownTimer!.Value.Ceiling(TimeSpan.FromMinutes(1)) == DateTime.UtcNow.Ceiling(TimeSpan.FromMinutes(1)) && !p.IsSuccessOFF)!.ToList();
+                var entitiesTurnOn = listTimeCheckAuto.Where(p => p.OpenTimer != null && p!.OpenTimer!.Value.Minute == DateTime.UtcNow.Minute && !p.IsSuccessON)!.ToList();
+                var entitiesTurnOff = listTimeCheckAuto.Where(p => p.ShutDownTimer != null && p!.ShutDownTimer!.Value.Minute == DateTime.UtcNow.Minute && !p.IsSuccessOFF)!.ToList();
 
                 if (entitiesTurnOn.Any())
                 {
