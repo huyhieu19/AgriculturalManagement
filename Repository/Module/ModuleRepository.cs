@@ -15,9 +15,17 @@ namespace Repository
         public async Task RemoveModuleFromUser(Guid moduleId, string userId)
         {
             var entity = await FindByCondition(prop => prop.Id == moduleId && prop.UserId == userId, true).FirstOrDefaultAsync();
+            var devices = await FactDbContext.DeviceEntities.Where(p => p.ModuleId == moduleId).ToListAsync();
             if (entity != null)
             {
                 entity.UserId = null;
+            }
+            if (devices.Any())
+            {
+                for (int i = 0; i < devices.Count; i++)
+                {
+                    devices[i].IsUsed = false;
+                }
             }
             else
             {
